@@ -1,0 +1,10 @@
+REACT_APP_VERSION = v18.0.0
+GENERATE_SOURCEMAP = false
+PORT = 8022
+
+## Public URL
+PUBLIC_URL = http://localhost:8022
+REACT_APP_BASE_NAME = /src/index
+
+## Backend API URL
+REACT_APP_API_URL=http:/localhost:8877
