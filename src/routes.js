@@ -300,6 +300,11 @@ const routes = [
         element: lazy(() => import('./views/databit/servincompl'))
       },
       {
+        exact: 'true',
+        path: '/statusos',
+        element: lazy(() => import('./views/databit/statusos'))
+      },
+      {
         path: '*',
         exact: 'true',
         element: () => <Navigate to={BASE_URL} />

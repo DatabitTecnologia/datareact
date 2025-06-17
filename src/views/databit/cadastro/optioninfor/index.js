@@ -28,6 +28,7 @@ import InforPrevenda from '../../prevenda/inforprevenda';
 import InforDefeito from '../../defeito/infordefeito';
 import InforOsCondicao from '../../codinterv/inforoscondicao';
 import InforServIncomp from '../../servincompl/inforservincomp';
+import InforStatusOs from '../../statusos/inforstatusos';
 
 const OptionInfor = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -411,6 +412,20 @@ const OptionInfor = (props) => {
         ></InforServIncomp>
       );
     }
+    case '30': {
+      //Status de OS
+      return (
+        <InforStatusOs
+          showinfor={showinfor}
+          rowselect={rowselect}
+          setRowselect={(data) => setRowselect(data)}
+          setShowinfor={(data) => setShowinfor(data)}
+          onupdate={onupdate}
+          setOnupdate={(data) => setOnupdate(data)}
+        ></InforStatusOs>
+      );
+    }
+    
   }
 };
 
