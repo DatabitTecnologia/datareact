@@ -27,6 +27,7 @@ import InforPrevendaTipo from '../../prevenda/tipo/infortipo';
 import InforPrevenda from '../../prevenda/inforprevenda';
 import InforDefeito from '../../defeito/infordefeito';
 import InforOsCondicao from '../../codinterv/inforoscondicao';
+import InforServIncomp from '../../servincompl/inforservincomp';
 
 const OptionInfor = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -395,6 +396,19 @@ const OptionInfor = (props) => {
           onupdate={onupdate}
           setOnupdate={(data) => setOnupdate(data)}
         ></InforOsCondicao>
+      );
+    }
+    case '29': {
+      //Serviços Incompletos
+      return (
+        <InforServIncomp
+          showinfor={showinfor}
+          rowselect={rowselect}
+          setRowselect={(data) => setRowselect(data)}
+          setShowinfor={(data) => setShowinfor(data)}
+          onupdate={onupdate}
+          setOnupdate={(data) => setOnupdate(data)}
+        ></InforServIncomp>
       );
     }
   }

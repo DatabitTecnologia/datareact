@@ -295,6 +295,11 @@ const routes = [
         element: lazy(() => import('./views/databit/codinterv'))
       },
       {
+        exact: 'true',
+        path: '/servincompl',
+        element: lazy(() => import('./views/databit/servincompl'))
+      },
+      {
         path: '*',
         exact: 'true',
         element: () => <Navigate to={BASE_URL} />
