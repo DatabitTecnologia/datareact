@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Infor from '../cadastro/infor';
+import StatusOsWorkflow from './workflow';
+import { Modal, ModalBody } from 'react-bootstrap';
 
 const InforStatusOs = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -11,6 +13,7 @@ const InforStatusOs = (props) => {
   const [valuesdisable, setValuesdisable] = React.useState([]);
   const [valuesinvisible, setValuesinvisible] = React.useState([]);
   const [valuesname, setValuesname] = React.useState([]);
+
   const [valuesrequired, setValuesrequired] = React.useState([]);
   const [valuesindex, setValuesindex] = React.useState([]);
   const [fields, setFields] = React.useState([]);
@@ -25,6 +28,76 @@ const InforStatusOs = (props) => {
   const [openmodal, setOpenmodal] = React.useState(props.openmodal);
   const [fieldsauto, setFieldsauto] = React.useState(props.fieldsauto);
   const [events, setEvents] = React.useState([]);
+
+  const [showworkflow, setShowworkflow] = useState(false);
+  /* const [showwuser, setShowuser] = useState(false);
+  const [showwcolor, setShowcolor] = useState(false);
+  const [showwnot, setShownot] = useState(false); */
+
+  useEffect(() => {
+    setActions([
+      {
+        id: 'btnWorkflow',
+        method: () => Workflow(),
+        classicon: 'feather icon-share-2',
+        classbutton: 'btn btn-primary shadow-2 mb-3',
+        caption: 'Workflow'
+      },
+      /* {
+        id: 'btnUsuarios',
+        method: () => Usuarios(),
+        classicon: 'feather icon-user-check',
+        classbutton: 'btn btn-primary shadow-2 mb-3',
+        caption: 'Usuários'
+      },
+      {
+        id: 'btnNotificacao',
+        method: () => Notificacao(),
+        classicon: 'feather icon-bell',
+        classbutton: 'btn btn-primary shadow-2 mb-3',
+        caption: 'Notificações'
+      },
+      {
+        id: 'btnColor',
+        method: () => Color(),
+        classicon: 'feather icon-command',
+        classbutton: 'btn btn-primary shadow-2 mb-3',
+        caption: 'Color'
+      } */
+    ]);
+  }, []);
+
+  const Workflow = () => {
+    setShowworkflow(true);
+  };
+
+  const handleCloseworkflow = () => {
+    setShowworkflow(false);
+  };
+
+  /* const Usuarios = () => {
+    setShowuser(true);
+  };
+
+  const handleCloseuser = () => {
+    setShowuser(false);
+  };
+
+  const Color = () => {
+    setShowcolor(true);
+  };
+
+  const handleClosecolor = () => {
+    setShowcolor(false);
+  };
+
+  const Notificacao = () => {
+    setShownot(true);
+  };
+
+  const handleClosenot = () => {
+    setShownot(false);
+  }; */
 
   return (
     <React.Fragment>
@@ -80,6 +153,16 @@ const InforStatusOs = (props) => {
         events={events}
         setEvents={(data) => setEvents(data)}
       />
+
+      <Modal backdrop="static" size="xl" show={showworkflow} centered={true} onHide={handleCloseworkflow}>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-share-2'} />
+          &nbsp;Definição de Fluxos (Workflow)
+        </Modal.Header>
+        <ModalBody>
+          <StatusOsWorkflow statusselec={valuesfield[valuesname.indexOf('codigo')]}></StatusOsWorkflow>
+        </ModalBody>
+      </Modal>
     </React.Fragment>
   );
 };
