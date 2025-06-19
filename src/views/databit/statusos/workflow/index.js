@@ -17,22 +17,22 @@ const StatusOsWorkflow = (props) => {
   const Filtrar = () => {
     setCarregando(true);
     apiList(
-      'StatusOsWorkflow',
+      'StatusWorkflow',
       'TB01073_CODIGO,TB01073_NOME',
       '',
       "TB01073_SITUACAO = 'A' AND TB01073_CODIGO <> '" +
-        /* props.statusselec +
-        "' " +
-        "AND NOT EXISTS (SELECT TB01137_STATUS FROM TB01137 WHERE TB01137_STATUSFIM = TB01136_CODIGO AND TB01137_STATUS =  '" + */
-        props.statusselec +
-        "') order by TB01073_NOME"
+         props.statusselec +
+        /* "' " + */
+       /*  "AND NOT EXISTS (SELECT TB01137_STATUS FROM TB01137 WHERE TB01137_STATUSFIM = TB01136_CODIGO AND TB01137_STATUS =  '" + 
+        props.statusselec + */
+        "' order by TB01073_NOME"
     ).then((response) => {
       if (response.status === 200) {
         setRows(response.data);
       }
     });
 
-    apiList('PrecontratoWorkflowVW', '*', '', "TB01137_STATUS= '" + props.statusselec + "' order by TB01136_NOME ").then((response) => {
+    apiList('StatusWorkflowVW', '*', '', "TB01057_STATUS= '" + props.statusselec +  "' order by TB01021_NOME ").then((response) => {
       if (response.status === 200) {
         setRowsselect(response.data);
         setCarregando(false);
@@ -85,7 +85,7 @@ const StatusOsWorkflow = (props) => {
         rowsselect.forEach((item) => {
           iteminsert['statusfim'] = item.codigo;
           iteminsert['status'] = props.statusselec;
-          apiInsert('PrecontratoWorkflow', iteminsert).then((response) => {
+          apiInsert('StatusWorkflow', iteminsert).then((response) => {
             if (response.status === 200) {
               setStatusprocessa('');
             }
