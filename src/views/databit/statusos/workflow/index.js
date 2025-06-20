@@ -41,6 +41,9 @@ const StatusOsWorkflow = (props) => {
         "TB01057_STATUS= '" + props.statusselec +  "'AND TB01057_TIPO = 'O' order by TB01021_NOME ").then((response) => {
       if (response.status === 200) {
         setRowsselect(response.data);
+
+        /* alert('Retorno da API: ' + JSON.stringify(response.data)); */
+
         setCarregando(false);
       }
     });
@@ -89,8 +92,8 @@ const StatusOsWorkflow = (props) => {
     apiExec("DELETE FROM TB01057 WHERE TB01057_TIPO = 'O' AND TB01057_STATUS = '" + props.statusselec + "' ", 'N').then((response) => {
       if (response.status === 200) {
         rowsselect.forEach((item) => {
-          iteminsert['statusfim'] = item.codigo;
           iteminsert['status'] = props.statusselec;
+          iteminsert['novostatus'] = item.codigo;
           apiInsert('StatusWorkflow', iteminsert).then((response) => {
             if (response.status === 200) {
               setStatusprocessa('');
