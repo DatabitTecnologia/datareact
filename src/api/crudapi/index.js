@@ -12,7 +12,7 @@ export const apiList = async (nameclass, fields, fieldscalc, filter, count = 0) 
       count: count
     });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };
 

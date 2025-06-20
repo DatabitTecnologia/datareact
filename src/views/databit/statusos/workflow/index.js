@@ -17,22 +17,25 @@ const StatusOsWorkflow = (props) => {
   const Filtrar = () => {
     setCarregando(true);
     apiList(
-      'StatusWorkflow',
+      'OsStatus',
       'TB01073_CODIGO,TB01073_NOME',
       '',
       "TB01073_SITUACAO = 'A' AND TB01073_CODIGO <> '" +
          props.statusselec +
-        /* "' " + */
-       /*  "AND NOT EXISTS (SELECT TB01137_STATUS FROM TB01137 WHERE TB01137_STATUSFIM = TB01136_CODIGO AND TB01137_STATUS =  '" + 
-        props.statusselec + */
+        "' " +
+        "AND NOT EXISTS (SELECT TB01137_STATUS FROM TB01137 WHERE TB01137_STATUSFIM = TB01136_CODIGO AND TB01137_STATUS =  '" + 
+        props.statusselec +
         "' order by TB01073_NOME"
     ).then((response) => {
       if (response.status === 200) {
         setRows(response.data);
+
+        /* alert('Retorno da API: ' + JSON.stringify(response.data)); */
+
       }
     });
 
-    apiList('StatusWorkflowVW', '*', '', "TB01057_STATUS= '" + props.statusselec +  "' order by TB01021_NOME ").then((response) => {
+    apiList('StatusWorkflowVW', 'TB01057_NOVOSTATUS,TB01021_NOMENOVO', '', "TB01057_STATUS= '" + props.statusselec +  "'AND TB01057_TIPO = 'O' order by TB01021_NOME ").then((response) => {
       if (response.status === 200) {
         setRowsselect(response.data);
         setCarregando(false);
@@ -46,8 +49,8 @@ const StatusOsWorkflow = (props) => {
       { headerClassName: 'header-list', field: 'nome', headerName: 'Descrição do Status', width: 420 }
     ]);
     setColumnsselec([
-      { headerClassName: 'header-list', field: 'codigo', headerName: 'Código', width: 80 },
-      { headerClassName: 'header-list', field: 'nome', headerName: 'Descrição do Status', width: 420 }
+      { headerClassName: 'header-list', field: 'novostatus', headerName: 'Código', width: 80 },
+      { headerClassName: 'header-list', field: 'nomenovo', headerName: 'Descrição do Status', width: 420 }
     ]);
     Filtrar();
   }, []);
@@ -80,7 +83,7 @@ const StatusOsWorkflow = (props) => {
     setCarregando(true);
     let iteminsert = {};
     setStatusprocessa('Gravando informações, aguarde');
-    apiExec("DELETE FROM TB01137 WHERE TB01137_STATUS = '" + props.statusselec + "' ", 'N').then((response) => {
+    apiExec("DELETE FROM TB01057 WHERE TB01057_TIPO = 'O' AND TB01057_STATUS = '" + props.statusselec + "' ", 'N').then((response) => {
       if (response.status === 200) {
         rowsselect.forEach((item) => {
           iteminsert['statusfim'] = item.codigo;
@@ -97,6 +100,7 @@ const StatusOsWorkflow = (props) => {
     });
   };
 
+ 
   const clickGrid = (newSelection) => {
     setItemselect(newSelection);
   };
@@ -126,6 +130,7 @@ const StatusOsWorkflow = (props) => {
       Subtract(newSelection);
     }
   };
+
 
   return (
     <React.Fragment>
