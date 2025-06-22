@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Infor from '../cadastro/infor';
 import StatusOsWorkflow from './workflow';
 import StatusColor from './color';
+import StatusNotificacao from './notificacao';
 import { Modal, ModalBody } from 'react-bootstrap';
 
 const InforStatusOs = (props) => {
@@ -92,13 +93,13 @@ const InforStatusOs = (props) => {
     setShowcolor(false);
   };
 
-  /*  const Notificacao = () => {
+  const Notificacao = () => {
     setShownot(true);
   };
 
   const handleClosenot = () => {
     setShownot(false);
-  }; */
+  };
 
   return (
     <React.Fragment>
@@ -175,6 +176,15 @@ const InforStatusOs = (props) => {
             showwcolor={showwcolor}
             setShowcolor={(data) => setShowcolor(data)}
           ></StatusColor>
+        </ModalBody>
+      </Modal>
+      <Modal backdrop="static" size="xl" show={showwnot} centered={true} onHide={handleClosenot}>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-bell'} />
+          &nbsp;Notificação para Usuários
+        </Modal.Header>
+        <ModalBody>
+          <StatusNotificacao statusselec={valuesfield[valuesname.indexOf('codigo')]}></StatusNotificacao>
         </ModalBody>
       </Modal>
     </React.Fragment>
