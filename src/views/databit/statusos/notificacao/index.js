@@ -20,7 +20,7 @@ const StatusNotificacao = (props) => {
       'Usuario',
       '*',
       '',
-      "TB00035_SITUACAO = 'A' AND NOT EXISTS (SELECT TB01144_USER FROM TB01059 WHERE TB01059_USER = TB00035_NOME AND TB01059_STATUS =  '" +
+      "TB00035_SITUACAO = 'A' AND NOT EXISTS (SELECT TB01059_USER FROM TB01059 WHERE TB01059_USER = TB00035_NOME AND TB01059_STATUS =  '" +
         props.statusselec +
         "') order by TB00035_NOME"
     ).then((response) => {
@@ -38,7 +38,8 @@ const StatusNotificacao = (props) => {
       "TB01059_TIPO = 'O' AND TB01059_STATUS= '" + props.statusselec + "' order by TB01059_USER "
     ).then((response) => {
       if (response.status === 200) {
-        //console.log(response.data);
+        //console.log(response.data);  
+        alert('Retorno da API: ' + JSON.stringify(response.data));
         setRowsselect(response.data);
         setCarregando(false);
       }
