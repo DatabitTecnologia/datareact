@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Infor from '../cadastro/infor';
 import StatusOsWorkflow from './workflow';
+import StatusColor from './color';
 import { Modal, ModalBody } from 'react-bootstrap';
 
 const InforStatusOs = (props) => {
@@ -30,9 +31,9 @@ const InforStatusOs = (props) => {
   const [events, setEvents] = React.useState([]);
 
   const [showworkflow, setShowworkflow] = useState(false);
-  /* const [showwuser, setShowuser] = useState(false);
+  const [showwuser, setShowuser] = useState(false);
   const [showwcolor, setShowcolor] = useState(false);
-  const [showwnot, setShownot] = useState(false); */
+  const [showwnot, setShownot] = useState(false);
 
   useEffect(() => {
     setActions([
@@ -43,7 +44,7 @@ const InforStatusOs = (props) => {
         classbutton: 'btn btn-primary shadow-2 mb-3',
         caption: 'Workflow'
       },
-      /* {
+      {
         id: 'btnUsuarios',
         method: () => Usuarios(),
         classicon: 'feather icon-user-check',
@@ -63,7 +64,7 @@ const InforStatusOs = (props) => {
         classicon: 'feather icon-command',
         classbutton: 'btn btn-primary shadow-2 mb-3',
         caption: 'Color'
-      } */
+      }
     ]);
   }, []);
 
@@ -75,13 +76,13 @@ const InforStatusOs = (props) => {
     setShowworkflow(false);
   };
 
-  /* const Usuarios = () => {
+  /*  const Usuarios = () => {
     setShowuser(true);
   };
 
   const handleCloseuser = () => {
     setShowuser(false);
-  };
+  }; */
 
   const Color = () => {
     setShowcolor(true);
@@ -91,7 +92,7 @@ const InforStatusOs = (props) => {
     setShowcolor(false);
   };
 
-  const Notificacao = () => {
+  /*  const Notificacao = () => {
     setShownot(true);
   };
 
@@ -161,6 +162,19 @@ const InforStatusOs = (props) => {
         </Modal.Header>
         <ModalBody>
           <StatusOsWorkflow statusselec={valuesfield[valuesname.indexOf('codigo')]}></StatusOsWorkflow>
+        </ModalBody>
+      </Modal>
+      <Modal backdrop="static" size="lg" show={showwcolor} centered={true} onHide={handleClosecolor}>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-command h1'} />
+          &nbsp;Cor do Status
+        </Modal.Header>
+        <ModalBody>
+          <StatusColor
+            statusselec={valuesfield[valuesname.indexOf('codigo')]}
+            showwcolor={showwcolor}
+            setShowcolor={(data) => setShowcolor(data)}
+          ></StatusColor>
         </ModalBody>
       </Modal>
     </React.Fragment>
