@@ -30,8 +30,6 @@ const StatusOsWorkflow = (props) => {
       if (response.status === 200) {
         setRows(response.data);
 
-        /* alert('Retorno da API: ' + JSON.stringify(response.data)); */
-
       }
     });
 
@@ -41,8 +39,6 @@ const StatusOsWorkflow = (props) => {
         "TB01057_STATUS= '" + props.statusselec +  "'AND TB01057_TIPO = 'O' order by TB01021_NOME ").then((response) => {
       if (response.status === 200) {
         setRowsselect(response.data);
-
-        /* alert('Retorno da API: ' + JSON.stringify(response.data)); */
 
         setCarregando(false);
       }
