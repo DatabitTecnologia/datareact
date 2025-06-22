@@ -92,8 +92,8 @@ const StatusOsWorkflow = (props) => {
     apiExec("DELETE FROM TB01057 WHERE TB01057_TIPO = 'O' AND TB01057_STATUS = '" + props.statusselec + "' ", 'N').then((response) => {
       if (response.status === 200) {
         rowsselect.forEach((item) => {
-          iteminsert['status'] = props.statusselec;
-          iteminsert['novostatus'] = item.codigo;
+         iteminsert['novostatus'] = item.novostatus;
+          iteminsert['codigo'] = props.statusselec;
           apiInsert('StatusWorkflow', iteminsert).then((response) => {
             if (response.status === 200) {
               setStatusprocessa('');
@@ -104,8 +104,9 @@ const StatusOsWorkflow = (props) => {
         setStatusprocessa('Operação realizada com Sucesso !');
       }
     });
-  };
 
+  };
+ 
  
   const clickGrid = (newSelection) => {
     setItemselect(newSelection);
@@ -136,7 +137,6 @@ const StatusOsWorkflow = (props) => {
       Subtract(newSelection);
     }
   };
-
 
   return (
     <React.Fragment>
