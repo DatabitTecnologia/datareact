@@ -23,7 +23,7 @@ const StatusOsWorkflow = (props) => {
       "TB01073_SITUACAO = 'A' AND TB01073_CODIGO <> '" +
          props.statusselec +
         "' " +
-        "AND NOT EXISTS (SELECT * FROM VW01036  WHERE TB01057_NOVOSTATUS = TB01073_CODIGO AND TB01057_STATUS =  '" + 
+        "AND NOT EXISTS (SELECT * FROM VW01036  WHERE TB01057_TIPO = 'O' AND TB01057_NOVOSTATUS = TB01073_CODIGO AND TB01057_STATUS =  '" + 
         props.statusselec +
         "') order by TB01073_NOME"
     ).then((response) => {
