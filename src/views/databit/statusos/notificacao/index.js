@@ -35,7 +35,7 @@ const StatusNotificacao = (props) => {
       'StatusNotificacao',
       '*',
       'TB01059_USER AS nome',
-      " TB01059_STATUS= '" + props.statusselec + "' order by TB01059_USER "
+      "TB01059_STATUS= '" + props.statusselec + "' order by TB01059_USER "
     ).then((response) => {
       if (response.status === 200) {
         setRowsselect(response.data);   
