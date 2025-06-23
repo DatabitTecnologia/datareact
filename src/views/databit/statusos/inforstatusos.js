@@ -3,6 +3,7 @@ import Infor from '../cadastro/infor';
 import StatusOsWorkflow from './workflow';
 import StatusColor from './color';
 import StatusNotificacao from './notificacao';
+import StatusUser from './user';
 import { Modal, ModalBody } from 'react-bootstrap';
 
 const InforStatusOs = (props) => {
@@ -77,13 +78,13 @@ const InforStatusOs = (props) => {
     setShowworkflow(false);
   };
 
-  /*  const Usuarios = () => {
+   const Usuarios = () => {
     setShowuser(true);
   };
 
   const handleCloseuser = () => {
     setShowuser(false);
-  }; */
+  };
 
   const Color = () => {
     setShowcolor(true);
@@ -185,6 +186,15 @@ const InforStatusOs = (props) => {
         </Modal.Header>
         <ModalBody>
           <StatusNotificacao statusselec={valuesfield[valuesname.indexOf('codigo')]}></StatusNotificacao>
+        </ModalBody>
+      </Modal>
+      <Modal backdrop="static" size="xl" show={showwuser} centered={true} onHide={handleCloseuser}>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-user-check'} />
+          &nbsp;Definição de Usuários
+        </Modal.Header>
+        <ModalBody>
+          <StatusUser statusselec={valuesfield[valuesname.indexOf('codigo')]}></StatusUser>
         </ModalBody>
       </Modal>
     </React.Fragment>
