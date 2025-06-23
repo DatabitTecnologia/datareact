@@ -31,15 +31,18 @@ const StatusUser = (props) => {
       }
     });
 
-    apiList('StatusUser', '*', 'TB01060_USER AS nome', "TB01060_TIPO = 'O' AND TB01060_STATUS= '" + props.statusselec + "' order by TB01060_USER ").then(
-      (response) => {
-        if (response.status === 200) {
-          //console.log(response.data);
-          setRowsselect(response.data);
-          setCarregando(false);
-        }
+    apiList(
+      'StatusUser',
+      '*',
+      'TB01060_USER AS nome',
+      "TB01060_TIPO = 'O' AND TB01060_STATUS= '" + props.statusselec + "' order by TB01060_USER "
+    ).then((response) => {
+      if (response.status === 200) {
+        //console.log(response.data);
+        setRowsselect(response.data);
+        setCarregando(false);
       }
-    );
+    });
   };
 
   useEffect(() => {
@@ -79,12 +82,12 @@ const StatusUser = (props) => {
     apiExec("DELETE FROM TB01060 WHERE TB01060_TIPO = 'O' AND TB01060_STATUS = '" + props.statusselec + "' ", 'N').then((response) => {
       if (response.status === 200) {
         rowsselect.forEach((item) => {
+          iteminsert['status'] = props.statusselec;
           iteminsert['user'] = item.nome;
           iteminsert['tipo'] = item.tipo;
-          iteminsert['status'] = props.statusselec;
           apiInsert('StatusUser', iteminsert).then((response) => {
             if (response.status === 200) {
-              console.log(response.data)
+              console.log(response.data);
               setStatusprocessa('');
             }
           });
