@@ -35,13 +35,13 @@ const StatusNotificacao = (props) => {
       'StatusNotificacao',
       '*',
       'TB01059_USER AS nome',
-      "TB01059_TIPO = 'O' AND TB01059_STATUS= '" + props.statusselec + "' order by TB01059_USER "
+      " TB01059_STATUS= '" + props.statusselec + "' order by TB01059_USER "
     ).then((response) => {
       if (response.status === 200) {
-        //console.log(response.data);  
-        alert('Retorno da API: ' + JSON.stringify(response.data));
-        setRowsselect(response.data);
+        setRowsselect(response.data);   
+        console.log(response.data)
         setCarregando(false);
+
       }
     });
   };
