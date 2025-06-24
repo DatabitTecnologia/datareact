@@ -89,6 +89,7 @@ const StatusOsWorkflow = (props) => {
       if (response.status === 200) {
         rowsselect.forEach((item) => {
           iteminsert['novostatus'] = item.novostatus;
+          iteminsert['tipo'] = item.tipo;
           iteminsert['codigo'] = props.statusselec;
           apiInsert('StatusWorkflow', iteminsert).then((response) => {
             if (response.status === 200) {

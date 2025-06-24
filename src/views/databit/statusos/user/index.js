@@ -50,7 +50,7 @@ const StatusUser = (props) => {
     setColumnsselec([{ headerClassName: 'header-list', field: 'nome', headerName: 'Usuários selecionados', width: 510 }]);
     Filtrar();
   }, []);
-  
+
   const Add = (item) => {
     if (item !== undefined) {
       const rowsbkp1 = rows.slice(0, rows.length);
