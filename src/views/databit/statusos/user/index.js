@@ -87,7 +87,7 @@ const StatusUser = (props) => {
           iteminsert['tipo'] = 'O';
           apiInsert('StatusUser', iteminsert).then((response) => {
             if (response.status === 200) {
-              console.log(response.data);
+              //console.log(response.data);
               setStatusprocessa('');
             }
           });

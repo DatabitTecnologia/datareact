@@ -39,7 +39,7 @@ const StatusOsWorkflow = (props) => {
         "TB01057_STATUS= '" + props.statusselec +  "'AND TB01057_TIPO = 'O' order by TB01021_NOME ").then((response) => {
       if (response.status === 200) {
         setRowsselect(response.data);
-        console.log(response.data)
+        //console.log(response.data)
         setCarregando(false);
       }
     });
@@ -89,10 +89,11 @@ const StatusOsWorkflow = (props) => {
       if (response.status === 200) {
         rowsselect.forEach((item) => {
           iteminsert['novostatus'] = item.novostatus;
-          iteminsert['tipo'] = item.tipo;
-          iteminsert['codigo'] = props.statusselec;
+          iteminsert['status'] = props.statusselec;
+          iteminsert['tipo'] = 'O';
           apiInsert('StatusWorkflow', iteminsert).then((response) => {
             if (response.status === 200) {
+              console.log(response.data)
               setStatusprocessa('');
             }
           });
