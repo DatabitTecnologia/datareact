@@ -20,7 +20,7 @@ const StatusUser = (props) => {
       'Usuario',
       '*',
       '',
-      "TB00035_SITUACAO = 'A' AND NOT EXISTS (SELECT TB01139_USER FROM TB01139 WHERE TB01139_USER = TB00035_NOME AND TB01139_STATUS =  '" +
+      "TB00035_SITUACAO = 'A' AND NOT EXISTS (SELECT TB01060_USER FROM TB01060 WHERE TB01060_TIPO = 'O' AND TB01060_USER = TB00035_NOME AND TB01060_STATUS =  '" +
         props.statusselec +
         "') order by TB00035_NOME"
     ).then((response) => {
@@ -84,7 +84,7 @@ const StatusUser = (props) => {
         rowsselect.forEach((item) => {
           iteminsert['status'] = props.statusselec;
           iteminsert['user'] = item.nome;
-          iteminsert['tipo'] = item.tipo;
+          iteminsert['tipo'] = 'O';
           apiInsert('StatusUser', iteminsert).then((response) => {
             if (response.status === 200) {
               console.log(response.data);
