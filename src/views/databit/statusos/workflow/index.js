@@ -33,10 +33,10 @@ const StatusOsWorkflow = (props) => {
       }
     });
 
-    apiList('StatusWorkflowVW', 
+    apiList('StatusWorkflowOsVW', 
         '*', 
         '', 
-        "TB01057_STATUS= '" + props.statusselec +  "'AND TB01057_TIPO = 'O' order by TB01021_NOME ").then((response) => {
+        "TB01057_STATUS= '" + props.statusselec +  "' order by TB01073_NOME ").then((response) => {
       if (response.status === 200) {
         setRowsselect(response.data);
         //console.log(response.data)
@@ -51,8 +51,8 @@ const StatusOsWorkflow = (props) => {
       { headerClassName: 'header-list', field: 'nome', headerName: 'Descrição do Status', width: 420 }
     ]);
     setColumnsselec([
-      { headerClassName: 'header-list', field: 'novostatus', headerName: 'Código', width: 80 },
-      { headerClassName: 'header-list', field: 'nomenovo', headerName: 'Descrição do Status', width: 420 }
+      { headerClassName: 'header-list', field: 'codigo', headerName: 'Código', width: 80 },
+      { headerClassName: 'header-list', field: 'nome', headerName: 'Descrição do Status', width: 420 }
     ]);
     Filtrar();
   }, []);
@@ -88,7 +88,7 @@ const StatusOsWorkflow = (props) => {
     apiExec("DELETE FROM TB01057 WHERE TB01057_TIPO = 'O' AND TB01057_STATUS = '" + props.statusselec + "' ", 'N').then((response) => {
       if (response.status === 200) {
         rowsselect.forEach((item) => {
-          iteminsert['novostatus'] = item.novostatus;
+          iteminsert['novostatus'] = item.codigo;
           iteminsert['status'] = props.statusselec;
           iteminsert['tipo'] = 'O';
           apiInsert('StatusWorkflow', iteminsert).then((response) => {
