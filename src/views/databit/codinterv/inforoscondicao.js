@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Infor from '../cadastro/infor';
+import CondicaoColor from './color';
+import { Modal, ModalBody } from 'react-bootstrap';
 
 const InforOsCondicao = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -25,6 +27,9 @@ const InforOsCondicao = (props) => {
   const [openmodal, setOpenmodal] = React.useState(props.openmodal);
   const [fieldsauto, setFieldsauto] = React.useState(props.fieldsauto);
   const [events, setEvents] = React.useState([]);
+
+  const [showwcolor, setShowcolor] = useState(false);
+  
 
   useEffect(() => {
     const valor = valuesfield[valuesname.indexOf('reqpendente')];
@@ -54,6 +59,26 @@ const InforOsCondicao = (props) => {
       setValuesaddressdisable([...valuesdisable]);
     }
   }, [valuesfield[valuesname.indexOf('osreinc')], disabled]);
+
+  useEffect(() => {
+    setActions([
+      {
+        id: 'btnColor',
+        method: () => Color(),
+        classicon: 'feather icon-command',
+        classbutton: 'btn btn-primary shadow-2 mb-3',
+        caption: 'Color'
+      }
+    ]);
+  }, []);
+
+  const Color = () => {
+    setShowcolor(true);
+  };
+
+  const handleClosecolor = () => {
+    setShowcolor(false);
+  };
 
   return (
     <React.Fragment>
@@ -109,6 +134,19 @@ const InforOsCondicao = (props) => {
         events={events}
         setEvents={(data) => setEvents(data)}
       />
+      <Modal backdrop="static" size="lg" show={showwcolor} centered={true} onHide={handleClosecolor}>
+              <Modal.Header className="h5" closeButton>
+                <i className={'feather icon-command h1'} />
+                &nbsp;Cor do Status
+              </Modal.Header>
+              <ModalBody>
+                <CondicaoColor
+                  statusselec={valuesfield[valuesname.indexOf('codigo')]}
+                  showwcolor={showwcolor}
+                  setShowcolor={(data) => setShowcolor(data)}
+                ></CondicaoColor>
+              </ModalBody>
+            </Modal>
     </React.Fragment>
   );
 };
