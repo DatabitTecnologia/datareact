@@ -36,7 +36,7 @@ const InforTecnico = (props) => {
         classobject="Tecnico"
         termlist="Tecnico"
         moduleoption="31"
-        address={false}
+        address={true}
         primarykey="CODIGO"
         autoincrement={true}
         disabled={disabled}
