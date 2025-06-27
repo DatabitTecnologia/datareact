@@ -29,6 +29,7 @@ import InforDefeito from '../../defeito/infordefeito';
 import InforOsCondicao from '../../codinterv/inforoscondicao';
 import InforServIncomp from '../../servincompl/inforservincomp';
 import InforStatusOs from '../../statusos/inforstatusos';
+import InforTecnico from '../../tecnico/infortecnico';
 
 const OptionInfor = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -423,6 +424,19 @@ const OptionInfor = (props) => {
           onupdate={onupdate}
           setOnupdate={(data) => setOnupdate(data)}
         ></InforStatusOs>
+      );
+    }
+    case '31': {
+      //Definições de Tecnicos
+      return (
+        <InforTecnico
+          showinfor={showinfor}
+          rowselect={rowselect}
+          setRowselect={(data) => setRowselect(data)}
+          setShowinfor={(data) => setShowinfor(data)}
+          onupdate={onupdate}
+          setOnupdate={(data) => setOnupdate(data)}
+        ></InforTecnico>
       );
     }
     
