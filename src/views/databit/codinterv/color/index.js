@@ -6,7 +6,7 @@ import { apiFind, apiUpdate } from '../../../../api/crudapi';
 
 const CondicaoColor = (props) => {
   const [itemselec, setItemselec] = React.useState([]);
-  //const [cor, setCor] = React.useState('#fff');
+  const [cor, setCor] = React.useState('#fff');
   const [cor2, setCor2] = React.useState('#fff');
   const [carregando, setCarregando] = React.useState(false);
   const { showwcolor, setShowcolor } = props;
@@ -25,19 +25,19 @@ const CondicaoColor = (props) => {
   }, []);
 
   useEffect(() => {
-    //ValidCor(itemselec.color);
-    ValidCor(itemselec.color2);
+    ValidCor(itemselec.color);
+    ///ValidCor(itemselec.color2);
     if (itemselec.color !== undefined && itemselec.color !== '' && itemselec.color !== null) {
-      //setCor(itemselec.color);
-      setCor2(itemselec.color2);
+      setCor(itemselec.color);
+      //setCor2(itemselec.color2);
     }
   }, [itemselec]);
 
   const Salvar = (item) => {
-    //item.color = cor;
-    item.color2 = cor2;
+    item.color = cor;
+    //item.color2 = cor2;
     setCarregando(true);
-    apiUpdate('OsStatus', item).then((response) => {
+    apiUpdate('OsCondicao', item).then((response) => {
       if (response.status === 200) {
         setCarregando(false);
         setItemselec(response.data);
@@ -51,11 +51,11 @@ const CondicaoColor = (props) => {
     setShowcolor(false);
   };
 
-  /* const handleChangecor = (color) => {
+  const handleChangecor = (color) => {
     if (color !== null) {
       setCor(color.hex);
     }
-  }; */
+  };
 
   const handleChangecor2 = (color) => {
     if (color !== null) {
@@ -86,8 +86,8 @@ const CondicaoColor = (props) => {
       <Row style={{ marginBottom: '5px' }}>
         <Button
           style={{
-           //backgroundColor: ValidCor(cor),
-            color: ValidCor(cor2),
+            backgroundColor: '#93cbef',
+            color: ValidCor(cor),
             borderColor: '#fff'
           }}
         >
@@ -106,8 +106,8 @@ const CondicaoColor = (props) => {
                 height="300px"
                 width="300px"
                 textAlign="center"
-                color={ValidCor(cor2)}
-                onChangeComplete={(color) => handleChangecor2(color)}
+                color={ValidCor(cor)}
+                onChangeComplete={(color) => handleChangecor(color)}
               />
             </Card.Body>
           </Card>
