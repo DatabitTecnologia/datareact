@@ -31,10 +31,10 @@ const InforTecnico = (props) => {
       <Infor
         title="Definições de Técnicos"
         table="TB01024"
-        object="TB01024"
+        object="VW01008"
         classname="Tecnico"
-        classobject="Tecnico"
-        termlist="Tecnico"
+        classobject="TecnicoVW"
+        termlist="Técnico"
         moduleoption="31"
         address={true}
         primarykey="CODIGO"
