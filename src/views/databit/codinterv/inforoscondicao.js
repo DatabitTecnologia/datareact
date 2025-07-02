@@ -134,19 +134,20 @@ const InforOsCondicao = (props) => {
         events={events}
         setEvents={(data) => setEvents(data)}
       />
+      
       <Modal backdrop="static" size="lg" show={showwcolor} centered={true} onHide={handleClosecolor}>
-              <Modal.Header className="h5" closeButton>
-                <i className={'feather icon-command h1'} />
-                &nbsp;Cor do Status
-              </Modal.Header>
-              <ModalBody>
-                <CondicaoColor
-                  statusselec={valuesfield[valuesname.indexOf('codigo')]}
-                  showwcolor={showwcolor}
-                  setShowcolor={(data) => setShowcolor(data)}
-                ></CondicaoColor>
-              </ModalBody>
-            </Modal>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-command h1'} />
+          &nbsp;Cor do Status
+        </Modal.Header>
+        <ModalBody>
+          <CondicaoColor
+            statusselec={valuesfield[valuesname.indexOf('codigo')]}
+            showwcolor={showwcolor}
+            setShowcolor={(data) => setShowcolor(data)}
+          ></CondicaoColor>
+        </ModalBody>
+      </Modal>
     </React.Fragment>
   );
 };

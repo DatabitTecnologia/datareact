@@ -18,6 +18,7 @@ const CondicaoColor = (props) => {
         if (response.status === 200) {
           setCarregando(false);
           setItemselec(response.data);
+          
           console.log(response.data)
         }
       }
@@ -26,22 +27,21 @@ const CondicaoColor = (props) => {
 
   useEffect(() => {
     ValidCor(itemselec.color);
-    ///ValidCor(itemselec.color2);
     if (itemselec.color !== undefined && itemselec.color !== '' && itemselec.color !== null) {
       setCor(itemselec.color);
-      //setCor2(itemselec.color2);
     }
   }, [itemselec]);
 
   const Salvar = (item) => {
     item.color = cor;
-    //item.color2 = cor2;
     setCarregando(true);
     apiUpdate('OsCondicao', item).then((response) => {
       if (response.status === 200) {
         setCarregando(false);
         setItemselec(response.data);
+
         console.log(response.data)
+
         setShowcolor(false);
       }
     });
@@ -54,12 +54,6 @@ const CondicaoColor = (props) => {
   const handleChangecor = (color) => {
     if (color !== null) {
       setCor(color.hex);
-    }
-  };
-
-  const handleChangecor2 = (color) => {
-    if (color !== null) {
-      setCor2(color.hex);
     }
   };
 
@@ -81,51 +75,40 @@ const CondicaoColor = (props) => {
 
   return (
     <React.Fragment>
-      <div id="linear-progress">{carregando && <LinearProgress color="primary" />}</div>
-
-      <Row style={{ marginBottom: '5px' }}>
-        <Button
-          style={{
-            backgroundColor: '#93cbef',
-            color: ValidCor(cor),
-            borderColor: '#fff'
-          }}
-        >
-          Cor da listagem
-        </Button>
-      </Row>
-
-      <Row style={{ justifyContent: 'center' }}>
-        <Col md={6}>
-          <Card>
-            <Card.Header>
-              <Card.Title as="h5">Cor da Fonte</Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <SketchPicker
-                height="300px"
-                width="300px"
-                textAlign="center"
-                color={ValidCor(cor)}
-                onChangeComplete={(color) => handleChangecor(color)}
-              />
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
-      <hr />
-
-      <Row style={{ justifyContent: 'center' }}>
-        <Col xs="auto" style={{ textAlign: 'center' }}>
-          <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={() => Salvar(getSelected())}>
-            <i className="feather icon-save" /> Salvar
-          </Button>
-          <Button id="btnCancelar" className="btn btn-warning shadow-2 mb-2" onClick={() => Cancelar()} style={{ marginLeft: '10px' }}>
-            <i className="feather icon-x" /> Cancelar
-          </Button>
-        </Col>
-      </Row>
+      <div id="linear-progress" >{carregando && <LinearProgress color="primary" />}</div>
+            <Row style={{ marginBottom: '5px' }}>
+              <Button style={{ backgroundColor: ValidCor(cor), borderColor: '#fff' }}>Cor da listagem</Button>
+            </Row>
+            <Row>
+              <Col>
+                <Card>
+                  <Card.Header>
+                    <Card.Title as="h5">Cor de Fundo</Card.Title>
+                  </Card.Header>
+                  <Card.Body style={{display: 'flex', justifyContent: 'center'}}>
+                    <SketchPicker
+                      height="300px"
+                      width="300px"
+                      textAlign="center"
+                      color={ValidCor(cor)}
+                      onChangeComplete={(color) => handleChangecor(color)}
+                    />
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+            <hr></hr>
+            <Row style={{ textAlign: 'center' }}>
+              <Col style={{ textAlign: 'rigth' }}>
+                <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={() => Salvar(getSelected())}>
+                  <i className={'feather icon-save'} /> Salvar
+                </Button>
+                <Button id="btnCancelar" className="btn btn-warning shadow-2 mb-2" onClick={() => Cancelar()}>
+                  <i className={'feather icon-x'} />
+                  Cancelar
+                </Button>
+              </Col>
+            </Row>
     </React.Fragment>
   );
 };
