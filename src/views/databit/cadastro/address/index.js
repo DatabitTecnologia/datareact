@@ -60,6 +60,7 @@ const Address = (props) => {
   ];
 
   useEffect(() => {
+    console.log('Entrou')
     Filtrar();
   }, []);
 
