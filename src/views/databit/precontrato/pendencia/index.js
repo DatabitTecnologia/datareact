@@ -471,6 +471,7 @@ const PrecontratoPendencia = (props) => {
         "') ";
     }
     setFiltroSQL(sql);
+    console.log(sql);
   };
 
   useEffect(() => {

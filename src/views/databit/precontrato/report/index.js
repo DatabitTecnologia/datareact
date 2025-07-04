@@ -212,6 +212,231 @@ export const PrecontratoReport = (precontrato) => {
                                         }
                                       ]
                                     },
+                                    ...(cabecalho.operacao !== 'C'
+                                      ? [
+                                          {
+                                            columns: [
+                                              {
+                                                text: 'FRANQUIAS DO CONTRATO : ',
+                                                style: 'lineBlack',
+                                                margin: [0, 10, 5, 0],
+                                                width: '40%'
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            columns: [
+                                              {
+                                                width: '100%',
+                                                margin: [0, 0],
+                                                table: {
+                                                  headerRows: 1,
+                                                  widths: [
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%'
+                                                  ],
+                                                  body: [
+                                                    [
+                                                      { text: 'TIPO', style: 'lineSimple', alignment: 'left', margin: [5, 5] },
+                                                      { text: 'QUANT.', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'VALOR', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'TIPO', style: 'lineSimple', alignment: 'left', margin: [5, 5] },
+                                                      { text: 'QUANT.', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'VALOR', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'TIPO', style: 'lineSimple', alignment: 'left', margin: [5, 5] },
+                                                      { text: 'QUANT.', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'VALOR', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'TIPO', style: 'lineSimple', alignment: 'left', margin: [5, 5] },
+                                                      { text: 'QUANT.', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'VALOR', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'TIPO', style: 'lineSimple', alignment: 'left', margin: [5, 5] },
+                                                      { text: 'QUANT.', style: 'lineSimple', alignment: 'right', margin: [5, 5] },
+                                                      { text: 'VALOR', style: 'lineSimple', alignment: 'right', margin: [5, 5] }
+                                                    ]
+                                                  ]
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            columns: [
+                                              {
+                                                width: '100%',
+                                                margin: [0, 0],
+                                                table: {
+                                                  headerRows: 1,
+                                                  widths: [
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%',
+                                                    '7.5%',
+                                                    '6.5%',
+                                                    '6.5%'
+                                                  ],
+                                                  body: [
+                                                    [
+                                                      { text: 'A4 MONO', style: 'lineBold', alignment: 'right', margin: [5, 5] },
+                                                      {
+                                                        text: formatNumber(cabecalho.franqpb, 0),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      {
+                                                        text: formatNumber(cabecalho.vlrnotapb, 2),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      { text: 'A4 COLOR', style: 'lineBold', alignment: 'right', margin: [5, 5] },
+                                                      {
+                                                        text: formatNumber(cabecalho.franqcolor, 0),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      {
+                                                        text: formatNumber(cabecalho.vlrnotacl, 2),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      { text: 'DIGIT.', style: 'lineBold', alignment: 'right', margin: [5, 5] },
+                                                      {
+                                                        text: formatNumber(cabecalho.franqdg, 0),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      {
+                                                        text: formatNumber(cabecalho.vlrnotadg, 2),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      { text: 'A3 MONO', style: 'lineBold', alignment: 'right', margin: [5, 5] },
+                                                      {
+                                                        text: formatNumber(cabecalho.franqgf, 0),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      {
+                                                        text: formatNumber(cabecalho.vlrnotagf, 2),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      { text: 'A3 COLOR', style: 'lineBold', alignment: 'right', margin: [5, 5] },
+                                                      {
+                                                        text: formatNumber(cabecalho.franqgfc, 0),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      {
+                                                        text: formatNumber(cabecalho.vlrnotagfc, 2),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      }
+                                                    ]
+                                                  ]
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            columns: [
+                                              {
+                                                text: 'VALORES DO CONTRATO : ',
+                                                style: 'lineBlack',
+                                                margin: [0, 10, 5, 0],
+                                                width: '50%'
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            columns: [
+                                              {
+                                                width: '100%',
+                                                margin: [0, 0],
+                                                table: {
+                                                  headerRows: 1,
+                                                  widths: ['15%', '10%', '15%', '10%'],
+                                                  body: [
+                                                    [
+                                                      { text: 'TAXA FIXA', style: 'lineBold', alignment: 'right', margin: [5, 5] },
+                                                      {
+                                                        text: formatNumber(cabecalho.vlrfixo, 2),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      },
+                                                      { text: 'VALOR CONTRATO', style: 'lineBold', alignment: 'right', margin: [5, 5] },
+                                                      {
+                                                        text: formatNumber(cabecalho.vlrnota, 2),
+                                                        style: 'lineSimple',
+                                                        alignment: 'right',
+                                                        margin: [5, 5]
+                                                      }
+                                                    ]
+                                                  ]
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            columns: [
+                                              {
+                                                text: ' ',
+                                                margin: [0, 10, 5, 0],
+                                                width: '40%'
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            columns: [
+                                              {
+                                                text: ' ',
+                                                margin: [0, 10, 5, 0],
+                                                width: '40%'
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            columns: [
+                                              {
+                                                text: ' ',
+                                                margin: [0, 10, 5, 0],
+                                                width: '40%'
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      : []),
                                     {
                                       columns: [
                                         {

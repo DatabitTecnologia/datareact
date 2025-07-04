@@ -13,6 +13,7 @@ import CreateSelect from '../CreateSelect';
 export const CreateObject = (props) => {
   const { valuesfield, setValuesfield } = props;
   const { valuesfield2, setValuesfield2 } = props;
+  const { valuesname, setValuesname } = props;
   const [listoptions, setListoptions] = React.useState([]);
   const { valuesfieldref } = props;
   const valuesfieldref2 = useRef([]);
@@ -216,6 +217,8 @@ export const CreateObject = (props) => {
               setValuesfield={(data) => setValuesfield(data)}
               valuesfield2={valuesfield2}
               setValuesfield2={(data) => setValuesfield2(data)}
+              valuesname={valuesname}
+              setValuesname={(data) => setValuesname(data)}
               interval={props.field.tipofiltro === 3}
               measure={props.field.measure}
               typemask={props.field.tipomascara}

@@ -165,57 +165,67 @@ const InforPrecontrato = (props) => {
               method: async function () {
                 if (valuesfield !== undefined && valuesfield.length > 0) {
                   let contrato = valuesfield[valuesname.indexOf('contrato')];
-                  if (contrato !== '' && contrato !== undefined) {
-                    const responselist = await apiList(
-                      'PrecontratoEndereco',
-                      'TB02269_CODIGO,TB02269_NOME,TB02269_END,TB02269_CEP,TB02269_END,TB02269_NUM,TB02269_COMP,TB02269_BAIRRO,' +
-                        'TB02269_CIDADE,TB02269_ESTADO,TB02269_CONTATO,TB02269_FONE,TB02269_EMAIL,TB02269_OPORTUNIDADE',
-                      '',
-                      " TB02269_PRECONTRATO= '" + valuesfield[valuesname.indexOf('codigo')] + "' "
-                    );
-                    if (responselist.status === 200) {
-                      const enderecos = responselist.data;
-
-                      if (enderecos.length <= 0) {
-                        setProcessando(true);
-                        const responselistsite = await apiList(
+                  let codcli = valuesfield[valuesname.indexOf('codcli')];
+                  const responselist = await apiList(
+                    'PrecontratoEndereco',
+                    'TB02269_CODIGO,TB02269_NOME,TB02269_END,TB02269_CEP,TB02269_END,TB02269_NUM,TB02269_COMP,TB02269_BAIRRO,' +
+                      'TB02269_CIDADE,TB02269_ESTADO,TB02269_CONTATO,TB02269_FONE,TB02269_EMAIL,TB02269_OPORTUNIDADE',
+                    '',
+                    " TB02269_PRECONTRATO= '" + valuesfield[valuesname.indexOf('codigo')] + "' "
+                  );
+                  if (responselist.status === 200) {
+                    const enderecos = responselist.data;
+                    if (enderecos.length <= 0) {
+                      setProcessando(true);
+                      let responselistsite = undefined;
+                      if (contrato !== '' && contrato !== undefined) {
+                        responselistsite = await apiList(
                           'Site',
                           'TB02176_NOME,TB02176_END,TB02176_CEP,TB02176_END,TB02176_NUM,TB02176_COMP,TB02176_BAIRRO,' +
                             'TB02176_CIDADE,TB02176_ESTADO,TB02176_CONTATO,TB02176_FONE,TB02176_EMAIL',
                           '',
                           "TB02176_CONTRATO = '" + contrato + "' "
                         );
-                        if (responselistsite.status === 200) {
-                          const sites = responselistsite.data;
-                          if (sites !== undefined) {
-                            let i = 0;
-                            for (const site of sites) {
-                              let item = {};
-                              item['nome'] = site.nome;
-                              item['cep'] = site.cep;
-                              item['end'] = site.end;
-                              item['num'] = site.num;
-                              item['comp'] = site.comp;
-                              item['bairro'] = site.bairro;
-                              item['cidade'] = site.cidade;
-                              item['estado'] = site.estado;
-                              item['fone'] = site.fone;
-                              item['contato'] = site.contato;
-                              item['email'] = site.email;
-                              item['precontrato'] = valuesfield[valuesname.indexOf('codigo')];
-                              const responseinsert = await apiInsert('PrecontratoEndereco', item);
-                              if (responseinsert.status === 200) {
-                                i += 1;
-                                setItemprocessa('Site(' + i + '/' + sites.length + ') ' + site.nome);
-                              }
+                      } else {
+                        responselistsite = await apiList(
+                          'Endereco',
+                          'TB00012_END,TB00012_CEP,TB00012_END,TB00012_NUM,TB00012_COMP,TB00012_BAIRRO,' +
+                            'TB00012_CIDADE,TB00012_ESTADO,TB00012_CONTATO,TB00012_FONE,TB00012_EMAIL',
+                          "'SITE PADRÃO' AS nome",
+                          "TB00012_CODIGO = '" + codcli + "' and TB00012_TIPO = '01' and TB00012_TABELA = 'TB01008' "
+                        );
+                      }
+                      if (responselistsite.status === 200) {
+                        const sites = responselistsite.data;
+                        if (sites !== undefined) {
+                          let i = 0;
+                          for (const site of sites) {
+                            let item = {};
+                            item['nome'] = site.nome;
+                            item['cep'] = site.cep;
+                            item['end'] = site.end;
+                            item['num'] = site.num;
+                            item['comp'] = site.comp;
+                            item['bairro'] = site.bairro;
+                            item['cidade'] = site.cidade;
+                            item['estado'] = site.estado;
+                            item['fone'] = site.fone;
+                            item['contato'] = site.contato;
+                            item['email'] = site.email;
+                            item['precontrato'] = valuesfield[valuesname.indexOf('codigo')];
+                            const responseinsert = await apiInsert('PrecontratoEndereco', item);
+                            if (responseinsert.status === 200) {
+                              i += 1;
+                              setItemprocessa('Site(' + i + '/' + sites.length + ') ' + site.nome);
                             }
                           }
                         }
-                        setProcessando(false);
                       }
+                      setProcessando(false);
                     }
                   }
                 }
+
                 return true;
               }
             }
@@ -346,13 +356,32 @@ const InforPrecontrato = (props) => {
     const poscontrato = valuesname.indexOf('contrato');
     const valorstatus = valuesfield[valuesname.indexOf('status')];
     const codcli = valuesfield[valuesname.indexOf('codcli')];
+    const posfrantotal = valuesname.indexOf('franqtotal');
+    const posvlrfranqtotal = valuesname.indexOf('vlrfranqtotal');
+    const posfranqpb = valuesname.indexOf('franqpb');
+    const posvlrfranqpb = valuesname.indexOf('vlrfranqpb');
+    const posfranqcolor = valuesname.indexOf('franqcolor');
+    const posvlrfranqcolor = valuesname.indexOf('vlrfranqcolor');
+    const posfranqdg = valuesname.indexOf('franqdg');
+    const posvlrfranqdg = valuesname.indexOf('vlrfranqdg');
+    const posfranqgf = valuesname.indexOf('franqgf');
+    const posvlrfranqgf = valuesname.indexOf('vlrfranqgf');
+    const posfranqgfc = valuesname.indexOf('franqgfc');
+    const posvlrfranqgfc = valuesname.indexOf('vlrfranqgfc');
+    const postipofranquia = valuesname.indexOf('tipofranquia');
+    const posanalfranquia = valuesname.indexOf('analfranquia');
+    const poscodemp = valuesname.indexOf('codemp');
+    const poscodemp2 = valuesname.indexOf('codemp2');
+    const posdtinicio = valuesname.indexOf('dtinicio');
+    const posdtvenc = valuesname.indexOf('venccontr');
+    const posduracao = valuesname.indexOf('duracao');
+    const posdiavenc = valuesname.indexOf('diavenc');
 
-    valuesinvisible[poscontrato] = true;
-    setValuesinvisible([...valuesinvisible]);
     let valor = valuesfield[valuesname.indexOf('tipopre')];
+
     if (valor !== undefined) {
       if (valor !== '' && valor.length === 4) {
-        apiFind('PrecontratoTipo', '*', '', "TB01138_CODIGO = '" + valor + "' ").then((response) => {
+        apiFind('PrecontratoTipo', 'TB01138_STATUSINICIAL,TB01138_OPERACAO', '', "TB01138_CODIGO = '" + valor + "' ").then((response) => {
           if (response.status === 200) {
             if (valorstatus === '') {
               valuesfield[posstatus] = response.data.statusinicial;
@@ -361,13 +390,37 @@ const InforPrecontrato = (props) => {
             const operacao = response.data.operacao;
             valuesinvisible[poscontrato] = operacao === 'C' || operacao === undefined;
             setValuesinvisible([...valuesinvisible]);
+
+            if (!disabled) {
+              valuesdisable[posfrantotal] = operacao !== 'C';
+              valuesdisable[posvlrfranqtotal] = operacao !== 'C';
+              valuesdisable[posfranqpb] = operacao !== 'C';
+              valuesdisable[posvlrfranqpb] = operacao !== 'C';
+              valuesdisable[posfranqcolor] = operacao !== 'C';
+              valuesdisable[posvlrfranqcolor] = operacao !== 'C';
+              valuesdisable[posvlrfranqdg] = operacao !== 'C';
+              valuesdisable[posfranqgf] = operacao !== 'C';
+              valuesdisable[posfranqdg] = operacao !== 'C';
+              valuesdisable[posvlrfranqgf] = operacao !== 'C';
+              valuesdisable[posvlrfranqgfc] = operacao !== 'C';
+              valuesdisable[posvlrfranqgfc] = operacao !== 'C';
+              valuesdisable[postipofranquia] = operacao !== 'C';
+              valuesdisable[posanalfranquia] = operacao !== 'C';
+              valuesdisable[poscodemp] = operacao !== 'C';
+              valuesdisable[poscodemp2] = operacao !== 'C';
+              valuesdisable[posdtinicio] = operacao !== 'C';
+              valuesdisable[posdtvenc] = operacao !== 'C';
+              valuesdisable[posduracao] = operacao !== 'C';
+              valuesdisable[posdiavenc] = operacao !== 'C';
+              setValuesdisable([...valuesdisable]);
+            }
             fields[poscontrato].filteraux = " AND TB02111_CODCLI = '" + codcli + "' ";
             setFields([...fields]);
           }
         });
       }
     }
-  }, [valuesfield[valuesname.indexOf('tipopre')], valuesfield[valuesname.indexOf('codcli')]]);
+  }, [valuesfield[valuesname.indexOf('tipopre')], valuesfield[valuesname.indexOf('codcli')], disabled]);
 
   useEffect(() => {
     // Obtendo informações do Contrato
@@ -426,7 +479,7 @@ const InforPrecontrato = (props) => {
               const datafim = new Date(dt1);
               valuesfield[posdtinicio] = datafim;
             } catch (error) {
-              console.log(error);
+              //console.log(error);
             }
           }
           if (!valuesfield[posdtvenc]) {
@@ -440,14 +493,14 @@ const InforPrecontrato = (props) => {
               const datafim2 = new Date(dt2);
               valuesfield[posdtvenc] = datafim2;
             } catch (error) {
-              console.log(error);
+              //console.log(error);
             }
           }
           setValuesfield([...valuesfield]);
         }
       });
     }
-  }, [valuesfield[valuesname.indexOf('contrato')]]);
+  }, [valuesfield2[valuesname.indexOf('contrato')]]);
 
   useEffect(() => {
     if (

@@ -102,7 +102,7 @@ const CreateFind = (props) => {
   }, [itemselec]);
 
   const handleFind = (e, size) => {
-    if (e.target.value !== '' && e.target.value !== undefined) {
+    if (e.target.value !== '' && e.target.value !== undefined && props.table !== 'TB02111' && props.table !== 'TB04006') {
       const texto = e.target.value;
       const textoformatado = texto.padStart(size, '0');
       e.target.value = textoformatado;

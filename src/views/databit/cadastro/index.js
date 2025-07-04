@@ -226,13 +226,15 @@ const Cadastro = (props) => {
         );
       }
       case 2: {
-        return <FieldsParam object={props.object} setOptiontitle={(data) => setOptiontitle(data)}></FieldsParam>;
+        return <FieldsParam object={props.object} table={props.table} setOptiontitle={(data) => setOptiontitle(data)}></FieldsParam>;
       }
       case 3: {
-        return <FieldsRequired object={props.object} setOptiontitle={(data) => setOptiontitle(data)}></FieldsRequired>;
+        return <FieldsRequired object={props.object} table={props.table} setOptiontitle={(data) => setOptiontitle(data)}></FieldsRequired>;
       }
       case 4: {
-        return <FieldsValidation object={props.object} setOptiontitle={(data) => setOptiontitle(data)}></FieldsValidation>;
+        return (
+          <FieldsValidation object={props.object} table={props.table} setOptiontitle={(data) => setOptiontitle(data)}></FieldsValidation>
+        );
       }
       case 5: {
         return <DefAddress object={props.table} setOptiontitle={(data) => setOptiontitle(data)}></DefAddress>;

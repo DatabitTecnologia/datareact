@@ -1343,6 +1343,11 @@ const PreContratoEquipamento = (props) => {
                               setShowplus={(data) => setShowplus(data)}
                               processado={processado}
                               setProcessado={(data) => setProcessado(data)}
+                              tipoop={'P'}
+                              browseequip={'BrowseEquipVW'}
+                              browsetotal={'BrowseEquipTotalVW'}
+                              classdevolu={'PrecontratoDevolucao'}
+                              classequip={'PrecontratoEquipamento'}
                             ></BrowseEquip>
                           </ModalBody>
                         </Modal>

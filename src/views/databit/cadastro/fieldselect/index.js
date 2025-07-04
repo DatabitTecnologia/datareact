@@ -40,7 +40,7 @@ const FieldSelect = (props) => {
     //{ value: '3', label: 'Multi-Seleção' },
     { value: '4', label: 'Numérico' },
     { value: '5', label: 'Data' },
-    //{ value: '6', label: 'Multi-Texto' },
+    { value: '6', label: 'Multi-Texto' },
     { value: '8', label: 'Texto Especial' },
     { value: '9', label: 'CheckBox' },
     { value: '10', label: 'Radio' },

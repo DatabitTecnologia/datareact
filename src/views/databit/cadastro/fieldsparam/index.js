@@ -20,13 +20,20 @@ const FieldsParam = (props) => {
 
   const Filtrar = () => {
     setCarregando(true);
-    apiList('Paramfield', '*', '', "TB00003_TABELA = '" + props.object + "' and TB00003_SELEC2 = 'N' ORDER BY TB00003_FUNCAO").then(
-      (response) => {
-        if (response.status === 200) {
-          setRows(response.data);
-        }
+    apiList(
+      'Paramfield',
+      '*',
+      '',
+      "TB00003_TABELA = '" +
+        props.object +
+        "' and TB00003_SELEC2 = 'N' and (charindex('" +
+        props.table +
+        "',TB00003_CAMPO)> 0 or charindex('TB00012',TB00003_CAMPO)> 0) ORDER BY TB00003_FUNCAO"
+    ).then((response) => {
+      if (response.status === 200) {
+        setRows(response.data);
       }
-    );
+    });
 
     apiList('Paramfield', '*', '', "TB00003_TABELA = '" + props.object + "' and TB00003_SELEC2 = 'S' ORDER BY TB00003_FUNCAO").then(
       (response) => {

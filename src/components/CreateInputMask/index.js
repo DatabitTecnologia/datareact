@@ -10,6 +10,7 @@ import ConsultaCNPJ from '../../views/databit/cnpj';
 const CreateInputMask = (props) => {
   const { valuesfield, setValuesfield } = props;
   const { valuesfield2, setValuesfield2 } = props;
+  const { valuesname, setValuesname } = props;
   const { refs } = props;
   const [mascara, setMascara] = React.useState();
   const { addToast } = useToasts();
@@ -300,13 +301,17 @@ const CreateInputMask = (props) => {
           &nbsp;Consulta de CNPJ : {valuesfield[props.index]}
         </Modal.Header>
         <ModalBody>
-          <ConsultaCNPJ cnpjselec={valuesfield[props.index]} setCnpjselec={(data) => setCnpj(data)}></ConsultaCNPJ>
+          <ConsultaCNPJ
+            cnpjselec={valuesfield[props.index]}
+            setCnpjselec={(data) => setCnpj(data)}
+            valuesfield={valuesfield}
+            setValuesfield={(data) => setValuesfield(data)}
+            valuesname={valuesname}
+            setValuesname={(data) => setValuesname(data)}
+            showcons={showcons}
+            setShowcons={(data) => setShowcons(data)}
+          ></ConsultaCNPJ>
         </ModalBody>
-        <ModalFooter>
-          <Button id="btnSair" className="btn btn-success shadow-2 mb-2" onClick={(e) => setShowcons(false)}>
-            <i className={'feather icon-x'} /> Sair
-          </Button>
-        </ModalFooter>
       </Modal>
     </React.Fragment>
   );

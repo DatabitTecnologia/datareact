@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
-import { LinearProgress } from '@mui/material';
 import AGGrid from '../AGGrid';
 import { apiList, apiInsert, apiExec } from '../../api/crudapi';
 import { CreateObject } from '../CreateObject';
 import { states } from '../../utils/states';
-import { Confirmation } from '../Confirmation';
 
 const BrowseEquip = (props) => {
-  const { precontrato, operacaotipo, coditem, iditem } = props;
+  const { precontrato, operacaotipo, coditem, iditem, oportunidade, tipoop, browseequip, browsetotal, classdevolu, classequip } = props;
   const { showplus, setShowplus } = props;
   const { processado, setProcessado } = props;
   const [carregando, setCarregando] = React.useState(false);
@@ -35,6 +33,25 @@ const BrowseEquip = (props) => {
 
     tmpvalidations = tmpvalidations.concat(validation);
     setValidations(tmpvalidations);
+  }, []);
+
+  useEffect(() => {
+    let contratoselec = undefined;
+    if (tipoop === 'P') {
+      if (precontrato !== undefined) {
+        valuesfield[0] = precontrato.contrato;
+        valuesfield[1] = precontrato.codcli;
+        contratoselec = precontrato.contrato;
+        setValuesfield([...valuesfield]);
+      }
+    } else {
+      if (oportunidade !== undefined) {
+        valuesfield[0] = oportunidade.contrato;
+        valuesfield[1] = oportunidade.codcli;
+        contratoselec = oportunidade.contrato;
+        setValuesfield([...valuesfield]);
+      }
+    }
     setColumns([
       { headerClassName: 'header-list', field: 'contrato', headerName: 'Contrato', width: 90 },
       { headerClassName: 'header-list', field: 'codcli', headerName: 'Cliente', width: 100 },
@@ -61,7 +78,7 @@ const BrowseEquip = (props) => {
         tipoobject: 1,
         widthfield: 10,
         measure: '9rem',
-        disabled: precontrato !== undefined
+        disabled: contratoselec !== undefined
       },
       {
         id: 1,
@@ -75,7 +92,7 @@ const BrowseEquip = (props) => {
         measure: '32rem',
         tabelaref: 'TB01008',
         widthname: 23,
-        disabled: precontrato !== undefined
+        disabled: contratoselec !== undefined
       },
       {
         id: 2,
@@ -214,7 +231,7 @@ const BrowseEquip = (props) => {
         tabelaref: 'TB02176',
         widthname: 23,
         disabled: false,
-        filteraux: " and TB02176_CONTRATO = '" + precontrato.contrato + "' "
+        filteraux: " and TB02176_CONTRATO = '" + contratoselec + "' "
       },
       {
         id: 13,
@@ -259,16 +276,8 @@ const BrowseEquip = (props) => {
         disabled: false
       }
     ]);
-  }, []);
-
-  useEffect(() => {
-    if (precontrato !== undefined) {
-      valuesfield[0] = precontrato.contrato;
-      valuesfield[1] = precontrato.codcli;
-      setValuesfield([...valuesfield]);
-    }
     Filtrar();
-  }, [precontrato]);
+  }, [precontrato, oportunidade, tipoop]);
 
   useEffect(() => {
     if (operacaotipo === 'D') {
@@ -332,7 +341,7 @@ const BrowseEquip = (props) => {
     if (valuesfield[12] !== '' && valuesfield[12] !== undefined) {
       filter += " and codsite = '" + valuesfield[12] + "' ";
     }
-    apiList('BrowseEquipVW', '*', '', filter).then((response) => {
+    apiList(browseequip, '*', '', filter).then((response) => {
       if (response.status === 200) {
         setRows(response.data);
         setCarregando(false);
@@ -351,22 +360,36 @@ const BrowseEquip = (props) => {
   };
 
   const selectItem = (item) => {
-    if (item.precontrato === '' || item.precontrato === undefined || item.precontrato === null) {
-      item.operacaotipo = valuesfield[13];
-      item.precontrato = precontrato.codigo;
-      item.qtcontratada = valuesfield[14];
-      item.qtaprovada = valuesfield[15];
+    if (tipoop === 'P') {
+      if (item.precontrato === '' || item.precontrato === undefined || item.precontrato === null) {
+        item.operacaotipo = valuesfield[13];
+        item.precontrato = precontrato.codigo;
+        item.qtcontratada = valuesfield[14];
+        item.qtaprovada = valuesfield[15];
+      } else {
+        item.operacaotipo = 'N';
+        item.precontrato = null;
+        item.qtcontratada = '0';
+        item.qtaprovada = '0';
+      }
     } else {
-      item.operacaotipo = 'N';
-      item.precontrato = null;
-      item.qtcontratada = '0';
-      item.qtaprovada = '0';
+      if (item.oportunidade === '' || item.oportunidade === undefined || item.oportunidade === null) {
+        item.operacaotipo = valuesfield[13];
+        item.oportunidade = oportunidade.codigo;
+        item.qtcontratada = valuesfield[14];
+        item.qtaprovada = valuesfield[15];
+      } else {
+        item.operacaotipo = 'N';
+        item.oportunidade = null;
+        item.qtcontratada = '0';
+        item.qtaprovada = '0';
+      }
     }
   };
 
   const processaItens = async () => {
     try {
-      const { codigo, contrato } = precontrato;
+      const { codigo, contrato } = tipoop === 'P' ? precontrato : oportunidade;
       const qtContratada = valuesfield[14];
       const qtAprovada = valuesfield[15];
 
@@ -374,10 +397,17 @@ const BrowseEquip = (props) => {
       setProcessando(true);
 
       // Apaga registros antigos
-      await apiExec(
-        `DELETE FROM TB02308 WHERE TB02308_PRECONTRATO = '${codigo}' AND TB02308_CODITEM = '${coditem}' AND TB02308_IDITEM = '${iditem}'`,
-        'N'
-      );
+      if (tipoop === 'P') {
+        await apiExec(
+          `DELETE FROM TB02308 WHERE TB02308_PRECONTRATO = '${codigo}' AND TB02308_CODITEM = '${coditem}' AND TB02308_IDITEM = '${iditem}'`,
+          'N'
+        );
+      } else {
+        await apiExec(
+          `DELETE FROM TB02309 WHERE TB02309_OPORTUNIDADE = '${codigo}' AND TB02309_CODITEM = '${coditem}' AND TB02309_IDITEM = '${iditem}'`,
+          'N'
+        );
+      }
 
       // Filtra itens válidos
       const itens = rows.filter((x) => x.operacaotipo !== 'N');
@@ -386,6 +416,7 @@ const BrowseEquip = (props) => {
       for (const item of itens) {
         const itemsave = {
           precontrato: codigo,
+          oportunidade: codigo,
           contrato,
           produto: item.produto,
           numserie: item.numserie,
@@ -399,7 +430,7 @@ const BrowseEquip = (props) => {
           iditem
         };
 
-        const responseinsert = await apiInsert('PrecontratoDevolucao', itemsave);
+        const responseinsert = await apiInsert(classdevolu, itemsave);
 
         if (responseinsert.status === 200) {
           setItemprocessa(`Equipamento : ${item.numserie} - ${item.nomeprod}`);
@@ -407,17 +438,26 @@ const BrowseEquip = (props) => {
       }
 
       // Remove dados antigos da TB02267
-      await apiExec(
-        `DELETE FROM TB02267 WHERE TB02267_PRECONTRATO = '${codigo}' AND TB02267_CODITEM = '${coditem}' AND TB02267_IDITEM = '${iditem}' AND TB02267_OPERACAOTIPO = 'R' `,
-        'N'
-      );
+      if (tipoop === 'P') {
+        await apiExec(
+          `DELETE FROM TB02267 WHERE TB02267_PRECONTRATO = '${codigo}' AND TB02267_CODITEM = '${coditem}' AND TB02267_IDITEM = '${iditem}' AND TB02267_OPERACAOTIPO = 'R' `,
+          'N'
+        );
+      } else {
+        await apiExec(
+          `DELETE FROM TB02261 WHERE TB02261_OPORTUNIDADE = '${codigo}' AND TB02261_CODITEM = '${coditem}' AND TB02261_IDITEM = '${iditem}' AND TB02261_OPERACAOTIPO = 'R' `,
+          'N'
+        );
+      }
 
       // Lista equipamentos atualizados
       const responselistequip = await apiList(
-        'BrowseEquipTotalVW',
+        browsetotal,
         '*',
         '',
-        `precontrato = '${codigo}' AND coditem = '${coditem}' AND iditem = '${iditem}'`
+        tipoop === 'P'
+          ? `precontrato = '${codigo}' AND coditem = '${coditem}' AND iditem = '${iditem}'`
+          : `oportunidade = '${codigo}' AND coditem = '${coditem}' AND iditem = '${iditem}'`
       );
 
       if (responselistequip.status === 200) {
@@ -426,6 +466,7 @@ const BrowseEquip = (props) => {
         for (const equip of equips) {
           const itemsaveequip = {
             precontrato: codigo,
+            oportunidade: codigo,
             coditem,
             iditem,
             produto: equip.produto,
@@ -438,7 +479,7 @@ const BrowseEquip = (props) => {
             situacaoequip: 1
           };
 
-          const responseinsertequip = await apiInsert('PrecontratoEquipamento', itemsaveequip);
+          const responseinsertequip = await apiInsert(classequip, itemsaveequip);
 
           if (responseinsertequip.status === 200) {
             setItemprocessa(`Equipamento : ${equip.produto} - ${equip.codsite}`);

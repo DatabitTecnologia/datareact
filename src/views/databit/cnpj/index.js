@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Alert } from 'react-bootstrap';
+import { Row, Col, Card, Alert, Button } from 'react-bootstrap';
 import { LinearProgress } from '@mui/material';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -10,6 +10,10 @@ import { apiCNPJ } from '../../../api/crudapi';
 
 const ConsultaCNPJ = (props) => {
   const { cnpjselec, setCnpjselec, resultado, setResultado } = props;
+  const { valuesfield, setValuesfield } = props;
+  const { valuesfield2, setValuesfield2 } = props;
+  const { valuesname, setValuesname } = props;
+  const { showcons, setShowcons } = props;
   const [cadastro, setCadastro] = React.useState([]);
   const [dados, setDados] = React.useState(undefined);
   const [atividades, setAtividades] = React.useState([]);
@@ -259,6 +263,28 @@ const ConsultaCNPJ = (props) => {
     }
   }, [dados]);
 
+  const adicionarDados = () => {
+    let obsFim = valuesfield[valuesname.indexOf('obs')] ?? '' + '\n';
+    obsFim += 'Dados Cadastrais\n';
+    obsFim += '*****************\n';
+    cadastro.forEach((info) => {
+      obsFim += info.info + ': ' + info.nome + '\n';
+    });
+    obsFim += 'Ramos de Atividade\n';
+    obsFim += '******************\n';
+    atividades.forEach((ramo) => {
+      obsFim += ramo.codigo + '-' + ramo.nome + '\n';
+    });
+    obsFim += 'Sócios\n';
+    obsFim += '******\n';
+    socios.forEach((socio) => {
+      obsFim += socio.nome + ' Cargo: ' + socio.cargo + '\n';
+    });
+    valuesfield[valuesname.indexOf('obs')] = obsFim;
+    setValuesfield([...valuesfield]);
+    setShowcons(false);
+  };
+
   return (
     <React.Fragment>
       <div id="frmcnpj" name="frmcnpj">
@@ -277,7 +303,23 @@ const ConsultaCNPJ = (props) => {
         {activeStep === 0 ? telacadastrais : <></>}
         {activeStep === 1 ? telaatividades : <></>}
         {activeStep === 2 ? telasocios : <></>}
+        {valuesfield !== undefined && valuesfield.length > 0 && (
+          <p style={{ textAlign: 'center' }}>Atenção, caso deseja adicionar as informações, as mesmas ficaram no campo de Observações</p>
+        )}
       </div>
+      <hr></hr>
+      <Row style={{ textAlign: 'right' }}>
+        <Col>
+          {valuesfield !== undefined && valuesfield.length > 0 && (
+            <Button id="btnAdicionar" className="btn btn-success shadow-2 mb-2" onClick={(e) => adicionarDados(false)}>
+              <i className={'feather icon-plus'} /> Adicionar informações
+            </Button>
+          )}
+          <Button id="btnSair" className="btn btn-warning shadow-2 mb-2" onClick={(e) => setShowcons(false)}>
+            <i className={'feather icon-x'} /> Sair
+          </Button>
+        </Col>
+      </Row>
       <Row>
         <Alert
           show={mensagem !== '' && mensagem !== undefined}

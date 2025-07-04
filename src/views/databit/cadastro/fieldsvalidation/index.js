@@ -27,7 +27,11 @@ const FieldsValidation = (props) => {
         'TB00003_TIPOTAB,TB00003_VALORVAL,TB00003_MENSAGEM,TB00003_CAMVAL1,' +
         'TB00003_VOLTAR,TB00003_COR, TB00003_TABELA, TB00003_CORWEB',
       '',
-      "TB00003_TABELA = '" + props.object + "' and TB00003_SELEC4 = 'N' ORDER BY TB00003_FUNCAO"
+      "TB00003_TABELA = '" +
+        props.object +
+        "' and TB00003_SELEC4 = 'N' and (charindex('" +
+        props.table +
+        "',TB00003_CAMPO)> 0 or charindex('TB00012',TB00003_CAMPO)> 0) ORDER BY TB00003_FUNCAO"
     ).then((response) => {
       if (response.status === 200) {
         setRows(response.data);

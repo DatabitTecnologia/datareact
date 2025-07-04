@@ -1394,6 +1394,8 @@ const Infor = (props) => {
                                         setValuesfield={(data) => setValuesfield(data)}
                                         valuesfield2={valuesfield2}
                                         setValuesfield2={(data) => setValuesfield2(data)}
+                                        valuesname={valuesname}
+                                        setValuesname={(data) => setValuesname(data)}
                                         disabled={valuesdisable[field.id]}
                                         required={valuesrequired[field.id]}
                                         invisible={valuesinvisible[field.id]}

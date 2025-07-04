@@ -34,7 +34,7 @@ const FieldsList = (props) => {
         "' " +
         " and TB00101_CAMPO = TB00003_CAMPO and TB00101_USER = '" +
         Decode64(sessionStorage.getItem('user')) +
-        "') " +
+        "') and TB00003_TIPO <> 'text' " +
         'order by TB00003_FUNCAO '
     ).then((response) => {
       if (response.status === 200) {

@@ -225,7 +225,7 @@ export const apiGetPicture = async (table, fieldpk, fieldimage, value) => {
   }
 };
 
-export const apiGetPicturelist = async (table, fieldpk, fieldimage, filter, fieldslist, base64) => {
+export const apiGetPicturelist = async (table, fieldpk, fieldimage, filter, fieldslist, base64, functiontable = 'N') => {
   try {
     const apiInstance = getInstance();
     return await apiInstance.post('getPicturelist/', {
@@ -235,13 +235,13 @@ export const apiGetPicturelist = async (table, fieldpk, fieldimage, filter, fiel
       field: fieldimage,
       where: filter,
       fieldslist: fieldslist,
-      base64: base64
+      base64: base64,
+      functiontable: functiontable
     });
   } catch (error) {
     console.log(error);
   }
 };
-
 export const apiSetPicture = async (table, fieldpk, fieldimage, value, base64) => {
   try {
     const apiInstance = getInstance();

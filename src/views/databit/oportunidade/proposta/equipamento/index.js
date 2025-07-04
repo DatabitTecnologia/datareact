@@ -6,6 +6,7 @@ import { apiList, apiInsert, apiUpdate, apiDelete, apiFind, apiID } from '../../
 import { Link } from 'react-router-dom';
 import { Confirmation } from '../../../../../components/Confirmation';
 import AGGrid from '../../../../../components/AGGrid';
+import BrowseEquip from '../../../../../components/BrowseEquip';
 
 const PropostaEquipamento = (props) => {
   const [carregando, setCarregando] = React.useState(false);
@@ -28,6 +29,7 @@ const PropostaEquipamento = (props) => {
   const [valuesinvisible, setValuesinvisible] = React.useState([]);
   const [contrato, setContrato] = React.useState([]);
   const [showsave, setShowsave] = useState(false);
+  const [showplus, setShowplus] = useState(false);
 
   const [inclusao, setInclusao] = React.useState(false);
   const [contratada, setContratada] = React.useState(0);
@@ -37,6 +39,7 @@ const PropostaEquipamento = (props) => {
   const [precontrato, setPrecontrato] = React.useState('');
   const [operacaotipo, setOperacaotipo] = React.useState('');
   const [validations, setValidations] = React.useState([]);
+  const [processado, setProcessado] = React.useState(false);
 
   useEffect(() => {
     setCarregando(true);
@@ -687,6 +690,13 @@ const PropostaEquipamento = (props) => {
     desabilitarCampos();
   }, [valuesfield[4]]);
 
+  useEffect(() => {
+    if (processado) {
+      Filtrar();
+      setProcessado(false);
+    }
+  }, [processado]);
+
   const desabilitarCampos = () => {
     if (contrato.tipofranquia === 'G') {
       valuesinvisible[6] = contrato.analfranquia === 'M';
@@ -967,6 +977,12 @@ const PropostaEquipamento = (props) => {
     setShowsave(false);
   };
 
+  const handleCloseShowplus = () => {
+    setDisabled(true);
+    setShowplus(false);
+    Filtrar();
+  };
+
   const Cancelar = () => {
     setItemselec(undefined);
     setDisabled(true);
@@ -1047,6 +1063,18 @@ const PropostaEquipamento = (props) => {
                             <Button id="btnExcluir" className="btn btn-success  mb-2" disabled={!disabled} onClick={Excluir}>
                               <i className={'feather icon-trash'} /> Excluir Equipamento
                             </Button>
+                            {operacaotipo !== 'C' ? (
+                              <Button
+                                id="btnPlus"
+                                className="btn btn-warning  mb-2"
+                                disabled={!disabled}
+                                onClick={(e) => setShowplus(true)}
+                              >
+                                <i className={'feather icon-minus'} /> Retirar Equipamentos
+                              </Button>
+                            ) : (
+                              <></>
+                            )}
                           </Col>
                         </Row>
                       ) : (
@@ -1151,6 +1179,29 @@ const PropostaEquipamento = (props) => {
                               </Alert>
                             </Row>
                           </ModalFooter>
+                        </Modal>
+                        <Modal fullscreen={true} size="xl" show={showplus} centered={true} onHide={handleCloseShowplus}>
+                          <Modal.Header className="h5" closeButton>
+                            <i className={'feather icon-minus h1'} />
+                            &nbsp;Retirar Equipamentos
+                          </Modal.Header>
+                          <ModalBody>
+                            <BrowseEquip
+                              oportunidade={contrato}
+                              operacaotipo={'D'}
+                              coditem={rows[indexitem].coditem}
+                              iditem={rows[indexitem].iditem}
+                              showplus={showplus}
+                              setShowplus={(data) => setShowplus(data)}
+                              processado={processado}
+                              setProcessado={(data) => setProcessado(data)}
+                              tipoop={'O'}
+                              browseequip={'BrowseEquipProVW'}
+                              browsetotal={'BrowseEquipTotalProVW'}
+                              classdevolu={'PropostaDevolucao'}
+                              classequip={'PropostaEquipamento'}
+                            ></BrowseEquip>
+                          </ModalBody>
                         </Modal>
                       </div>
                     </div>
