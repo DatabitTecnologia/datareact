@@ -33,7 +33,7 @@ const CondicaoColor = (props) => {
   }, [itemselec]);
 
   const Salvar = (item) => {
-    item.color = cor;
+    item.cor = cor;
     setCarregando(true);
     apiUpdate('OsCondicao', item).then((response) => {
       if (response.status === 200) {
