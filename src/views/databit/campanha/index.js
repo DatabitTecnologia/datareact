@@ -114,6 +114,8 @@ const Campanha = (props) => {
     });
   }, []);
 
+  useEffect(() => {console.log(selecao)},[selecao]);
+
   const updateFiles = (incommingFiles) => {
     let listarq = [];
     if (files !== undefined && files.length > 0) {

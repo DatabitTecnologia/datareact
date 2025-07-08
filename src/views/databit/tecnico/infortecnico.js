@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Infor from '../cadastro/infor';
+import { Modal, ModalBody } from 'react-bootstrap';
+import Territorio from './territorio';
 
 const InforTecnico = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -25,6 +27,29 @@ const InforTecnico = (props) => {
   const [openmodal, setOpenmodal] = React.useState(props.openmodal);
   const [fieldsauto, setFieldsauto] = React.useState(props.fieldsauto);
   const [events, setEvents] = React.useState([]);
+
+  const [showterritorio, setShowTerritorio] = useState(false);
+
+  useEffect(() => {
+      setActions([
+        {
+          id: 'territorio',
+          method: () => abrirTerritorio(),
+          classicon: 'feather icon-share-2',
+          classbutton: 'btn btn-primary shadow-2 mb-3',
+          caption: 'Territorio'
+        },
+        
+      ]);
+    }, []);
+
+    const abrirTerritorio = () => {
+    setShowTerritorio(true);
+  };
+
+  const handleCloseTerritorio = () => {
+    setShowTerritorio(false);
+  };
 
   return (
     <React.Fragment>
@@ -80,6 +105,16 @@ const InforTecnico = (props) => {
         events={events}
         setEvents={(data) => setEvents(data)}
       />
+    
+      <Modal backdrop="static" size="xl" show={showterritorio} centered={true} onHide={handleCloseTerritorio}>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-bell'} />
+          &nbsp;Notificação para Usuários
+        </Modal.Header>
+        <ModalBody>
+          <Territorio statusselec={valuesfield[valuesname.indexOf('codigo')]}></Territorio>
+        </ModalBody>
+      </Modal>
     </React.Fragment>
   );
 };
