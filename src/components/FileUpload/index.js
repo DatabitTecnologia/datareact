@@ -28,7 +28,7 @@ const FileUpload = (props) => {
   }, []);
 
   const updateFiles = (incommingFiles) => {
-    console.log('incomming files', incommingFiles);
+    //console.log('incomming files', incommingFiles);
     setExtFiles(incommingFiles);
   };
   const onDelete = (id) => {

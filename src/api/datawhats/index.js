@@ -553,7 +553,7 @@ export const deleteMessage = async (whatsapp, id, owner = false) => {
       Message('frmChat', '', 'error', 'É necessário preencher as propriedades "Instance e Token"');
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };
 

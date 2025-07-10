@@ -5,7 +5,9 @@ import { apiFind, apiGetPicture } from '../crudapi';
 export const apiSendEmail = async (enterprise, dest, subject, body, files) => {
   try {
     const apiInstance = getInstance();
-    ConfigEmail(enterprise);
+    if (enterprise !== null) {
+      ConfigEmail(enterprise);
+    }
     const params = {
       email: Decode64(sessionStorage.getItem('from')),
       fromname: Decode64(sessionStorage.getItem('fromname')),
