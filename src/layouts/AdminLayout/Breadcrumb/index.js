@@ -16,7 +16,6 @@ const Breadcrumb = () => {
       navigation.items.map((item, index) => {
         if (item.type && item.type === 'group') {
           getCollapse(item, index);
-          console.log(item);
         }
         return false;
       });

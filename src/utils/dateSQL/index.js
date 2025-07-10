@@ -8,6 +8,5 @@ export function dateSQL(date) {
   let minutos = date.getMinutes();
   let segundos = date.getSeconds();
   const datafim = zeroLeft(mes + 1, 2) + '/' + zeroLeft(dia, 2) + '/' + ano + ' ' + horas + ':' + minutos + ':' + segundos;
-  console.log(datafim);
   return datafim;
 }

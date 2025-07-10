@@ -8,10 +8,6 @@ const AnyReactComponent = ({ text }) => <div>{text}</div>;
 const Maps = (props) => {
   const { latcenter, lngcenter, zoom, items } = props;
 
-  useEffect(() => {
-    console.log(latcenter);
-  }, []);
-
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <GoogleMapReact

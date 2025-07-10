@@ -128,25 +128,22 @@ const Ambiente = (props) => {
         try {
           value = Decode64(sessionStorage.getItem(sessionStorage.key(i)));
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
         apiFind('Ambiente', '*', '', "TB00057_SESSION = '" + key + "' ").then((response) => {
           if (response.status === 200) {
             let item = {};
             item['session'] = key;
             item['valor'] = value;
-            console.log(response.data);
             if (response.data === undefined || response.data === '' || response.data === null) {
               apiInsert('Ambiente', item).then((response) => {
                 if (response.status === 200) {
-                  console.log(response.data);
                 }
               });
             } else {
               item['iditem'] = response.data.iditem;
               apiUpdate('Ambiente', item).then((response) => {
                 if (response.status === 200) {
-                  console.log(response.data);
                 }
               });
             }
