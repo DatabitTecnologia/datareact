@@ -16,14 +16,7 @@ const Territorio = (props) => {
 
   const Filtrar = () => {
     setCarregando(true);
-    apiList(
-      'Tecnico',
-      '*',
-      '',
-      "TB01048_SITUACAO = 'A'" +
-        props.statusselec +
-        "') order by TB01048_NOME"
-    ).then((response) => {
+    apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' order by TB01024_NOME").then((response) => {
       if (response.status === 200) {
         //console.log('1');
         console.log(response.data);
@@ -32,14 +25,33 @@ const Territorio = (props) => {
     });
 
     apiList(
-      'StatusUser',
+      'Tecnico',
       '*',
-      'TB01060_USER AS nome',
-      "TB01060_TIPO = 'O' AND TB01060_STATUS= '" + props.statusselec + "' order by TB01060_USER "
+      '',
+      "TB01024_SITUACAO = 'A' AND TB01024_CODIGO = '" + props.statusselec + "' order by TB01024_NOME "
     ).then((response) => {
       if (response.status === 200) {
-        //console.log(response.data);
-        setRowsselect(response.data);
+        // Campo completo
+        const bruto = response.data[0]?.nometec || '';
+
+        // Remover parenteses
+        const semParenteses = bruto.slice(1, -1);
+
+        // Separar pelas ','
+        const itens = semParenteses.split("','").map((s) => s.replace(/^'/, '').replace(/'$/, '').trim());
+
+        // Pegar o nome depois da barra
+        const nomesFormatados = itens.map((item) => {
+          const partes = item.split('/');
+          const nome = partes.length > 1 ? partes[1].trim() : partes[0].trim();
+          return { nome };
+        });
+
+        // 5. Definir no estado
+        setRowsselect(nomesFormatados);
+
+        console.log(nomesFormatados);
+
         setCarregando(false);
       }
     });

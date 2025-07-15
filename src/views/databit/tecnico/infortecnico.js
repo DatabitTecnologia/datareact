@@ -109,7 +109,7 @@ const InforTecnico = (props) => {
       <Modal backdrop="static" size="xl" show={showterritorio} centered={true} onHide={handleCloseTerritorio}>
         <Modal.Header className="h5" closeButton>
           <i className={'feather icon-bell'} />
-          &nbsp;Notificação para Usuários
+          &nbsp;Técnico territorio
         </Modal.Header>
         <ModalBody>
           <Territorio statusselec={valuesfield[valuesname.indexOf('codigo')]}></Territorio>
