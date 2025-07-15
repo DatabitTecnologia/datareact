@@ -105,7 +105,7 @@ const Territorio = (props) => {
       nometec: nomesSQL
     };
 
-    // 4️⃣ Chamar sua apiUpdate (note que você precisa importar apiUpdate lá em cima)
+
     apiUpdate('Tecnico', data).then((response) => {
       if (response?.status === 200) {
         setStatusprocessa('Operação realizada com Sucesso !');
