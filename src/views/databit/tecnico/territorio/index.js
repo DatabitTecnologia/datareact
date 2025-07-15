@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { LinearProgress } from '@mui/material';
-import { apiUpdate, apiList, apiExec } from '../../../../api/crudapi';
+import { apiUpdate, apiList } from '../../../../api/crudapi';
 import AGGrid from '../../../../components/AGGrid';
 
 const Territorio = (props) => {
@@ -16,38 +16,80 @@ const Territorio = (props) => {
 
   const Filtrar = () => {
     setCarregando(true);
-    apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' order by TB01024_NOME").then((response) => {
-      if (response.status === 200) {
-        //console.log('1');
-        console.log(response.data);
-        setRows(response.data);
+    /* conferir com o Sidney o tecnico filtrado não pode aparecer na lista de seleção? */
+    apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' AND TB01024_CODIGO <> '" + props.statusselec + "' order by TB01024_NOME").then((responseLeft) => {
+      if (responseLeft.status === 200) {
+        // Repete para buscar os tecnicos que ja estão no territorio
+        apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' AND TB01024_CODIGO = '" + props.statusselec + "' order by TB01024_NOME").then(
+          (responseRight) => {
+            if (responseRight.status === 200) {
+              const brutoNomeTec = responseRight.data[0]?.nometec || '';
+              const brutoCodTec = responseRight.data[0]?.codtec || '';
+
+              // tirar caracteres
+              const parseLista = (texto) => {
+                if (!texto || texto.length < 2) return [];
+                const semParenteses = texto.slice(1, -1);
+                return semParenteses.split("','").map((s) => s.replace(/^'/, '').replace(/'$/, '').trim());
+              };
+
+              const nomes = parseLista(brutoNomeTec).map((item) => {
+                const partes = item.split('/');
+                return partes.length > 1 ? partes[1].trim() : partes[0].trim();
+              });
+
+              const codigosSelecionados = parseLista(brutoCodTec);
+
+              // Monta lista de tecnicos da direita
+              const listaSelecionada = nomes.map((nome, index) => ({
+                nome,
+                codigo: codigosSelecionados[index] || ''
+              }));
+              setRowsselect(listaSelecionada);
+
+              // tira os tecnicos selecionados
+              const listaFiltrada = responseLeft.data.filter((item) => !codigosSelecionados.includes(item.codigo));
+              setRows(listaFiltrada);
+
+              setCarregando(false);
+            }
+          }
+        );
       }
     });
+
+
 
     apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' AND TB01024_CODIGO = '" + props.statusselec + "' order by TB01024_NOME ").then(
       (response) => {
         if (response.status === 200) {
-          // Campo completo
-          const bruto = response.data[0]?.nometec || '';
+          const brutoNomeTec = response.data[0]?.nometec || '';
+          const brutoCodTec = response.data[0]?.codtec || '';
 
-          // Remover parenteses
-          const semParenteses = bruto.slice(1, -1);
+          // Remover caracteres
+          const parseLista = (texto) => {
+            if (!texto || texto.length < 2) return [];
+            const semParenteses = texto.slice(1, -1);
+            return semParenteses.split("','").map((s) => s.replace(/^'/, '').replace(/'$/, '').trim());
+          };
 
-          // Separar pelas ','
-          const itens = semParenteses.split("','").map((s) => s.replace(/^'/, '').replace(/'$/, '').trim());
-
-          // Pegar o nome depois da barra
-          const nomesFormatados = itens.map((item) => {
+          // nomes
+          const nomes = parseLista(brutoNomeTec).map((item) => {
             const partes = item.split('/');
-            const nome = partes.length > 1 ? partes[1].trim() : partes[0].trim();
-            return { nome };
+            return partes.length > 1 ? partes[1].trim() : partes[0].trim();
           });
 
-          // 5. Definir no estado
-          setRowsselect(nomesFormatados);
+          const codigos = parseLista(brutoCodTec);
 
-          console.log(nomesFormatados);
+          // Monta objeto para passar para api
+          const listaCombinada = nomes.map((nome, index) => ({
+            nome,
+            codigo: codigos[index] || ''
+          }));
 
+          //console.log(listaCombinada);
+
+          setRowsselect(listaCombinada);
           setCarregando(false);
         }
       }
@@ -96,8 +138,8 @@ const Territorio = (props) => {
     const nomesSQL = '(' + nomes.map((n) => `'${n}'`).join(',') + ')';
     const codigosSQL = '(' + codigos.map((c) => `'${c}'`).join(',') + ')';
 
-    console.log('nometec para salvar:', nomesSQL);
-    console.log('codtec para salvar:', codigosSQL);
+    console.log('nometec:', nomesSQL);
+    console.log('codtec:', codigosSQL);
 
     // Monta para mandar na api
     const data = {
