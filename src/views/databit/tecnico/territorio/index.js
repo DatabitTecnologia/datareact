@@ -88,24 +88,25 @@ const Territorio = (props) => {
     setCarregando(true);
     setStatusprocessa('Gravando informações, aguarde');
 
-    // pegando os nomes
-    const nomesCompletos = rowsselect.map((item) => {
-      let valor = item.nome;
-      return valor;
-    });
+    // Pegar lista selecionada
+    const nomes = rowsselect.map((item) => item.nome);
+    const codigos = rowsselect.map((item) => item.codigo);
 
-    // Montar string para ficar ('A','B','C')
-    const nomesSQL = '(' + nomesCompletos.map((nome) => `'${nome}'`).join(',') + ')';
+    // Monta a string ('A','B','C')
+    const nomesSQL = '(' + nomes.map((n) => `'${n}'`).join(',') + ')';
+    const codigosSQL = '(' + codigos.map((c) => `'${c}'`).join(',') + ')';
 
-    console.log('Nomes para salvar:', nomesSQL);
+    console.log('nometec para salvar:', nomesSQL);
+    console.log('codtec para salvar:', codigosSQL);
 
-    // montar para enviar na api
+    // Monta para mandar na api
     const data = {
       codigo: props.statusselec,
-      nometec: nomesSQL
+      nometec: nomesSQL,
+      codtec: codigosSQL
     };
 
-
+    // apiUpdate
     apiUpdate('Tecnico', data).then((response) => {
       if (response?.status === 200) {
         setStatusprocessa('Operação realizada com Sucesso !');
