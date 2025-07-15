@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { LinearProgress } from '@mui/material';
-import { apiInsert, apiList, apiExec } from '../../../../api/crudapi';
+import { apiUpdate, apiList, apiExec } from '../../../../api/crudapi';
 import AGGrid from '../../../../components/AGGrid';
 
 const Territorio = (props) => {
@@ -24,37 +24,34 @@ const Territorio = (props) => {
       }
     });
 
-    apiList(
-      'Tecnico',
-      '*',
-      '',
-      "TB01024_SITUACAO = 'A' AND TB01024_CODIGO = '" + props.statusselec + "' order by TB01024_NOME "
-    ).then((response) => {
-      if (response.status === 200) {
-        // Campo completo
-        const bruto = response.data[0]?.nometec || '';
+    apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' AND TB01024_CODIGO = '" + props.statusselec + "' order by TB01024_NOME ").then(
+      (response) => {
+        if (response.status === 200) {
+          // Campo completo
+          const bruto = response.data[0]?.nometec || '';
 
-        // Remover parenteses
-        const semParenteses = bruto.slice(1, -1);
+          // Remover parenteses
+          const semParenteses = bruto.slice(1, -1);
 
-        // Separar pelas ','
-        const itens = semParenteses.split("','").map((s) => s.replace(/^'/, '').replace(/'$/, '').trim());
+          // Separar pelas ','
+          const itens = semParenteses.split("','").map((s) => s.replace(/^'/, '').replace(/'$/, '').trim());
 
-        // Pegar o nome depois da barra
-        const nomesFormatados = itens.map((item) => {
-          const partes = item.split('/');
-          const nome = partes.length > 1 ? partes[1].trim() : partes[0].trim();
-          return { nome };
-        });
+          // Pegar o nome depois da barra
+          const nomesFormatados = itens.map((item) => {
+            const partes = item.split('/');
+            const nome = partes.length > 1 ? partes[1].trim() : partes[0].trim();
+            return { nome };
+          });
 
-        // 5. Definir no estado
-        setRowsselect(nomesFormatados);
+          // 5. Definir no estado
+          setRowsselect(nomesFormatados);
 
-        console.log(nomesFormatados);
+          console.log(nomesFormatados);
 
-        setCarregando(false);
+          setCarregando(false);
+        }
       }
-    });
+    );
   };
 
   useEffect(() => {
@@ -89,24 +86,33 @@ const Territorio = (props) => {
 
   const Salvar = () => {
     setCarregando(true);
-    let iteminsert = {};
     setStatusprocessa('Gravando informações, aguarde');
-    apiExec("DELETE FROM TB01060 WHERE TB01060_TIPO = 'O' AND TB01060_STATUS = '" + props.statusselec + "' ", 'N').then((response) => {
-      if (response.status === 200) {
-        rowsselect.forEach((item) => {
-          iteminsert['status'] = props.statusselec;
-          iteminsert['user'] = item.nome;
-          iteminsert['tipo'] = 'O';
-          apiInsert('StatusUser', iteminsert).then((response) => {
-            if (response.status === 200) {
-              //console.log(response.data);
-              setStatusprocessa('');
-            }
-          });
-        });
-        setCarregando(false);
+
+    // pegando os nomes
+    const nomesCompletos = rowsselect.map((item) => {
+      let valor = item.nome;
+      return valor;
+    });
+
+    // Montar string para ficar ('A','B','C')
+    const nomesSQL = '(' + nomesCompletos.map((nome) => `'${nome}'`).join(',') + ')';
+
+    console.log('Nomes para salvar:', nomesSQL);
+
+    // montar para enviar na api
+    const data = {
+      codigo: props.statusselec,
+      nometec: nomesSQL
+    };
+
+    // 4️⃣ Chamar sua apiUpdate (note que você precisa importar apiUpdate lá em cima)
+    apiUpdate('Tecnico', data).then((response) => {
+      if (response?.status === 200) {
         setStatusprocessa('Operação realizada com Sucesso !');
+      } else {
+        setStatusprocessa('Falha ao salvar');
       }
+      setCarregando(false);
     });
   };
 
