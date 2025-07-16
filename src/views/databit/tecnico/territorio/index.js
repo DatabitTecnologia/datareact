@@ -97,8 +97,8 @@ const Territorio = (props) => {
   };
 
   useEffect(() => {
-    setColumns([{ headerClassName: 'header-list', field: 'nome', headerName: 'Nome dos usuários', width: 510 }]);
-    setColumnsselec([{ headerClassName: 'header-list', field: 'nome', headerName: 'Usuários selecionados', width: 510 }]);
+    setColumns([{ headerClassName: 'header-list', field: 'nome', headerName: 'Nome dos técnicos', width: 510 }]);
+    setColumnsselec([{ headerClassName: 'header-list', field: 'nome', headerName: 'Técnicos selecionados', width: 510 }]);
     Filtrar();
   }, []);
 
@@ -138,8 +138,8 @@ const Territorio = (props) => {
     const nomesSQL = '(' + nomes.map((n) => `'${n}'`).join(',') + ')';
     const codigosSQL = '(' + codigos.map((c) => `'${c}'`).join(',') + ')';
 
-    console.log('nometec:', nomesSQL);
-    console.log('codtec:', codigosSQL);
+    //console.log('nometec:', nomesSQL);
+    //console.log('codtec:', codigosSQL);
 
     // Monta para mandar na api
     const data = {
