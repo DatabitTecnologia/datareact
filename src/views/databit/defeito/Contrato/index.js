@@ -63,7 +63,6 @@ const Contrato = (props) => {
               return !codigosSet.has(codigoNormalizado);
             });
 
-            console.log('Lista filtrada (esquerda):', listaFiltrada);
             setRows(listaFiltrada);
           }
           /*  */
