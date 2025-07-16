@@ -43,29 +43,28 @@ const Contrato = (props) => {
             const nomesBrutos = parseLista(brutoNomeTab);
             const codigosSelecionados = parseLista(brutoCodTab);
 
-            // Garantir tamanho igual
             const tamanhoMinimo = Math.min(nomesBrutos.length, codigosSelecionados.length);
             const listaSelecionada = [];
 
             for (let i = 0; i < tamanhoMinimo; i++) {
               const nomeCompleto = nomesBrutos[i];
-              const partes = nomeCompleto.split('/');
-
               listaSelecionada.push({
-                nome: nomeCompleto, // nome completo com prefixo
+                nome: nomeCompleto,
                 codigo: codigosSelecionados[i]
               });
             }
 
             setRowsselect(listaSelecionada);
 
-            // tira os contratos selecionados da lista da esquerda
-            const listaFiltrada = responseLeft.data.filter((item) => !codigosSelecionados.includes(item.codigo));
+            const codigosSet = new Set(codigosSelecionados.map((c) => c.trim().replace(/^0+/, '')));
 
-            console.log(listaSelecionada)
+            const listaFiltrada = responseLeft.data.filter((item) => {
+              const codigoNormalizado = (item.codigo || '').toString().trim().replace(/^0+/, '');
+              return !codigosSet.has(codigoNormalizado);
+            });
+
+            console.log('Lista filtrada (esquerda):', listaFiltrada);
             setRows(listaFiltrada);
-
-            setCarregando(false);
           }
           /*  */
         });
