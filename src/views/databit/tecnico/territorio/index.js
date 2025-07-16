@@ -16,7 +16,9 @@ const Territorio = (props) => {
 
   const Filtrar = () => {
     setCarregando(true);
+    
     /* conferir com o Sidney o tecnico filtrado não pode aparecer na lista de seleção? */
+
     apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' AND TB01024_CODIGO <> '" + props.statusselec + "' order by TB01024_NOME").then((responseLeft) => {
       if (responseLeft.status === 200) {
         // Repete para buscar os tecnicos que ja estão no territorio
