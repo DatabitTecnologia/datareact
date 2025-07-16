@@ -50,11 +50,9 @@ const Contrato = (props) => {
             for (let i = 0; i < tamanhoMinimo; i++) {
               const nomeCompleto = nomesBrutos[i];
               const partes = nomeCompleto.split('/');
-              const nomeExibicao = partes.length > 1 ? partes[1].trim() : partes[0].trim();
 
               listaSelecionada.push({
                 nome: nomeCompleto, // nome completo com prefixo
-                nomeExibicao, // nome só para mostrar
                 codigo: codigosSelecionados[i]
               });
             }
@@ -63,6 +61,8 @@ const Contrato = (props) => {
 
             // tira os contratos selecionados da lista da esquerda
             const listaFiltrada = responseLeft.data.filter((item) => !codigosSelecionados.includes(item.codigo));
+
+            console.log(listaSelecionada)
             setRows(listaFiltrada);
 
             setCarregando(false);
@@ -106,16 +106,12 @@ const Contrato = (props) => {
 
           // nome para exibir (parte depois da barra)
           const partes = nomeCompleto.split('/');
-          const nomeExibicao = partes.length > 1 ? partes[1].trim() : partes[0].trim();
 
           listaCombinada.push({
             nome: nomeCompleto, // valor completo com barra para salvar
-            nomeExibicao, // só para mostrar no grid
             codigo
           });
         }
-
-        console.log(listaCombinada);
 
         setRowsselect(listaCombinada);
         setCarregando(false);
