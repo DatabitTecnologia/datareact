@@ -35,7 +35,7 @@ const InforTecnico = (props) => {
         {
           id: 'territorio',
           method: () => abrirTerritorio(),
-          classicon: 'map-pin icon-share-2',
+          classicon: 'feather icon-share-2',
           classbutton: 'btn btn-primary shadow-2 mb-3',
           caption: 'Territorio'
         },

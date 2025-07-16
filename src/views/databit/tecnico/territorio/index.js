@@ -16,7 +16,7 @@ const Territorio = (props) => {
 
   const Filtrar = () => {
     setCarregando(true);
-    
+
     /* conferir com o Sidney o tecnico filtrado não pode aparecer na lista de seleção? */
 
     apiList('Tecnico', '*', '', "TB01024_SITUACAO = 'A' AND TB01024_CODIGO <> '" + props.statusselec + "' order by TB01024_NOME").then((responseLeft) => {
@@ -137,8 +137,8 @@ const Territorio = (props) => {
     const codigos = rowsselect.map((item) => item.codigo);
 
     // Monta a string ('A','B','C')
-    const nomesSQL = '(' + nomes.map((n) => `'${n}'`).join(',') + ')';
-    const codigosSQL = '(' + codigos.map((c) => `'${c}'`).join(',') + ')';
+    const nomesSQL =  nomes.map((n) => `'${n}'`).join(',');
+    const codigosSQL = codigos.map((c) => `'${c}'`).join(',');
 
     //console.log('nometec:', nomesSQL);
     //console.log('codtec:', codigosSQL);
