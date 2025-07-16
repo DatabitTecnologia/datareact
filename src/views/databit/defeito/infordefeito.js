@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Infor from '../cadastro/infor';
+import { Modal, ModalBody } from 'react-bootstrap';
+import Contrato from './Contrato';
 
 const InforDefeito = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -25,6 +27,30 @@ const InforDefeito = (props) => {
   const [openmodal, setOpenmodal] = React.useState(props.openmodal);
   const [fieldsauto, setFieldsauto] = React.useState(props.fieldsauto);
   const [events, setEvents] = React.useState([]);
+
+  const [showcontrato, setShowContrato] = useState(false);
+
+  useEffect(() => {
+        setActions([
+          {
+            id: 'contrrato',
+            method: () => abrirContrato(),
+            classicon: 'feather icon-share-2',
+            classbutton: 'btn btn-primary shadow-2 mb-3',
+            caption: 'Contrato'
+          },
+          
+        ]);
+      }, []);
+
+  const abrirContrato = () => {
+    setShowContrato(true);
+  }
+
+  const handleCloseContrato = () => {
+    setShowContrato(false);
+  }
+  
 
   return (
     <React.Fragment>
@@ -80,6 +106,15 @@ const InforDefeito = (props) => {
         events={events}
         setEvents={(data) => setEvents(data)}
       />
+      <Modal backdrop="static" size="xl" show={showcontrato} centered={true} onHide={handleCloseContrato}>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-bell'} />
+          &nbsp;Vinculo com contrato
+        </Modal.Header>
+        <ModalBody>
+          <Contrato statusselec={valuesfield[valuesname.indexOf('codigo')]}></Contrato>
+        </ModalBody>
+      </Modal>
     </React.Fragment>
   );
 };
