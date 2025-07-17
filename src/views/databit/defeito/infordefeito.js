@@ -30,27 +30,43 @@ const InforDefeito = (props) => {
 
   const [showcontrato, setShowContrato] = useState(false);
 
+  const [btndisabled, setBtnDisabled] = useState('shadow-2 mb-3');
+
   useEffect(() => {
-        setActions([
-          {
-            id: 'contrrato',
-            method: () => abrirContrato(),
-            classicon: 'feather icon-share-2',
-            classbutton: 'btn btn-primary shadow-2 mb-3',
-            caption: 'Contrato'
-          },
-          
-        ]);
-      }, []);
+    if (!valuesname || !valuesfield) return;
+
+    const idx = valuesname.map((v) => v.trim().toLowerCase()).indexOf('defcontrato');
+
+    if (idx !== -1 && valuesfield[idx] !== undefined) {
+      const valor = valuesfield[idx];
+
+      if (valor === 'N') {
+        setBtnDisabled('btn btn-light mb-3');
+      } else {
+        setBtnDisabled('btn btn-primary shadow-2 mb-3');
+      }
+    }
+  }, [valuesname, valuesfield]); 
+
+  useEffect(() => {
+    setActions([
+      {
+        id: 'btnContrato',
+        method: () => abrirContrato(),
+        classicon: 'feather icon-share-2',
+        classbutton: btndisabled,
+        caption: 'Contratos'
+      }
+    ]);
+  }, [btndisabled]); // Reexecuta quando btndisabled mudar
 
   const abrirContrato = () => {
     setShowContrato(true);
-  }
+  };
 
   const handleCloseContrato = () => {
     setShowContrato(false);
-  }
-  
+  };
 
   return (
     <React.Fragment>

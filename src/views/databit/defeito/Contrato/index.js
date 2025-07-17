@@ -65,7 +65,6 @@ const Contrato = (props) => {
 
             setRows(listaFiltrada);
           }
-          /*  */
         });
       }
     });
