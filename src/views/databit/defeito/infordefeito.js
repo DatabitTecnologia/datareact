@@ -42,7 +42,7 @@ const InforDefeito = (props) => {
       const valor = valuesfield[idx];
 
       if (valor === 'N') {
-        setBtnDisabled('btn btn-light disable mb-3');
+        setBtnDisabled('btn btn-light mb-3 disabled');
       } else {
         setBtnDisabled('btn btn-primary shadow-2 mb-3');
       }
@@ -54,7 +54,7 @@ const InforDefeito = (props) => {
       {
         id: 'btnContrato',
         method: () => abrirContrato(),
-        classicon: 'feather icon-share-2',
+        classicon: 'feather icon-paperclip',
         classbutton: btndisabled,
         caption: 'Contratos'
       }

@@ -38,7 +38,7 @@ const InforTecnico = (props) => {
     const valor = valuesfield[valuesname.indexOf('territorio')];
 
     if(valor === 'N'){
-      setBtnDisabled('btn btn-light disable mb-3');
+      setBtnDisabled('btn btn-light mb-3 disabled');
     }else{
       setBtnDisabled('btn btn-primary shadow-2 mb-3');
     }
@@ -50,7 +50,7 @@ const InforTecnico = (props) => {
         {
           id: 'territorio',
           method: () => abrirTerritorio(),
-          classicon: 'feather icon-share-2',
+          classicon: 'feather icon-map-pin',
           classbutton: btndisable,
           caption: 'Territorio'
         },
