@@ -30,18 +30,33 @@ const InforTecnico = (props) => {
 
   const [showterritorio, setShowTerritorio] = useState(false);
 
+  const [btndisable, setBtnDisabled] = useState('btn btn-light mb-3');
+
+  useEffect(() => {
+    if(!valuesname || !valuesfield) return;
+
+    const valor = valuesfield[valuesname.indexOf('territorio')];
+
+    if(valor === 'N'){
+      setBtnDisabled('btn btn-light disable mb-3');
+    }else{
+      setBtnDisabled('btn btn-primary shadow-2 mb-3');
+    }
+
+  })
+
   useEffect(() => {
       setActions([
         {
           id: 'territorio',
           method: () => abrirTerritorio(),
           classicon: 'feather icon-share-2',
-          classbutton: 'btn btn-primary shadow-2 mb-3',
+          classbutton: btndisable,
           caption: 'Territorio'
         },
         
       ]);
-    }, []);
+    }, [btndisable]);
 
     const abrirTerritorio = () => {
     setShowTerritorio(true);
