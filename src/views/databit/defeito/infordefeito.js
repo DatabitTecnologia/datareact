@@ -32,6 +32,7 @@ const InforDefeito = (props) => {
 
   const [btndisabled, setBtnDisabled] = useState('shadow-2 mb-3');
 
+  /* Desabilita o botão contratos de acordo com o vinc contrato */
   useEffect(() => {
     if (!valuesname || !valuesfield) return;
 
