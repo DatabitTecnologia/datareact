@@ -30,6 +30,7 @@ import InforOsCondicao from '../../codinterv/inforoscondicao';
 import InforServIncomp from '../../servincompl/inforservincomp';
 import InforStatusOs from '../../statusos/inforstatusos';
 import InforTecnico from '../../tecnico/infortecnico';
+import InforGrupoProdutos from '../../grupoproduto/inforgrupoproduto';
 
 const OptionInfor = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -437,6 +438,19 @@ const OptionInfor = (props) => {
           onupdate={onupdate}
           setOnupdate={(data) => setOnupdate(data)}
         ></InforTecnico>
+      );
+    }
+    case '32': {
+      //Grupo de Produtos
+      return (
+        <InforGrupoProdutos
+          showinfor={showinfor}
+          rowselect={rowselect}
+          setRowselect={(data) => setRowselect(data)}
+          setShowinfor={(data) => setShowinfor(data)}
+          onupdate={onupdate}
+          setOnupdate={(data) => setOnupdate(data)}
+        ></InforGrupoProdutos>
       );
     }
     
