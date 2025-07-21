@@ -31,6 +31,7 @@ import InforServIncomp from '../../servincompl/inforservincomp';
 import InforStatusOs from '../../statusos/inforstatusos';
 import InforTecnico from '../../tecnico/infortecnico';
 import InforGrupoProdutos from '../../grupoproduto/inforgrupoproduto';
+import InforSubgrupoProdutos from '../../subgrupoproduto/inforsubgrupoprodutos';
 
 const OptionInfor = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -453,7 +454,19 @@ const OptionInfor = (props) => {
         ></InforGrupoProdutos>
       );
     }
-    
+    case '33': {
+      //Sub-Grupo de Produtos
+      return (
+        <InforSubgrupoProdutos
+          showinfor={showinfor}
+          rowselect={rowselect}
+          setRowselect={(data) => setRowselect(data)}
+          setShowinfor={(data) => setShowinfor(data)}
+          onupdate={onupdate}
+          setOnupdate={(data) => setOnupdate(data)}
+        ></InforSubgrupoProdutos>
+      );
+    }
   }
 };
 

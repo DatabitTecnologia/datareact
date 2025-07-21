@@ -315,6 +315,11 @@ const routes = [
         element: lazy(() => import('./views/databit/grupoproduto'))
       },
       {
+        exact: 'true',
+        path: '/subgrupoproduto',
+        element: lazy(() => import('./views/databit/subgrupoproduto'))
+      },
+      {
         path: '*',
         exact: 'true',
         element: () => <Navigate to={BASE_URL} />
