@@ -33,6 +33,7 @@ import InforTecnico from '../../tecnico/infortecnico';
 import InforGrupoProdutos from '../../grupoproduto/inforgrupoproduto';
 import InforSubgrupoProdutos from '../../subgrupoproduto/inforsubgrupoprodutos';
 import InforMarca from '../../marcaproduto/informarca';
+import InfoProduto from '../../produto/inforproduto';
 
 const OptionInfor = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -479,6 +480,19 @@ const OptionInfor = (props) => {
           onupdate={onupdate}
           setOnupdate={(data) => setOnupdate(data)}
         ></InforMarca>
+      );
+    }
+    case '35': {
+      //Produto
+      return (
+        <InfoProduto
+          showinfor={showinfor}
+          rowselect={rowselect}
+          setRowselect={(data) => setRowselect(data)}
+          setShowinfor={(data) => setShowinfor(data)}
+          onupdate={onupdate}
+          setOnupdate={(data) => setOnupdate(data)}
+        ></InfoProduto>
       );
     }
   }
