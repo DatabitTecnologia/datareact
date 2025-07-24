@@ -29,12 +29,12 @@ const InfoProduto = (props) => {
   return (
     <React.Fragment>
       <Infor
-        title="Produtos"
+        title="Cadastro de Produtos"
         table="TB01010"
         object="TB01010"
-        classname="Produtos"
-        classobject="Produtos"
-        termlist="Produtos"
+        classname="Produto"
+        classobject="Produto"
+        termlist="Produto"
         moduleoption="35"
         address={false}
         primarykey="CODIGO"

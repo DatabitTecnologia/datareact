@@ -5,7 +5,7 @@ const Produto = (props) => {
   return (
     <React.Fragment>
       <Cadastro
-        title="Nivel de Cliente"
+        title="Cadastro de Produtos"
         table="TB01010"
         object="TB01010"
         classname="Produto"
