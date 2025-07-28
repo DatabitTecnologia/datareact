@@ -2,8 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { LinearProgress } from '@mui/material';
 import { Row, Col, Button, Modal, ModalBody, ModalFooter, Form } from 'react-bootstrap';
-import TipoSup1 from '../../../assets/images/produtos/TipoSup1.png';
 
+//os numeros apos os nomes das imagens são referentes ai TB01010_TIPOSUP do datalcassic
+import TipoSup0 from '../../../assets/images/produtos/TipoSup0.png';
+import TipoSup1 from '../../../assets/images/produtos/TipoSup1.png';
+import TipoSup2 from '../../../assets/images/produtos/TipoSup2.png';
+import TipoSup3 from '../../../assets/images/produtos/TipoSup3.png';
+import TipoSup4 from '../../../assets/images/produtos/TipoSup4.png';
+import TipoSup9 from '../../../assets/images/produtos/TipoSup9.png';
+import TipoSup10 from '../../../assets/images/produtos/TipoSup10.png';
 
 
 import { apiGetPicture, apiSetPicture, apiExec } from '../../../api/crudapi';
@@ -21,7 +28,13 @@ const AvatarProduto = (props) => {
   const { disabledform, setDisabledform } = props;
 
   const arrayImages = [
+    TipoSup0,
     TipoSup1,
+    TipoSup2,
+    TipoSup3,
+    TipoSup4,
+    TipoSup9,
+    TipoSup10,
    
   
   ];
@@ -117,7 +130,7 @@ const AvatarProduto = (props) => {
         <Row style={{ textAlign: 'center', marginTop: '3px' }}>
           <Col>
             {foto === undefined || foto === '' || foto === null ? (
-              <img src={TipoSup1} alt="avatar" className="rounded-circle" width="125" height="125" />
+              <img src={TipoSup0} alt="avatar" className="rounded-circle" width="116" height="116" />
             ) : (
               <img src={`data:image/jpeg;base64,${foto}`} alt="avatar" className="rounded-circle" width="116" height="116" />
             )}

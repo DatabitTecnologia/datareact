@@ -1460,9 +1460,7 @@ const Infor = (props) => {
                                     <Avatar
                                       table={props.table}
                                       fieldpk={props.table + '_' + props.primarykey}
-                                      field={
-                                        rowselect?.[props.table + '_PHOTO'] !== undefined ? props.table + '_PHOTO' : props.table + '_FOTO'
-                                      }
+                                      field={props.table + '_PHOTO'}
                                       value={
                                         rowselect !== undefined
                                           ? rowselect[props.table + '_' + props.primarykey]
