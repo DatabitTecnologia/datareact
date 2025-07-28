@@ -13,6 +13,7 @@ import { Confirmation } from '../../../../components/Confirmation';
 import OportunidadeItem from '../../oportunidade/item';
 import { Decode64 } from '../../../../utils/crypto';
 import Avatar from '../../avatar';
+import AvatarProduto from '../../avatarproduto';
 import Documento from '../../documento';
 import Email from '../../email';
 import Signature from '../../signature';
@@ -1459,7 +1460,9 @@ const Infor = (props) => {
                                     <Avatar
                                       table={props.table}
                                       fieldpk={props.table + '_' + props.primarykey}
-                                      field={props.table + '_PHOTO'}
+                                      field={
+                                        rowselect?.[props.table + '_PHOTO'] !== undefined ? props.table + '_PHOTO' : props.table + '_FOTO'
+                                      }
                                       value={
                                         rowselect !== undefined
                                           ? rowselect[props.table + '_' + props.primarykey]
@@ -1528,6 +1531,24 @@ const Infor = (props) => {
                                       valuesname={valuesname}
                                       setValuesname={(data) => setValuesname(data)}
                                     ></PartnerItem>
+                                  ) : (
+                                    <></>
+                                  )}
+                                  {form.tipoespecial === 9 ? ( // Definição de Foto Produto
+                                    <AvatarProduto
+                                      table={props.table}
+                                      fieldpk={props.table + '_' + props.primarykey}
+                                      field={
+                                        rowselect?.[props.table + '_PHOTO'] !== undefined ? props.table + '_PHOTO' : props.table + '_FOTO'
+                                      }
+                                      value={
+                                        rowselect !== undefined
+                                          ? rowselect[props.table + '_' + props.primarykey]
+                                          : valuesfield[valuesname.indexOf(props.primarykey.toLowerCase())]
+                                      }
+                                      disabledform={disabledform}
+                                      setDisabledform={(data) => setDisabledform(data)}
+                                    ></AvatarProduto>
                                   ) : (
                                     <></>
                                   )}
