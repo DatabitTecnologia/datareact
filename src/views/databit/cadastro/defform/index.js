@@ -31,7 +31,7 @@ const DefForm = (props) => {
     { value: 6, label: 'Configuração de Dashboards' },
     { value: 7, label: 'Itens de Compra (DataPartner)' },
     { value: 8, label: 'Módulos de Movimentação' },
-    { value: 9, label: 'Definição de foto Produtos' }
+    { value: 9, label: 'Definição de Foto Produtos' }
   ];
 
   useEffect(() => {
