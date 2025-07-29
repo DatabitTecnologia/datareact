@@ -125,7 +125,7 @@ const AvatarProduto = (props) => {
 
   return (
     <React.Fragment>
-      <div id="frmavatar" name="frmavatar">
+      <div id="frmavatar" name="frmavatar" style={{ height: '22.7rem' }}>
         <div id="linear-progress">{carregando && <LinearProgress color="primary" />}</div>
         <Row style={{ textAlign: 'center', marginTop: '3px' }}>
           <Col>
