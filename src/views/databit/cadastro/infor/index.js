@@ -13,7 +13,7 @@ import { Confirmation } from '../../../../components/Confirmation';
 import OportunidadeItem from '../../oportunidade/item';
 import { Decode64 } from '../../../../utils/crypto';
 import Avatar from '../../avatar';
-import AvatarProduto from '../../avatarproduto';
+import AvatarProduto from '../../produto/avatarproduto';
 import Documento from '../../documento';
 import Email from '../../email';
 import Signature from '../../signature';

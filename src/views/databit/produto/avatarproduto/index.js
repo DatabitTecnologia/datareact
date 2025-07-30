@@ -4,17 +4,17 @@ import { LinearProgress } from '@mui/material';
 import { Row, Col, Button, Modal, ModalBody, ModalFooter, Form } from 'react-bootstrap';
 
 //os numeros apos os nomes das imagens são referentes ai TB01010_TIPOSUP do datalcassic
-import TipoSup0 from '../../../assets/images/produtos/TipoSup0.png';
-import TipoSup1 from '../../../assets/images/produtos/TipoSup1.png';
-import TipoSup2 from '../../../assets/images/produtos/TipoSup2.png';
-import TipoSup3 from '../../../assets/images/produtos/TipoSup3.png';
-import TipoSup4 from '../../../assets/images/produtos/TipoSup4.png';
-import TipoSup9 from '../../../assets/images/produtos/TipoSup9.png';
-import TipoSup10 from '../../../assets/images/produtos/TipoSup10.png';
+import TipoSup0 from '../../../../assets/images/produtos/TipoSup0.png';
+import TipoSup1 from '../../../../assets/images/produtos/TipoSup1.png';
+import TipoSup2 from '../../../../assets/images/produtos/TipoSup2.png';
+import TipoSup3 from '../../../../assets/images/produtos/TipoSup3.png';
+import TipoSup4 from '../../../../assets/images/produtos/TipoSup4.png';
+import TipoSup9 from '../../../../assets/images/produtos/TipoSup9.png';
+import TipoSup10 from '../../../../assets/images/produtos/TipoSup10.png';
 
 
-import { apiGetPicture, apiSetPicture, apiExec } from '../../../api/crudapi';
-import { getBase64, imageUrlToBase64 } from '../../../utils/crypto';
+import { apiGetPicture, apiSetPicture, apiExec } from '../../../../api/crudapi';
+import { getBase64, imageUrlToBase64 } from '../../../../utils/crypto';
 
 const AvatarProduto = (props) => {
   const [carregando, setCarregando] = React.useState(false);
