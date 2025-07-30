@@ -130,9 +130,9 @@ const AvatarProduto = (props) => {
         <Row style={{ textAlign: 'center', marginTop: '3px' }}>
           <Col>
             {foto === undefined || foto === '' || foto === null ? (
-              <img src={TipoSup0} alt="avatar" width="235" height="235" />
+              <img src={TipoSup0} alt="avatar"  style={{ width: '235px', height: '235px', objectFit: 'contain' }} />
             ) : (
-              <img src={`data:image/jpeg;base64,${foto}`} alt="avatar" width="235" height="235" />
+              <img src={`data:image/jpeg;base64,${foto}`}  alt="avatar" style={{ width: '235px', height: '235px', objectFit: 'contain' }} />
             )}
           </Col>
         </Row>
