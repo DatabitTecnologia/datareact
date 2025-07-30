@@ -130,9 +130,9 @@ const AvatarProduto = (props) => {
         <Row style={{ textAlign: 'center', marginTop: '3px' }}>
           <Col>
             {foto === undefined || foto === '' || foto === null ? (
-              <img src={TipoSup0} alt="avatar" className="rounded-circle" width="116" height="116" />
+              <img src={TipoSup0} alt="avatar" width="235" height="235" />
             ) : (
-              <img src={`data:image/jpeg;base64,${foto}`} alt="avatar" className="rounded-circle" width="116" height="116" />
+              <img src={`data:image/jpeg;base64,${foto}`} alt="avatar" width="235" height="235" />
             )}
           </Col>
         </Row>
@@ -182,7 +182,7 @@ const AvatarProduto = (props) => {
             />
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
               {url !== undefined && (url !== null) & (url !== '') ? (
-                <img src={url} alt="avatar" className="rounded-circle" width="216" height="216" />
+                <img src={url} alt="avatar"  width="216" height="216" />
               ) : (
                 <></>
               )}
