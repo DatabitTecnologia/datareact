@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Infor from '../cadastro/infor';
+import Composicaoproduto from './composicao';
+import { Modal, ModalBody } from 'react-bootstrap';
 
 const InfoProduto = (props) => {
   const { showinfor, setShowinfor } = props;
@@ -25,6 +27,28 @@ const InfoProduto = (props) => {
   const [openmodal, setOpenmodal] = React.useState(props.openmodal);
   const [fieldsauto, setFieldsauto] = React.useState(props.fieldsauto);
   const [events, setEvents] = React.useState([]);
+
+  const [showcomp, setShowcomp] = useState(false);
+
+  useEffect(() => {
+    setActions([
+      {
+         id: 'btnEquip',
+          method: () => Comp(),
+          classicon: 'feather icon-box',
+          classbutton: 'btn btn-primary shadow-2 mb-3',
+          caption: 'Composicao'
+      }
+    ]);
+  }, []);
+
+  const Comp = () => {
+    setShowcomp(true);
+  };
+
+  const handleClosecomp = () => {
+    setShowcomp(false);
+  };
 
   return (
     <React.Fragment>
@@ -80,9 +104,17 @@ const InfoProduto = (props) => {
         events={events}
         setEvents={(data) => setEvents(data)}
       />
+      <Modal backdrop="static" size="xl" show={showcomp} centered={true} onHide={handleClosecomp}>
+        <Modal.Header className="h5" closeButton>
+          <i className={'feather icon-box'} />
+          &nbsp;Componsição
+        </Modal.Header>
+        <ModalBody>
+          <Composicaoproduto cliente={valuesfield[valuesname.indexOf('codigo')]}></Composicaoproduto>
+        </ModalBody>
+      </Modal>
     </React.Fragment>
   );
 };
 
 export default InfoProduto;
-
