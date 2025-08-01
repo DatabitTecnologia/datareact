@@ -155,7 +155,7 @@ export const apiFieldsDict = async (object) => {
 
 export const apiDropdown = async (table, value, label, filter) => {
   try {
-    let sql = 'select ' + value + ' as value, ' + label + ' as label from ' + table;
+    let sql = 'select distinct ' + value + ' as value, ' + label + ' as label from ' + table;
     if (filter !== '' && filter !== undefined && filter !== null) {
       sql = sql + ' where ' + filter;
     }
