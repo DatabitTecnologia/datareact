@@ -110,7 +110,7 @@ const InfoProduto = (props) => {
           &nbsp;Componsição
         </Modal.Header>
         <ModalBody>
-          <Composicaoproduto cliente={valuesfield[valuesname.indexOf('codigo')]}></Composicaoproduto>
+          <Composicaoproduto codprod={valuesfield[valuesname.indexOf('codigo')]}></Composicaoproduto>
         </ModalBody>
       </Modal>
     </React.Fragment>

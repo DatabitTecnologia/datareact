@@ -8,7 +8,7 @@ import { CreateObject } from '../../../../components/CreateObject';
 import ClienteEquipamentoSelec from './select';
 
 const Composicaoproduto = (props) => {
-  const { cliente } = props;
+  const { codprod } = props;
   const [carregando, setCarregando] = useState(false);
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
@@ -56,10 +56,11 @@ const Composicaoproduto = (props) => {
     apiList('ProdutoComposicaoVW',
       'TB01031_CODIGO,TB01010_REFERENCIA,TB01010_CODBARRAS,TB01010_CODAUXILIAR,TB01010_NOME,TB01031_QTDE,TB01010_UNPROD,TB01031_PRUNIT,TB01031_TOTVALOR',
       'TB01002_NOME grupo, TB01018_NOME subgrupo',
-      "TB01031_CODIGOPRODUTO = '00129'"
+      "TB01031_CODIGOPRODUTO = '" + codprod + "'"
     ).then((response) => {
         if (response.status === 200) {
           console.log('Dados recebidos:', response.data);
+          console.log('Codprod:', codprod);
           setRows(response.data);
         } else {
           setMensagem('Erro ao buscar dados');
@@ -210,7 +211,7 @@ const Composicaoproduto = (props) => {
             <ClienteEquipamentoSelec
               itemselec={itemselec}
               showselec={showselec}
-              codcli={cliente}
+              codcli={codprod}
               setShowselec={setShowselec}
             />
           </ModalBody>
