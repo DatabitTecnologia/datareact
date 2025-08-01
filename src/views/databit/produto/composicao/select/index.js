@@ -362,25 +362,8 @@ const Composicaoselec = (props) => {
               <Card.Title as="h5">Informações do Produto selecionado</Card.Title>
             </Card.Header>
             <Row style={{ marginTop: '5px' }}>
-              <Col lg={2}>
-                <Row style={{ width: '100%', textAlign: 'center' }}>
-                  <Col>
-                    {foto === undefined || foto === '' || foto === null ? (
-                      <img src={nopicture} alt="foto" width={'230px'} height={'230px'} onDoubleClick={(e) => setShowfile(true)} />
-                    ) : (
-                      <img
-                        src={`data:image/jpeg;base64,${foto}`}
-                        alt="foto"
-                        width={'230px'}
-                        height={'230px'}
-                        onDoubleClick={(e) => setShowfile(true)}
-                      />
-                    )}
-                  </Col>
-                </Row>
-              </Col>
               <Col>
-                <Row style={{ marginLeft: '65px', marginRight: '5px', marginBottom: '3px' }}>
+                <Row className='g-2'>
                   {fields.map((field, index) => (
                     <CreateObject
                       key={index}
@@ -398,34 +381,7 @@ const Composicaoselec = (props) => {
               </Col>
             </Row>
           </Card>
-        </Row>
-        <Row style={{ textAlign: 'center', marginTop: '1px', marginBottom: '1px' }}>
-        </Row>
-        {activeStep === 0 ? (
-          <Card className="Recent-Users" style={{ marginBottom: '5px' }}>
-            <Card.Header>
-              <Card.Title as="h5">Observações do Equipamento</Card.Title>
-            </Card.Header>
-            <Row style={{ marginTop: '5px', marginLeft: '5px', marginRight: '5px' }}>
-              {fieldsobs.map((field, index) => (
-                <CreateObject
-                  key={index}
-                  field={field}
-                  index={field.id}
-                  fields={fields}
-                  valuesfield={valuesfield}
-                  setValuesfield={(data) => setValuesfield(data)}
-                  valuesfield2={valuesfield2}
-                  setValuesfield2={(data) => setValuesfield2(data)}
-                  disabled={valuesdisable[field.id]}
-                ></CreateObject>
-              ))}
-            </Row>
-          </Card>
-        ) : (
-          <></>
-        )}
-        
+        </Row>  
         <hr></hr>
         <Row>
           <Alert

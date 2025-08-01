@@ -144,7 +144,7 @@ const ExcluirProduto = () => {
         <Row style={{ marginLeft: '5px', marginRight: '5px', marginBottom: '5px' }}>
           <Card className="Recent-Users" style={{ marginBottom: '5px', marginTop: '-15px' }}>
             <Card.Header>
-              <Card.Title as="h5">Listagem de Equipamentos</Card.Title>
+              <Card.Title as="h5">Listagem de Materiais</Card.Title>
             </Card.Header>
             <Row style={{ marginBottom: '5px' }}>
               <AGGrid
