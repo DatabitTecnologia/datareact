@@ -20,20 +20,20 @@ const Composicaoproduto = (props) => {
   const [itemvariant, setItemvariant] = useState();
   const alertVariants = ['danger', 'warning', 'success', 'primary']; // corrigido
   const [showselec, setShowselec] = useState(false);
+  const [ultimoCodigo, setUltimoCodigo] = useState(null);
 
   // Configuração inicial
   useEffect(() => {
     setFields([
-      { id: 0, campo: 'produto', funcao: 'Código', tipo: 'varchar', nome: 'produto', tamanho: 5, tipoobject: 1, widthfield: 6, measure: '6rem', disabled: true },
-      { id: 1, campo: 'referencia', funcao: 'Referência', tipo: 'varchar', nome: 'referencia', tamanho: 20, tipoobject: 1, widthfield: 15, measure: '15rem', disabled: true },
+      { id: 0, campo: 'codigo', funcao: 'Código', tipo: 'varchar', nome: 'produto', tamanho: 5, tipoobject: 1, widthfield: 6, measure: '6rem', disabled: true },
+      { id: 1, campo: 'referencia', funcao: 'Referência', tipo: 'varchar', nome: 'referencia', tamanho: 20, tipoobject: 1, widthfield: 15, measure: '21rem', disabled: true },
       { id: 2, campo: 'codbarras', funcao: 'Código Barras', tipo: 'varchar', nome: 'codbarras', tamanho: 20, tipoobject: 1, widthfield: 15, measure: '15rem', disabled: true },
       { id: 3, campo: 'codauxiliar', funcao: 'Código Auxiliar', tipo: 'varchar', nome: 'codauxiliar', tamanho: 20, tipoobject: 1, widthfield: 15, measure: '15rem', disabled: true },
-      { id: 4, campo: 'nomeprod', funcao: 'Descrição Produto', tipo: 'varchar', nome: 'nomeproduto', tamanho: 60, tipoobject: 1, widthfield: 51, measure: '51rem', disabled: true },
-      { id: 5, campo: 'nomemarca', funcao: 'Marca', tipo: 'varchar', nome: 'marca', tamanho: 60, tipoobject: 1, widthfield: 13, measure: '13rem', disabled: true },
-      { id: 6, campo: 'dtinstalacao', funcao: 'Data Instalação', tipo: 'varchar', nome: 'marca', tamanho: 60, tipoobject: 5, widthfield: 10, measure: '10rem', disabled: true, decimal: 2 },
-      { id: 7, campo: 'dtvalidade', funcao: 'Data Validade', tipo: 'varchar', nome: 'prazo', tamanho: 60, tipoobject: 5, widthfield: 10, measure: '10rem', disabled: true },
-      { id: 8, campo: 'equipamento', funcao: 'Serial', tipo: 'varchar', nome: 'equipamento', tamanho: 20, tipoobject: 1, widthfield: 10, measure: '10rem', disabled: true }, // corrigido
-      { id: 9, campo: 'pat', funcao: 'Nº Patrimônio', tipo: 'varchar', nome: 'pat', tamanho: 20, tipoobject: 1, widthfield: 8, measure: '8rem', disabled: true }
+      { id: 4, campo: 'unprod', funcao: 'UN', tipo: 'varchar', nome: 'unprod', tamanho: 60, tipoobject: 1, widthfield: 13, measure: '5rem', disabled: true },
+      { id: 5, campo: 'qtde', funcao: 'Qtde', tipo: 'varchar', nome: 'marca', tamanho: 60, tipoobject: 1, widthfield: 13, measure: '5rem', disabled: true },
+      { id: 6, campo: 'nome', funcao: 'Descrição Produto', tipo: 'varchar', nome: 'nomeproduto', tamanho: 60, tipoobject: 1, widthfield: 51, measure: '45rem', disabled: true },
+      { id: 7, campo: 'grupo', funcao: 'Grupo', tipo: 'varchar', nome: 'grupo', tamanho: 60, tipoobject: 1, widthfield: 10, measure: '11rem', disabled: true, decimal: 2 },
+      { id: 8, campo: 'subgrupo', funcao: 'Subgrupo', tipo: 'varchar', nome: 'subgrupo', tamanho: 60, tipoobject: 1, widthfield: 10, measure: '11rem', disabled: true },
     ]);
 
     setColumns([
@@ -54,9 +54,9 @@ const Composicaoproduto = (props) => {
   const Filtrar = () => {
     setCarregando(true);
     apiList('ProdutoComposicaoVW',
-      'TB01031_CODIGO,TB01010_REFERENCIA,TB01010_CODBARRAS,TB01010_NOME,TB01031_QTDE,TB01031_PRUNIT,TB01031_TOTVALOR',
-      '',
-      "TB01031_CODIGOPRODUTO = '00129' "
+      'TB01031_CODIGO,TB01010_REFERENCIA,TB01010_CODBARRAS,TB01010_CODAUXILIAR,TB01010_NOME,TB01031_QTDE,TB01010_UNPROD,TB01031_PRUNIT,TB01031_TOTVALOR',
+      'TB01002_NOME grupo, TB01018_NOME subgrupo',
+      "TB01031_CODIGOPRODUTO = '00129'"
     ).then((response) => {
         if (response.status === 200) {
           console.log('Dados recebidos:', response.data);
@@ -76,14 +76,27 @@ const Composicaoproduto = (props) => {
   // Ao clicar na linha, preencher campos abaixo
   const clickGrid = (linhaSelecionada) => {
     if (!linhaSelecionada) return;
+
+    const codigoLinha = linhaSelecionada.codigo ?? null;
+
+    // Atualiza sempre o item selecionado
     setItemselec(linhaSelecionada);
 
-    let novosValores = fields.map(f => {
-      return linhaSelecionada[f.campo] !== undefined ? linhaSelecionada[f.campo] : '';
-    });
+    // Só atualiza valores se o código realmente mudou
+    if (codigoLinha !== ultimoCodigo) {
+        setUltimoCodigo(codigoLinha);
 
-    setValuesfield(novosValores);
-  };
+        const novosValores = fields.map(f =>
+            linhaSelecionada[f.campo] !== undefined ? linhaSelecionada[f.campo] : ''
+        );
+
+        if (JSON.stringify(valuesfield) !== JSON.stringify(novosValores)) {
+            setValuesfield(novosValores);
+        }
+    }
+};
+
+
 
   // Exclusão
   const ExcluirProduto = () => {
@@ -145,7 +158,7 @@ const Composicaoproduto = (props) => {
           </Card>
           <Card className="Recent-Users" style={{ marginBottom: '5px' }}>
             <Card.Header>
-              <Card.Title as="h5">Informações do Equipamento selecionado</Card.Title>
+              <Card.Title as="h5">Informações do item selecionado</Card.Title>
             </Card.Header>
             <Row style={{ marginTop: '5px' }}>
               <Col>
