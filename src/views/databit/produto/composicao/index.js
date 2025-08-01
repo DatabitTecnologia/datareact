@@ -5,8 +5,7 @@ import { apiDelete, apiList } from '../../../../api/crudapi';
 import { Confirmation } from '../../../../components/Confirmation';
 import AGGrid from '../../../../components/AGGrid';
 import { CreateObject } from '../../../../components/CreateObject';
-import ClienteEquipamentoSelec from './select';
-
+import Composicaoselec from './select';
 const Composicaoproduto = (props) => {
   const { codprod } = props;
   const [carregando, setCarregando] = useState(false);
@@ -59,8 +58,8 @@ const Composicaoproduto = (props) => {
       "TB01031_CODIGOPRODUTO = '" + codprod + "'"
     ).then((response) => {
         if (response.status === 200) {
-          console.log('Dados recebidos:', response.data);
-          console.log('Codprod:', codprod);
+          /* console.log('Dados recebidos:', response.data);
+          console.log('Codprod:', codprod); */
           setRows(response.data);
         } else {
           setMensagem('Erro ao buscar dados');
@@ -100,34 +99,43 @@ const Composicaoproduto = (props) => {
 
 
   // Exclusão
-  const ExcluirProduto = () => {
-    if (valuesfield[0] !== '' && valuesfield[0] !== undefined) {
-      Confirmation('frmclienteeuipamento', 'Confirma a exclusão deste registro ?').then((result) => {
-        if (result.isConfirmed) {
-          setCarregando(true);
-          apiDelete('ClienteEquipamento', itemselec).then((response) => {
+const ExcluirProduto = () => {
+  if (itemselec?.codigo) {
+    Confirmation('frmclienteeuipamento', 'Confirma a exclusão deste registro ?').then((result) => {
+      if (result.isConfirmed) {
+        setCarregando(true);
+
+        const dadosExclusao = {
+          codigo: itemselec.codigo,
+          codigoproduto: codprod 
+        };
+
+        apiDelete('ProdutoComposicao', dadosExclusao)
+          .then((response) => {
             if (response.status === 200 && response.data.status === 1) {
               setItemselec(undefined);
               setValuesfield(Array(fields.length).fill(''));
               Filtrar();
             } else {
               setItemvariant(-1);
-              setMensagem(response.data);
+              setMensagem(response.data.mensagem ?? 'Erro ao excluir registro!');
             }
             setCarregando(false);
           });
-        }
-      });
-    } else {
-      setItemvariant(1);
-      setMensagem('Não possui nenhum registro para ser excluído !');
-    }
-  };
+      }
+    });
+  } else {
+    setItemvariant(1);
+    setMensagem('Não possui nenhum registro para ser excluído !');
+  }
+};
 
-  const IncluirProduto = () => {
-    setItemselec(undefined);
-    setShowselec(true);
-  };
+
+
+    const IncluirProduto = () => {
+        setItemselec(undefined);
+        setShowselec(true);
+    };
 
   return (
     <React.Fragment>
@@ -208,7 +216,7 @@ const Composicaoproduto = (props) => {
             <i className={'feather icon-box'} /> &nbsp;Lançamento de Itens
           </Modal.Header>
           <ModalBody>
-            <ClienteEquipamentoSelec
+            <Composicaoselec
               itemselec={itemselec}
               showselec={showselec}
               codcli={codprod}

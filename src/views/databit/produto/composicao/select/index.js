@@ -13,7 +13,7 @@ import { Decode64 } from '../../../../../utils/crypto';
 
 const AnyReactComponent = ({ text }) => <img src={Pointer} alt="pointer" />;
 
-const ClienteEquipamentoSelec = (props) => {
+const Composicaoselec = (props) => {
   const { itemselec, codcli } = props;
   const [carregando, setCarregando] = React.useState(false);
   const [fields, setFields] = React.useState([]);
@@ -925,4 +925,4 @@ const ClienteEquipamentoSelec = (props) => {
   );
 };
 
-export default ClienteEquipamentoSelec;
+export default Composicaoselec;
