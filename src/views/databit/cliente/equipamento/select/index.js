@@ -620,7 +620,6 @@ const ClienteEquipamentoSelec = (props) => {
       item['email'] = valuesfield[21];
       item['local'] = valuesfield[22];
       item['libleitura'] = valuesfield[23];
-      console.log(item);
       setCarregando(true);
       if (inclusao) {
         apiInsert('ClienteEquipamento', item).then((response) => {

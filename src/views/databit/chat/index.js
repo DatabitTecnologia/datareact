@@ -227,7 +227,6 @@ const DataChat = (props) => {
                 item['atendente'] = Decode64(sessionStorage.getItem('user'));
                 item['setor'] = 'COMERCIAL';
                 item['contato'] = contato.codigo;
-                console.log(item);
                 apiInsert('DatawhatsChat', item).then((response) => {
                   if (response.status === 200) {
                     console.log(response.data);

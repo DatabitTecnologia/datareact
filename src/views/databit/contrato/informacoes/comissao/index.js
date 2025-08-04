@@ -208,7 +208,6 @@ const ContratoComissao = (props) => {
           itembrowse[field.nome] = valuescom[index];
         });
         itembrowse['nome'] = valuescom2[0];
-        console.log(item);
         if (inclusaocom) {
           apiInsert('ContratoComissao', item).then((response) => {
             if (response.status === 200) {

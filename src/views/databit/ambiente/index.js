@@ -138,12 +138,14 @@ const Ambiente = (props) => {
             if (response.data === undefined || response.data === '' || response.data === null) {
               apiInsert('Ambiente', item).then((response) => {
                 if (response.status === 200) {
+                  //
                 }
               });
             } else {
               item['iditem'] = response.data.iditem;
               apiUpdate('Ambiente', item).then((response) => {
                 if (response.status === 200) {
+                  //
                 }
               });
             }

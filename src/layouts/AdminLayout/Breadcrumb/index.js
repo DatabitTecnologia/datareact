@@ -59,7 +59,7 @@ const Breadcrumb = () => {
     );
 
     /*if (item.breadcrumbs !== false) {
-      console.log(item);
+
       breadcrumbContent = (
         <div className="page-header">
           <div className="page-block">

@@ -316,7 +316,6 @@ const DashboardViewer = (props) => {
                     setView(1);
                     setCarregando(false);
                     return;
-                    AP;
                   }
                 });
               }

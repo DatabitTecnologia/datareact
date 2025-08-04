@@ -340,7 +340,6 @@ const DashboardItem = (props) => {
       } else {
         item['colortitle'] = '#fff';
       }
-      console.log(item);
       if (inclusao) {
         item['ordem'] = rows.length + 1;
         apiInsert('DashboardQuery', item).then((response) => {
