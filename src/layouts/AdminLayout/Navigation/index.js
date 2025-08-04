@@ -243,7 +243,7 @@ const Navigation = (props) => {
   }
   return (
     <React.Fragment>
-      <nav id={'menusys'} className={navClass.join(' ')} style={navStyle}>
+      <nav id={'menusys'} className={navClass.join(' ')}>
         {navContent}
       </nav>
     </React.Fragment>

@@ -16,6 +16,7 @@ const Breadcrumb = () => {
       navigation.items.map((item, index) => {
         if (item.type && item.type === 'group') {
           getCollapse(item, index);
+          console.log(item);
         }
         return false;
       });
@@ -59,7 +60,7 @@ const Breadcrumb = () => {
     );
 
     /*if (item.breadcrumbs !== false) {
-
+      console.log(item);
       breadcrumbContent = (
         <div className="page-header">
           <div className="page-block">

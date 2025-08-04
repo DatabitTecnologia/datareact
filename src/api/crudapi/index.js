@@ -154,7 +154,6 @@ export const apiFieldsDict = async (object) => {
 };
 
 export const apiDropdown = async (table, value, label, filter) => {
-  console.log(table);
   try {
     let sql = 'select distinct ' + value + ' as value, ' + label + ' as label from ' + table;
     if (filter !== '' && filter !== undefined && filter !== null) {
@@ -163,7 +162,6 @@ export const apiDropdown = async (table, value, label, filter) => {
     if (!sql.includes('ORDER BY')) {
       sql = sql + ' order by 2';
     }
-    console.log(sql);
     const apiInstance = getInstance();
     return await apiInstance.post('executeSQL/', { token: sessionStorage.getItem('token'), sql: sql, cursor: 'S' });
   } catch (error) {
