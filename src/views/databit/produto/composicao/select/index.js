@@ -14,7 +14,7 @@ import { Decode64 } from '../../../../../utils/crypto';
 const AnyReactComponent = ({ text }) => <img src={Pointer} alt="pointer" />;
 
 const Composicaoselec = (props) => {
-  const { itemselec, codcli } = props;
+  const { itemselec, codmaq } = props;
   const [carregando, setCarregando] = React.useState(false);
   const [fields, setFields] = React.useState([]);
   const [fieldsobs, setFieldsobs] = React.useState([]);
@@ -39,6 +39,35 @@ const Composicaoselec = (props) => {
   const [showmapa, setShowmapa] = React.useState(false);
   const [location, setLocation] = React.useState([]);
 
+  const states = [
+    { value: 'AC', label: 'Acre (AC)' },
+    { value: 'AL', label: 'Alagoas (AL)' },
+    { value: 'AP', label: 'Amapá (AP)' },
+    { value: 'AM', label: 'Amazonas (AM)' },
+    { value: 'BA', label: 'Bahia (BA)' },
+    { value: 'CE', label: 'Ceará (CE)' },
+    { value: 'DF', label: 'Distrito Federal (DF)' },
+    { value: 'ES', label: 'Espírito Santo (ES)' },
+    { value: 'GO', label: 'Goiás (GO)' },
+    { value: 'MA', label: 'Maranhão (MA)' },
+    { value: 'MT', label: 'Mato Grosso (MT)' },
+    { value: 'MS', label: 'Mato Grosso do Sul (MS)' },
+    { value: 'MG', label: 'Minas Gerais (MG)' },
+    { value: 'PA', label: 'Pará (PA)' },
+    { value: 'PB', label: 'Paraíba (PB)' },
+    { value: 'PR', label: 'Paraná (PR)' },
+    { value: 'PE', label: 'Pernambuco (PE)' },
+    { value: 'PI', label: 'Piauí (PI)' },
+    { value: 'RJ', label: 'Rio de Janeiro (RJ)' },
+    { value: 'RN', label: 'Rio Grande do Norte (RN)' },
+    { value: 'RS', label: 'Rio Grande do Sul (RS)' },
+    { value: 'RO', label: 'Rondônia (RO)' },
+    { value: 'RR', label: 'Roraima (RR)' },
+    { value: 'SC', label: 'Santa Catarina (SC)' },
+    { value: 'SP', label: 'São Paulo (SP)' },
+    { value: 'SE', label: 'Sergipe (SE)' },
+    { value: 'TO', label: 'Tocantins (TO)' }
+  ];
 
   useEffect(() => {
     let tmpsteps = [];
@@ -58,15 +87,146 @@ const Composicaoselec = (props) => {
     setOptions(tmpoptions);
 
     setFields([
-      { id: 0, campo: 'codigo', funcao: 'Código', tipo: 'varchar', nome: 'produto', tamanho: 5, tipoobject: 1, widthfield: 6, measure: '6rem', disabled: true },
-      { id: 1, campo: 'referencia', funcao: 'Referência', tipo: 'varchar', nome: 'referencia', tamanho: 20, tipoobject: 1, widthfield: 15, measure: '21rem', disabled: true },
-      { id: 2, campo: 'codbarras', funcao: 'Código Barras', tipo: 'varchar', nome: 'codbarras', tamanho: 20, tipoobject: 1, widthfield: 15, measure: '15rem', disabled: true },
-      { id: 3, campo: 'codauxiliar', funcao: 'Código Auxiliar', tipo: 'varchar', nome: 'codauxiliar', tamanho: 20, tipoobject: 1, widthfield: 15, measure: '15rem', disabled: true },
-      { id: 4, campo: 'unprod', funcao: 'UN', tipo: 'varchar', nome: 'unprod', tamanho: 60, tipoobject: 1, widthfield: 13, measure: '5rem', disabled: true },
-      { id: 5, campo: 'qtde', funcao: 'Qtde', tipo: 'varchar', nome: 'marca', tamanho: 60, tipoobject: 1, widthfield: 13, measure: '5rem', disabled: true },
-      { id: 6, campo: 'nome', funcao: 'Descrição Produto', tipo: 'varchar', nome: 'nomeproduto', tamanho: 60, tipoobject: 1, widthfield: 51, measure: '45rem', disabled: true },
-      { id: 7, campo: 'grupo', funcao: 'Grupo', tipo: 'varchar', nome: 'grupo', tamanho: 60, tipoobject: 1, widthfield: 10, measure: '11rem', disabled: true, decimal: 2 },
-      { id: 8, campo: 'subgrupo', funcao: 'Subgrupo', tipo: 'varchar', nome: 'subgrupo', tamanho: 60, tipoobject: 1, widthfield: 10, measure: '11rem', disabled: true },
+      {
+        id: 0,
+        campo: 'equipamemto',
+        funcao: 'Serial',
+        tipo: 'varchar',
+        nome: 'equipamemto',
+        tamanho: 20,
+        tipoobject: 1,
+        widthfield: 12,
+        measure: '12rem',
+        disabled: valuesdisable[0]
+      },
+      {
+        id: 1,
+        campo: 'produto',
+        funcao: 'Produto',
+        tipo: 'varchar',
+        nome: 'produto',
+        tamanho: 5,
+        tipoobject: 2,
+        widthfield: 39,
+        measure: '39rem',
+        tabelaref: 'TB01010',
+        widthname: 30,
+        disabled: valuesdisable[0]
+      },
+      {
+        id: 2,
+        campo: 'referencia',
+        funcao: 'Referência',
+        tipo: 'varchar',
+        nome: 'referencia',
+        tamanho: 20,
+        tipoobject: 1,
+        widthfield: 18,
+        measure: '18rem',
+        disabled: valuesdisable[2]
+      },
+      {
+        id: 3,
+        campo: 'codbarras',
+        funcao: 'Código Barras',
+        tipo: 'varchar',
+        nome: 'codbarras',
+        tamanho: 20,
+        tipoobject: 1,
+        widthfield: 17,
+        measure: '17rem',
+        disabled: valuesdisable[3]
+      },
+      {
+        id: 4,
+        campo: 'codauxiliar',
+        funcao: 'Código Auxiliar',
+        tipo: 'varchar',
+        nome: 'codauxiliar',
+        tamanho: 20,
+        tipoobject: 1,
+        widthfield: 16,
+        measure: '16rem',
+        disabled: valuesdisable[4]
+      },
+      {
+        id: 5,
+        campo: 'nomemarca',
+        funcao: 'Marca',
+        tipo: 'varchar',
+        nome: 'marca',
+        tamanho: 60,
+        tipoobject: 1,
+        widthfield: 13,
+        measure: '13rem',
+        disabled: valuesdisable[5]
+      },
+      {
+        id: 6,
+        campo: 'dtinstalacao',
+        funcao: 'Data Instalação',
+        tipo: 'varchar',
+        nome: 'dtinstalacao',
+        tamanho: 60,
+        tipoobject: 5,
+        widthfield: 10,
+        measure: '10rem',
+        disabled: valuesdisable[6]
+      },
+      {
+        id: 7,
+        campo: 'dtvalidade',
+        funcao: 'Data Validade',
+        tipo: 'varchar',
+        nome: 'dtvalidade',
+        tamanho: 60,
+        tipoobject: 5,
+        widthfield: 10,
+        measure: '10rem',
+        disabled: valuesdisable[7]
+      },
+      {
+        id: 8,
+        campo: 'pat',
+        funcao: 'Nº Patrimônio',
+        tipo: 'pat',
+        nome: 'prazo',
+        tamanho: 20,
+        tipoobject: 1,
+        widthfield: 10,
+        measure: '10rem',
+        disabled: valuesdisable[8]
+      },
+      {
+        id: 23,
+        campo: 'libleitura',
+        funcao: 'Ler Medidores',
+        tipo: 'varchar',
+        nome: 'libleitura',
+        tamanho: 20,
+        tipoobject: 11,
+        widthfield: 8,
+        measure: '8rem',
+        itens: 'Não,Sim',
+        values: 'N,S',
+        disabled: valuesdisable[23]
+      }
+    ]);
+
+    setFieldsobs([
+      {
+        id: 9,
+        campo: 'obs',
+        funcao: 'Observações',
+        tipo: 'text',
+        nome: 'obs',
+        tipoobject: 6,
+        tamanho: 10,
+        widthfield: 10,
+        measure: '10rem',
+        lines: 9,
+        disabled: valuesdisable[9]
+      }
     ]);
 
   }, []);
@@ -256,17 +416,10 @@ const Composicaoselec = (props) => {
   };
 
   const Salvar = () => {
-    if (valuesfield[0] === undefined || valuesfield[0] === '' || valuesfield[0] === null) {
-      setItemvariant(1);
-      setMensagem('Campo SERIAL é preenchimento obrigatório !');
-    } else if (valuesfield[1] === undefined || valuesfield[1] === '' || valuesfield[1] === null) {
-      setItemvariant(1);
-      setMensagem('Campo PRODUTO é preenchimento obrigatório !');
-    } else {
       let item = {};
-      item['codcli'] = codcli;
-      item['equipamento'] = valuesfield[0];
-      item['produto'] = valuesfield[1];
+      item['codigoproduto'] = codmaq;
+      item['codigo'] = valuesfield[0];
+      item['status'] = valuesfield[1];
       if (valuesfield[6] !== undefined) {
         const tmdata1 = Date.parse(valuesfield[6]);
         const dt1 = new Date(tmdata1);
@@ -295,7 +448,7 @@ const Composicaoselec = (props) => {
       item['email'] = valuesfield[21];
       item['local'] = valuesfield[22];
       item['libleitura'] = valuesfield[23];
-      //console.log(item);
+      console.log(item);
       setCarregando(true);
       if (inclusao) {
         apiInsert('ProdutoComposicao', item).then((response) => {
@@ -309,21 +462,8 @@ const Composicaoselec = (props) => {
             setMensagem(response.data);
           }
         });
-      } else {
-        apiUpdate('ProdutoComposicao', item).then((response) => {
-          if (response.status === 200) {
-            console.log(response.data);
-            if (response.data.status === 1) {
-              setShowselec(false);
-            }
-          } else {
-            setCarregando(false);
-            setItemvariant(-1);
-            setMensagem(response.data);
-          }
-        });
-      }
-    }
+      } 
+    
   };
 
   const handleCloseShowFile = () => {
@@ -351,6 +491,24 @@ const Composicaoselec = (props) => {
     });
   };
 
+  const Mapa = () => {
+    getZipCode(valuesfield[10]).then((response) => {
+      if (response.status === 200) {
+        try {
+          let tmplocation = response.data.results[0].geometry.location;
+          let locationfim = [];
+          tmplocation['name'] = valuesfield[11];
+          locationfim = locationfim.concat(tmplocation);
+          setLocation(locationfim);
+          setShowmapa(true);
+        } catch (error) {
+          setLocation([]);
+          setItemvariant(1);
+          setMensagem('Não foi possível buscar as coordenadas deste Endereço !');
+        }
+      }
+    });
+  };
 
   return (
     <React.Fragment>
@@ -362,8 +520,9 @@ const Composicaoselec = (props) => {
               <Card.Title as="h5">Informações do Produto selecionado</Card.Title>
             </Card.Header>
             <Row style={{ marginTop: '5px' }}>
+              
               <Col>
-                <Row className='g-2'>
+                <Row style={{ marginLeft: '65px', marginRight: '5px', marginBottom: '3px' }}>
                   {fields.map((field, index) => (
                     <CreateObject
                       key={index}
@@ -381,7 +540,33 @@ const Composicaoselec = (props) => {
               </Col>
             </Row>
           </Card>
-        </Row>  
+        </Row>
+        
+        {activeStep === 0 ? (
+          <Card className="Recent-Users" style={{ marginBottom: '5px' }}>
+            <Card.Header>
+              <Card.Title as="h5">Observações do Equipamento</Card.Title>
+            </Card.Header>
+            <Row style={{ marginTop: '5px', marginLeft: '5px', marginRight: '5px' }}>
+              {fieldsobs.map((field, index) => (
+                <CreateObject
+                  key={index}
+                  field={field}
+                  index={field.id}
+                  fields={fields}
+                  valuesfield={valuesfield}
+                  setValuesfield={(data) => setValuesfield(data)}
+                  valuesfield2={valuesfield2}
+                  setValuesfield2={(data) => setValuesfield2(data)}
+                  disabled={valuesdisable[field.id]}
+                ></CreateObject>
+              ))}
+            </Row>
+          </Card>
+        ) : (
+          <></>
+        )}
+        
         <hr></hr>
         <Row>
           <Alert
@@ -408,8 +593,6 @@ const Composicaoselec = (props) => {
             </Col>
           </Row>
         </Row>
-        
-       
       </div>
     </React.Fragment>
   );

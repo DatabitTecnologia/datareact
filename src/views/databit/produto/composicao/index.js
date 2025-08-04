@@ -219,7 +219,7 @@ const ExcluirProduto = () => {
             <Composicaoselec
               itemselec={itemselec}
               showselec={showselec}
-              codcli={codprod}
+              codmaq={codprod}
               setShowselec={setShowselec}
             />
           </ModalBody>
