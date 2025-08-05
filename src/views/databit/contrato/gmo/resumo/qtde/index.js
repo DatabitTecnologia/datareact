@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Button, Alert } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, Modal } from 'react-bootstrap';
 import { CreateObject } from '../../../../../../components/CreateObject';
 import ProdutoEstoque from '../../../../produto/estoque';
+import SeriaisSelector from '../../selecionar';
+
+const [showSeriaisModal, setShowSeriaisModal] = useState(false); 
 
 const GmoResumoQtde = (props) => {
   const { itemselec, setItemselec } = props;
@@ -207,6 +210,12 @@ const GmoResumoQtde = (props) => {
         </Row>
         <Row style={{ textAlign: 'center' }}>
           <Col>
+            <Button
+              className="btn btn-info shadow-2 mb-2"
+              onClick={() => setShowSeriaisModal(true)} // abre modal
+            >
+              <i className={'feather icon-search'} /> Selecionar Seriais
+            </Button>
             <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={(e) => Salvar()}>
               <i className={'feather icon-save'} /> Salvar
             </Button>
@@ -216,6 +225,27 @@ const GmoResumoQtde = (props) => {
           </Col>
         </Row>
       </div>
+      {/* Modal series */}
+      <Modal
+        show={showSeriaisModal}
+        onHide={() => setShowSeriaisModal(false)}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Selecionar Seriais</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <SeriaisSelector
+            produto={itemselec.precontrato}
+            onConfirm={(selecionados) => {
+              console.log('Seriais selecionados:', selecionados);
+              // Aqui você pode atualizar seu objeto antes de salvar
+            }}
+            onClose={() => setShowSeriaisModal(false)}
+          />
+        </Modal.Body>
+      </Modal>
     </React.Fragment>
   );
 };
