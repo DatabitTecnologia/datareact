@@ -52,7 +52,9 @@ const SeriaisSelector = ({ precontrato, produto, onConfirm, onClose }) => {
   }, [precontrato]);
 
   const handleConfirmar = () => {
+
     console.log('Selecionados:', selecionados); 
+    
     onConfirm(selecionados); 
     onClose();
   };
