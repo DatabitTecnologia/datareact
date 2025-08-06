@@ -173,7 +173,7 @@ const GmoResumoQtde = (props) => {
     // Salvar objetos inteiros no estado, sem modificar nada
     if (seriaisSelecionados.length > 0) {
       setSeriaisPreparados([...seriaisSelecionados]); 
-      console.log('Seriais armazenados para envio posterior:', seriaisSelecionados);
+      //console.log('Seriais armazenados:', seriaisSelecionados);
     }
 
     setShowlanc(false);
