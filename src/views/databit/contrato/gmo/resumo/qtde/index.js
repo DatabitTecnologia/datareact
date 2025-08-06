@@ -3,9 +3,11 @@ import { Row, Col, Card, Button, Alert, Modal } from 'react-bootstrap';
 import { CreateObject } from '../../../../../../components/CreateObject';
 import ProdutoEstoque from '../../../../produto/estoque';
 import SeriaisSelector from '../../selecionar';
-
+import { apiUpdate } from '../../../../../../api/crudapi';
 
 const GmoResumoQtde = (props) => {
+  const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
+
   const { itemselec, setItemselec } = props;
   const { showlanc, setShowlanc } = props;
   const { rows, setRows } = props;
@@ -17,7 +19,7 @@ const GmoResumoQtde = (props) => {
   const alertVariants = ['danger', 'warning', 'success', 'prmary'];
   const [mensagem, setMensagem] = React.useState('');
 
-  const [showSeriaisModal, setShowSeriaisModal] = useState(false); 
+  const [showSeriaisModal, setShowSeriaisModal] = useState(false);
 
   useEffect(() => {
     setValuesdisable([true, true, true, true, true, true, true, true, false]);
@@ -156,7 +158,7 @@ const GmoResumoQtde = (props) => {
     setValuesfield([...valuesfield]);
   }, []);
 
-  const Salvar = () => {
+  const Salvar = async () => {
     if (parseInt(valuesfield[8]) <= itemselec.qtaliberar - itemselec.qttransito) {
       itemselec.qtlanc = parseInt(valuesfield[8]);
       setItemselec(itemselec);
@@ -164,6 +166,31 @@ const GmoResumoQtde = (props) => {
       const itembkp = rowsbkp.find((element) => element.id === itemselec.id);
       itembkp.qtlanc = parseInt(valuesfield[8]);
       setRows(rowsbkp);
+
+      // Envia seriais selecionados
+      if (seriaisSelecionados.length > 0) {
+        for (const numserie of seriaisSelecionados) {
+          const data = {
+            numserie: numserie,
+            serieselecionada: 'S',
+            precontrato: itemselec.precontrato,
+            contrato: itemselec.contrato,
+            produto: itemselec.produto,
+            coditem: '00001',
+            iditem: 1
+          };
+
+          //console.log('Campos ', itemselec);
+
+          const response = await apiUpdate('PrecontratoDevolucao', data);
+          //console.log('Resposta ', response);
+
+          if (response?.status !== 200) {
+            console.error('Erro ao atualizar:', data);
+          }
+        }
+      }
+
       setShowlanc(false);
     } else {
       setItemvariant(1);
@@ -211,10 +238,7 @@ const GmoResumoQtde = (props) => {
         </Row>
         <Row style={{ textAlign: 'center' }}>
           <Col>
-            <Button
-              className="btn btn-info shadow-2 mb-2"
-              onClick={() => setShowSeriaisModal(true)} // abre modal
-            >
+            <Button className="btn btn-info shadow-2 mb-2" onClick={() => setShowSeriaisModal(true)}>
               <i className={'feather icon-search'} /> Selecionar Seriais
             </Button>
             <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={(e) => Salvar()}>
@@ -227,22 +251,15 @@ const GmoResumoQtde = (props) => {
         </Row>
       </div>
       {/* Modal series */}
-      <Modal
-        show={showSeriaisModal}
-        onHide={() => setShowSeriaisModal(false)}
-        size="lg"
-        centered
-      >
+      <Modal show={showSeriaisModal} onHide={() => setShowSeriaisModal(false)} size="lg" centered>
         <Modal.Header closeButton>
           <Modal.Title>Selecionar Seriais</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <SeriaisSelector
-            produto={itemselec.precontrato}
-            onConfirm={(selecionados) => {
-              console.log('Seriais selecionados:', selecionados);
-              // Aqui você pode atualizar seu objeto antes de salvar
-            }}
+            precontrato={itemselec.precontrato}
+            produto={itemselec.produto}
+            onConfirm={(selecionados) => setSeriaisSelecionados(selecionados)}
             onClose={() => setShowSeriaisModal(false)}
           />
         </Modal.Body>

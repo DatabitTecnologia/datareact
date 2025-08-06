@@ -4,7 +4,7 @@ import { LinearProgress } from '@mui/material';
 import { apiList } from '../../../../../api/crudapi';
 import AGGrid from '../../../../../components/AGGrid';
 
-const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
+const SeriaisSelector = ({ precontrato, produto,onConfirm, onClose }) => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const [carregando, setCarregando] = useState(false);
@@ -14,7 +14,7 @@ const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
     const carregarSeriais = async () => {
       setCarregando(true);
       const campos = 'TB02308_NUMSERIE as numserie, TB02308_PRODUTO as produto';
-      const filtro = `TB02308_PRECONTRATO = '${produto}' ORDER BY TB02308_NUMSERIE`;
+      const filtro = `TB02308_PRODUTO = '${produto}' AND TB02308_SERIESELECIONADA IS NULL AND TB02308_PRECONTRATO = '${precontrato}' ORDER BY TB02308_NUMSERIE`;
 
       try {
         const response = await apiList('PrecontratoDevolucao', campos, '', filtro);
@@ -49,7 +49,7 @@ const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
     ]);
 
     carregarSeriais();
-  }, [produto]);
+  }, [precontrato]);
 
   const handleConfirmar = () => {
     const numSeries = selecionados.map((item) => item.numserie);
