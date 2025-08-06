@@ -10,24 +10,27 @@ const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
   const [carregando, setCarregando] = useState(false);
   const [selecionados, setSelecionados] = useState([]);
 
-  const carregarSeriais = () => {
-    setCarregando(true);
-
-    apiList(
-      'PrecontratoDevolucao',
-      'TB02308_NUMSERIE as numserie, TB02308_PRODUTO as produto',
-      '',
-      `TB02308_PRECONTRATO = '${produto}' ORDER BY TB02308_NUMSERIE`
-    )
-      .then((response) => {
-        if (response.status === 200) {
-          setRows(response.data);
-        }
-      })
-      .finally(() => setCarregando(false));
-  };
-
   useEffect(() => {
+    const carregarSeriais = async () => {
+      setCarregando(true);
+      const campos = 'TB02308_NUMSERIE as numserie, TB02308_PRODUTO as produto';
+      const filtro = `TB02308_PRECONTRATO = '${produto}' ORDER BY TB02308_NUMSERIE`;
+
+      try {
+        const response = await apiList('PrecontratoDevolucao', campos, '', filtro);
+        if (response?.status === 200 && Array.isArray(response.data)) {
+          setRows(response.data);
+        } else {
+          setRows([]);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar seriais:', error);
+        setRows([]);
+      } finally {
+        setCarregando(false);
+      }
+    };
+
     setColumns([
       {
         field: 'numserie',
@@ -80,9 +83,17 @@ const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
         rows={rows}
         columns={columns}
         loading={carregando}
-        multselec={true} // ativa seleção múltipla
-        onMultselec={setSelecionados} // atualiza lista de selecionados
+        multselec={true}
+        onMultselec={setSelecionados}
       />
+
+      <Row className="mt-2">
+        <Col>
+          <div className="text-muted">
+            {selecionados.length} {selecionados.length === 1 ? 'item selecionado' : 'itens selecionados'}
+          </div>
+        </Col>
+      </Row>
     </>
   );
 };
