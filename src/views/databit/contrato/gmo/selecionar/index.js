@@ -4,7 +4,7 @@ import { LinearProgress } from '@mui/material';
 import { apiList } from '../../../../../api/crudapi';
 import AGGrid from '../../../../../components/AGGrid';
 
-const SeriaisSelector = ({ precontrato, produto,onConfirm, onClose }) => {
+const SeriaisSelector = ({ precontrato, produto, onConfirm, onClose }) => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const [carregando, setCarregando] = useState(false);
@@ -13,8 +13,8 @@ const SeriaisSelector = ({ precontrato, produto,onConfirm, onClose }) => {
   useEffect(() => {
     const carregarSeriais = async () => {
       setCarregando(true);
-      const campos = 'TB02308_NUMSERIE as numserie, TB02308_PRODUTO as produto';
-      const filtro = `TB02308_PRODUTO = '${produto}' AND TB02308_SERIESELECIONADA IS NULL AND TB02308_PRECONTRATO = '${precontrato}' ORDER BY TB02308_NUMSERIE`;
+      const campos = 'TB02308_NUMSERIE,TB02308_CONTRATO,TB02308_PRECONTRATO,TB02308_CODITEM,TB02308_IDITEM';
+      const filtro = `TB02308_PRODUTO = '${produto}' /*AND TB02308_SERIESELECIONADA IS NULL*/ AND TB02308_PRECONTRATO = '${precontrato}' ORDER BY TB02308_NUMSERIE`;
 
       try {
         const response = await apiList('PrecontratoDevolucao', campos, '', filtro);
@@ -52,8 +52,8 @@ const SeriaisSelector = ({ precontrato, produto,onConfirm, onClose }) => {
   }, [precontrato]);
 
   const handleConfirmar = () => {
-    const numSeries = selecionados.map((item) => item.numserie);
-    onConfirm(numSeries);
+    console.log('Selecionados:', selecionados); 
+    onConfirm(selecionados); 
     onClose();
   };
 
@@ -64,12 +64,7 @@ const SeriaisSelector = ({ precontrato, produto,onConfirm, onClose }) => {
           <Button variant="secondary" className="mb-2 me-2" onClick={onClose}>
             Fechar
           </Button>
-          <Button
-            variant="primary"
-            className="mb-2"
-            onClick={handleConfirmar}
-            disabled={selecionados.length === 0}
-          >
+          <Button variant="primary" className="mb-2" onClick={handleConfirmar} disabled={selecionados.length === 0}>
             Confirmar Seleção
           </Button>
         </Col>
