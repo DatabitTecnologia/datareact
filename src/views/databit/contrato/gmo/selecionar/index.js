@@ -4,7 +4,6 @@ import { LinearProgress } from '@mui/material';
 import { apiList } from '../../../../../api/crudapi';
 import AGGrid from '../../../../../components/AGGrid';
 
-
 const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
@@ -16,7 +15,7 @@ const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
 
     apiList(
       'PrecontratoDevolucao',
-      'TB02308_NUMSERIE as numserie, TB02308_PRODUTO as produto', // já normalizando nomes
+      'TB02308_NUMSERIE as numserie, TB02308_PRODUTO as produto',
       '',
       `TB02308_PRECONTRATO = '${produto}' ORDER BY TB02308_NUMSERIE`
     )
@@ -31,19 +30,25 @@ const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
   useEffect(() => {
     setColumns([
       {
-        headerCheckboxSelection: true, // checkbox no cabeçalho
-        checkboxSelection: true,       // checkbox nas linhas
-        width: 50
+        field: 'numserie',
+        headerName: 'Número de Série',
+        headerClassName: 'header-list',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        width: 250
       },
-      { headerClassName: 'header-list', field: 'numserie', headerName: 'Número de Série', width: 250 },
-      { headerClassName: 'header-list', field: 'produto', headerName: 'Produto', width: 150 }
+      {
+        field: 'produto',
+        headerName: 'Produto',
+        headerClassName: 'header-list',
+        width: 150
+      }
     ]);
 
     carregarSeriais();
   }, [produto]);
 
   const handleConfirmar = () => {
-    // Pega só os numserie selecionados
     const numSeries = selecionados.map((item) => item.numserie);
     onConfirm(numSeries);
     onClose();
@@ -75,9 +80,8 @@ const SeriaisSelector = ({ produto, onConfirm, onClose }) => {
         rows={rows}
         columns={columns}
         loading={carregando}
-        rowSelection="multiple"
-        rowMultiSelectWithClick={true} // permite selecionar clicando na linha também
-        onSelectionChange={(newSelection) => setSelecionados(newSelection)}
+        multselec={true} // ativa seleção múltipla
+        onMultselec={setSelecionados} // atualiza lista de selecionados
       />
     </>
   );

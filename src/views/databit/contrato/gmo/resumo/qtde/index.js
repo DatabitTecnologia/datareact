@@ -4,7 +4,6 @@ import { CreateObject } from '../../../../../../components/CreateObject';
 import ProdutoEstoque from '../../../../produto/estoque';
 import SeriaisSelector from '../../selecionar';
 
-const [showSeriaisModal, setShowSeriaisModal] = useState(false); 
 
 const GmoResumoQtde = (props) => {
   const { itemselec, setItemselec } = props;
@@ -17,6 +16,8 @@ const GmoResumoQtde = (props) => {
   const [itemvariant, setItemvariant] = React.useState();
   const alertVariants = ['danger', 'warning', 'success', 'prmary'];
   const [mensagem, setMensagem] = React.useState('');
+
+  const [showSeriaisModal, setShowSeriaisModal] = useState(false); 
 
   useEffect(() => {
     setValuesdisable([true, true, true, true, true, true, true, true, false]);
