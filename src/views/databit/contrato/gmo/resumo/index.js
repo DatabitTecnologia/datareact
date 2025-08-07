@@ -787,7 +787,10 @@ const GmoResumo = (props) => {
               setShowlanc={(data) => setShowlanc(data)}
               rows={rows}
               setRows={(data) => setRows(data)}
-              seriaisSelecionados={seriaisSelecionados}
+              onSaveSeriais={(lista) => {
+                console.log('[GmoResumo] recebidos do Qtde:', lista);
+                setSeriaisSelecionados(lista || []);
+              }}
             ></GmoResumoQtde>
           ) : (
             <></>

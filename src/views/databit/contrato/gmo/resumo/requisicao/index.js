@@ -9,6 +9,7 @@ import { Decode64 } from '../../../../../../utils/crypto';
 import { addCodigo } from '../../../../../../utils/codigo/codigo';
 
 const GmoResumoRequisicao = (props) => {
+  const { showreq, codemp, contrato  = [] } = props; 
   const { shoreq, setShowreq } = props;
   const { rows, setRows } = props;
   const { gerado, setGerado } = props;
@@ -138,6 +139,10 @@ const GmoResumoRequisicao = (props) => {
     }
   }, [codigoreq]);
 
+  useEffect(() => {
+    console.log('[GmoResumoRequisicao] seriaisSelecionados (props):', seriaisSelecionados);
+  }, [seriaisSelecionados]);
+
   const listarSites = async () => {
     valuesfield[1] = '';
     setValuesfield([...valuesfield]);
@@ -180,7 +185,7 @@ const GmoResumoRequisicao = (props) => {
                 let numreq = response.data.id;
 
                 // Atualiza os seriais com a Requisição correta
-                console.log('➡️ Seriais selecionados:', seriaisSelecionados);
+                console.log('Seriais selecionados:', seriaisSelecionados);
                 for (const objeto of seriaisSelecionados) {
                   if (objeto.precontrato === item.precontrato) {
                     const data = {

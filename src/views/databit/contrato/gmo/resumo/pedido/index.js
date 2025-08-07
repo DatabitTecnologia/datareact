@@ -261,7 +261,7 @@ const GmoResumoPedido = (props) => {
               );
               if (responseserial.status === 200) {
                 const seriais = responseserial.data;
-                console.log(seriais);
+                //console.log(seriais);
                 for (const serial of seriais) {
                   let saveserial = {};
                   saveserial['pedido'] = numreq;

@@ -5,8 +5,11 @@ import ProdutoEstoque from '../../../../produto/estoque';
 import SeriaisSelector from '../../selecionar';
 
 const GmoResumoQtde = (props) => {
+  
   const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
+  const [showModalSeriais, setShowModalSeriais] = useState(false);
 
+  const { onSaveSeriais } = props; 
   const { itemselec, setItemselec } = props;
   const { showlanc, setShowlanc } = props;
   const { rows, setRows } = props;
@@ -172,9 +175,22 @@ const GmoResumoQtde = (props) => {
     }
   };
 
-  const receberSeriaisSelecionados = (seriais) => {
-    setSeriaisSelecionados(seriais);
-    console.log('Recebidos:', seriais);
+   const abrirModalSeriais = () => {
+    console.log('[GmoResumoQtde] abrirModalSeriais()');
+    setShowModalSeriais(true);
+  };
+
+  const fecharModalSeriais = () => {
+    console.log('[GmoResumoQtde] fecharModalSeriais()');
+    setShowModalSeriais(false);
+  };
+
+  const receberSeriaisSelecionados = (lista) => {
+    console.log('[GmoResumoQtde] receberSeriaisSelecionados:', lista);
+    // se você precisa subir pro GmoResumo (pai), chame props.onSaveSeriais?.(lista);
+    // aqui só guardo local, se quiser:
+    setSeriaisSelecionados(lista || []);
+    fecharModalSeriais();
   };
 
   return (
@@ -241,7 +257,7 @@ const GmoResumoQtde = (props) => {
             precontrato={itemselec.precontrato}
             produto={itemselec.produto}
             onConfirm={receberSeriaisSelecionados}
-            onClose={() => setShowSeriaisModal(false)}
+            onClose={fecharModalSeriais} 
           />
         </Modal.Body>
       </Modal>
