@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Button, Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 import { LinearProgress } from '@mui/material';
 import { CreateObject } from '../../../../../components/CreateObject';
@@ -46,6 +46,7 @@ const GmoResumo = (props) => {
   const { operacao, setOperacao } = props;
   const [senhareq, setSenhareq] = React.useState([]);
   const [operacaotipo, setOperacaotipo] = React.useState('');
+  const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
 
   useEffect(() => {
     setTotais([
@@ -786,6 +787,7 @@ const GmoResumo = (props) => {
               setShowlanc={(data) => setShowlanc(data)}
               rows={rows}
               setRows={(data) => setRows(data)}
+              seriaisSelecionados={seriaisSelecionados}
             ></GmoResumoQtde>
           ) : (
             <></>
@@ -808,6 +810,8 @@ const GmoResumo = (props) => {
               setRows={(data) => setRows(data)}
               gerado={gerado}
               setGerado={(data) => setGerado(data)}
+              seriaisSelecionados={seriaisSelecionados}
+              setSeriaisSelecionados={setSeriaisSelecionados}
             ></GmoResumoRequisicao>
           ) : (
             <></>

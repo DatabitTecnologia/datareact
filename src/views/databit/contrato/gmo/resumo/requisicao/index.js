@@ -35,6 +35,7 @@ const GmoResumoRequisicao = (props) => {
   const [siteatual, setSiteatual] = React.useState('');
   const [nomestatus, setNomestatus] = React.useState('');
   const [tabela, setTabela] = React.useState('');
+  const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
 
   useEffect(() => {
     setColumns([
@@ -177,6 +178,28 @@ const GmoResumoRequisicao = (props) => {
             if (response.status === 200) {
               try {
                 let numreq = response.data.id;
+
+                // Atualiza os seriais com a Requisição correta
+                console.log('➡️ Seriais selecionados:', seriaisSelecionados);
+                for (const objeto of seriaisSelecionados) {
+                  if (objeto.precontrato === item.precontrato) {
+                    const data = {
+                      numserie: objeto.numserie,
+                      contrato: objeto.contrato,
+                      precontrato: objeto.precontrato,
+                      coditem: objeto.coditem,
+                      iditem: objeto.iditem,
+                      requisicao: numreq // cuidado com a capitalização do campo!
+                    };
+
+                    apiUpdate('PrecontratoDevolucao', data).then((res) => {
+                      if (res?.status !== 200) {
+                        console.error('Erro ao atualizar serial:', objeto);
+                      }
+                    });
+                  }
+                }
+
                 valuesfield[1] = valuesfield[1] + response.data.mensagem + '\n';
                 setValuesfield([...valuesfield]);
                 let itemhist = {};

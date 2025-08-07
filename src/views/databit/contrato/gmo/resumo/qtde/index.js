@@ -3,7 +3,6 @@ import { Row, Col, Card, Button, Alert, Modal } from 'react-bootstrap';
 import { CreateObject } from '../../../../../../components/CreateObject';
 import ProdutoEstoque from '../../../../produto/estoque';
 import SeriaisSelector from '../../selecionar';
-import { apiUpdate } from '../../../../../../api/crudapi';
 
 const GmoResumoQtde = (props) => {
   const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
@@ -19,9 +18,7 @@ const GmoResumoQtde = (props) => {
   const alertVariants = ['danger', 'warning', 'success', 'prmary'];
   const [mensagem, setMensagem] = React.useState('');
 
-  const [showSeriaisModal, setShowSeriaisModal] = useState(false);
-
-  const [seriaisPrepareados, setSeriaisPreparados] = useState([]);
+  const [showSeriaisModal, setShowSeriaisModal] = useState(false); // corrigido aqui
 
   useEffect(() => {
     setValuesdisable([true, true, true, true, true, true, true, true, false]);
@@ -151,40 +148,34 @@ const GmoResumoQtde = (props) => {
     valuesfield[5] = itemselec.cidade;
     valuesfield[6] = itemselec.uf;
     valuesfield[7] = itemselec.cep;
-    if (itemselec.qtlanc > 0) {
-      valuesfield[8] = itemselec.qtlanc;
-    } else {
-      valuesfield[8] = itemselec.qtaliberar - itemselec.qttransito;
-    }
+    valuesfield[8] = itemselec.qtlanc > 0 ? itemselec.qtlanc : itemselec.qtaliberar - itemselec.qttransito;
 
     setValuesfield([...valuesfield]);
   }, []);
 
   const Salvar = () => {
-  if (parseInt(valuesfield[8]) <= itemselec.qtaliberar - itemselec.qttransito) {
-    itemselec.qtlanc = parseInt(valuesfield[8]);
-    setItemselec(itemselec);
+    if (parseInt(valuesfield[8]) <= itemselec.qtaliberar - itemselec.qttransito) {
+      itemselec.qtlanc = parseInt(valuesfield[8]);
+      setItemselec(itemselec);
 
-    let rowsbkp = rows.slice(0, rows.length);
-    const itembkp = rowsbkp.find((element) => element.id === itemselec.id);
-    itembkp.qtlanc = parseInt(valuesfield[8]);
-    setRows(rowsbkp);
+      let rowsbkp = rows.slice(0, rows.length);
+      const itembkp = rowsbkp.find((element) => element.id === itemselec.id);
+      itembkp.qtlanc = parseInt(valuesfield[8]);
+      setRows(rowsbkp);
 
-    // Salvar objetos inteiros no estado, sem modificar nada
-    if (seriaisSelecionados.length > 0) {
-      setSeriaisPreparados([...seriaisSelecionados]); 
-      //console.log('Seriais armazenados:', seriaisSelecionados);
+      // seriaisSelecionados já está salvo, não precisa fazer mais nada aqui
+
+      setShowlanc(false);
+    } else {
+      setItemvariant(1);
+      setMensagem('Não é permitido lançar quantidade MAIOR que o saldo à Liberar !');
     }
+  };
 
-    setShowlanc(false);
-  } else {
-    setItemvariant(1);
-    setMensagem('Não é permitido lançar quantidade MAIOR que o saldo à Liberar !');
-  }
-};
-
-
-
+  const receberSeriaisSelecionados = (seriais) => {
+    setSeriaisSelecionados(seriais);
+    console.log('Recebidos:', seriais);
+  };
 
   return (
     <React.Fragment>
@@ -207,14 +198,14 @@ const GmoResumoQtde = (props) => {
                 valuesfield2={valuesfield2}
                 setValuesfield2={(data) => setValuesfield2(data)}
                 disabled={valuesdisable[field.id]}
-              ></CreateObject>
+              />
             ))}
           </Row>
         </Card>
         <Row style={{ height: '430px' }}>
-          <ProdutoEstoque produto={itemselec.produto} empselec={itemselec.codemp} compress={true}></ProdutoEstoque>
+          <ProdutoEstoque produto={itemselec.produto} empselec={itemselec.codemp} compress={true} />
         </Row>
-        <hr></hr>
+        <hr />
         <Row>
           <Alert
             show={mensagem !== '' && mensagem !== undefined}
@@ -230,15 +221,16 @@ const GmoResumoQtde = (props) => {
             <Button className="btn btn-info shadow-2 mb-2" onClick={() => setShowSeriaisModal(true)}>
               <i className={'feather icon-search'} /> Selecionar Seriais
             </Button>
-            <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={(e) => Salvar()}>
+            <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={() => Salvar()}>
               <i className={'feather icon-save'} /> Salvar
             </Button>
-            <Button id="btnCancelar" className="btn btn-warning shadow-2 mb-2" onClick={(e) => setShowlanc(false)}>
+            <Button id="btnCancelar" className="btn btn-warning shadow-2 mb-2" onClick={() => setShowlanc(false)}>
               <i className={'feather icon-x'} /> Cancelar
             </Button>
           </Col>
         </Row>
       </div>
+
       {/* Modal series */}
       <Modal show={showSeriaisModal} onHide={() => setShowSeriaisModal(false)} size="lg" centered>
         <Modal.Header closeButton>
@@ -248,7 +240,7 @@ const GmoResumoQtde = (props) => {
           <SeriaisSelector
             precontrato={itemselec.precontrato}
             produto={itemselec.produto}
-            onConfirm={(listaCompleta) => setSeriaisSelecionados(listaCompleta)}
+            onConfirm={receberSeriaisSelecionados}
             onClose={() => setShowSeriaisModal(false)}
           />
         </Modal.Body>
@@ -256,4 +248,5 @@ const GmoResumoQtde = (props) => {
     </React.Fragment>
   );
 };
+
 export default GmoResumoQtde;

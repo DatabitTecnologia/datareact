@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import { LinearProgress } from '@mui/material';
-import { apiList } from '../../../../../api/crudapi';
+import { apiList, apiUpdate } from '../../../../../api/crudapi';
 import AGGrid from '../../../../../components/AGGrid';
 
 const SeriaisSelector = ({ precontrato, produto, onConfirm, onClose }) => {
