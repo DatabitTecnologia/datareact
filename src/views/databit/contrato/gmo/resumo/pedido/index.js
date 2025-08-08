@@ -288,7 +288,7 @@ const GmoResumoPedido = (props) => {
 
                     try {
                       const upRes = await apiUpdate('PrecontratoDevolucao', dadosselec);
-                      console.log(upRes)
+                      //console.log(upRes)
                       if (upRes?.status !== 200) {
                         console.warn('Falha ao atualizar serial selecionado:', sel, upRes);
                       } else {
