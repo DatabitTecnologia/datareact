@@ -28,6 +28,11 @@ const GmoResumoPedido = (props) => {
   const [operacaocom, setOperacaocom] = React.useState();
   const [codigoreq, setCodigoreq] = React.useState('');
   const [nomestatus, setNomestatus] = React.useState('');
+  const { seriaisSelecionados = [] } = props;
+
+  useEffect(() => {
+    console.log('[GmoResumoPedido] seriaisSelecionados recebidos:', seriaisSelecionados);
+  }, [seriaisSelecionados]);
 
   useEffect(() => {
     setColumns([
@@ -261,11 +266,11 @@ const GmoResumoPedido = (props) => {
               );
               if (responseserial.status === 200) {
                 const seriais = responseserial.data;
-                //console.log(seriais);
+                console.log(seriais);
                 for (const serial of seriais) {
                   let saveserial = {};
                   saveserial['pedido'] = numreq;
-                  saveserial['contrato'] = props.contrato.contrato;
+                  saveserial['contrato'] = props.contrato;
                   saveserial['produto'] = serial.produto;
                   saveserial['numserie'] = serial.numserie;
                   saveserial['pat'] = serial.pat;
@@ -289,6 +294,9 @@ const GmoResumoPedido = (props) => {
 
   const Gerar = async () => {
     console.log(valuesfield[0]);
+
+    console.log('[GmoResumoPedido] Seriais selecionados no Pedido:', seriaisSelecionados);
+
     if (valuesfield[0] !== '' && valuesfield[0] !== undefined) {
       Confirmation('frmpedcom', 'Confirma a geração de Requisições ?').then((result) => {
         if (result.isConfirmed) {

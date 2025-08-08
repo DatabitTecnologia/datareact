@@ -14,7 +14,7 @@ const SeriaisSelector = ({ precontrato, produto, onConfirm, onClose }) => {
     const carregarSeriais = async () => {
       setCarregando(true);
       const campos = 'TB02308_NUMSERIE,TB02308_CONTRATO,TB02308_PRECONTRATO,TB02308_CODITEM,TB02308_IDITEM';
-      const filtro = `TB02308_PRODUTO = '${produto}' /*AND TB02308_SERIESELECIONADA IS NULL*/ AND TB02308_PRECONTRATO = '${precontrato}' ORDER BY TB02308_NUMSERIE`;
+      const filtro = `TB02308_PRODUTO = '${produto}' AND TB02308_REQUISICAO IS NULL AND TB02308_PRECONTRATO = '${precontrato}' ORDER BY TB02308_NUMSERIE`;
 
       try {
         const response = await apiList('PrecontratoDevolucao', campos, '', filtro);

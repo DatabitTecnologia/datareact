@@ -46,6 +46,8 @@ const GmoResumo = (props) => {
   const { operacao, setOperacao } = props;
   const [senhareq, setSenhareq] = React.useState([]);
   const [operacaotipo, setOperacaotipo] = React.useState('');
+
+  // <<< mantém lista de seriais selecionados vinda do filho
   const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
 
   useEffect(() => {
@@ -373,14 +375,12 @@ const GmoResumo = (props) => {
     let filter = "PRECONTRATO = '" + props.precontrato + "' ";
     let option = parseInt(valuesfield[8]);
     switch (option) {
-      case 1: {
+      case 1:
         filter = filter + ' AND  ((QTCONTRATADA <> QTINSTALADA) OR (QTAPROVADA = 0))  ';
         break;
-      }
-      case 2: {
+      case 2:
         filter = filter + '  AND ((QTCONTRATADA = QTINSTALADA) AND QTAPROVADA > 0)';
         break;
-      }
     }
     apiFind('Contrato', '*', '', "TB02111_CODIGO = '" + props.contrato + "' ").then((response) => {
       if (response.status === 200) {
@@ -394,10 +394,10 @@ const GmoResumo = (props) => {
         ).then((response) => {
           if (response.status === 200) {
             setRows(response.data);
-            apiFind('Senha', 'TB00008_ATIVO,TB00008_SENHA,TB00008_FUNCAO', '', 'TB00008_ID = 168').then((response) => {
-              if (response.status === 200) {
+            apiFind('Senha', 'TB00008_ATIVO,TB00008_SENHA,TB00008_FUNCAO', '', 'TB00008_ID = 168').then((response2) => {
+              if (response2.status === 200) {
                 setCarregando(false);
-                setSenhareq(response.data);
+                setSenhareq(response2.data);
               }
             });
           }
@@ -445,13 +445,11 @@ const GmoResumo = (props) => {
     }
     if (rows !== undefined && rows.length > 0) {
       rows.forEach((element) => {
-        console.log(element.qtinstalada);
+        console.log('[GmoResumo] qtinstalada row:', element.qtinstalada);
         totais[0].value += element.qtcontratada;
         totais[1].value += element.qtaprovada;
         totais[2].value += element.qtpendente;
-        if (element.operacaotipo !== 'R') {
-          totais[3].value += element.qtliberada;
-        }
+        if (element.operacaotipo !== 'R') totais[3].value += element.qtliberada;
         totais[4].value += element.qttransito;
         if (element.operacaotipo !== 'R') {
           totais[5].value += element.qtentregue;
@@ -467,34 +465,28 @@ const GmoResumo = (props) => {
     }
   }, [rows]);
 
-  const Fechar = () => {
-    setShowgmoequip(false);
-  };
-
-  const handleCloseparque = () => {
-    setShowparque(false);
-  };
-
-  const handleCloseprod = () => {
-    setShowprod(false);
-  };
+  const Fechar = () => setShowgmoequip(false);
+  const handleCloseparque = () => setShowparque(false);
+  const handleCloseprod = () => setShowprod(false);
+  const handleCloselanc = () => setShowlanc(false);
+  const handleClosereq = () => setShowreq(false);
+  const handleCloseped = () => setShowped(false);
+  const handleClosetran = () => setShowtran(false);
 
   const showLanc = () => {
     Password('frmgmo', senhareq.senha, 168, senhareq.funcao, senhareq.ativo === 'S').then((result) => {
       if (result.isConfirmed) {
+        console.log('[GmoResumo] Abrindo modal Qtde...');
         setShowlanc(true);
       }
     });
-  };
-
-  const handleCloselanc = () => {
-    setShowlanc(false);
   };
 
   const showReq = () => {
     Password('frmgmo', senhareq.senha, 168, senhareq.funcao, senhareq.ativo === 'S').then((result) => {
       if (result.isConfirmed) {
         if (valuesfield[9] === 'A') {
+          console.log('[GmoResumo] Abrindo modal Requisição... Seriais atuais:', seriaisSelecionados);
           setShowreq(true);
         } else {
           setShowped(true);
@@ -503,33 +495,15 @@ const GmoResumo = (props) => {
     });
   };
 
-  const handleClosereq = () => {
-    setShowreq(false);
-  };
-
-  const handleCloseped = () => {
-    setShowped(false);
-  };
-
-  const handleClosetran = () => {
-    setShowtran(false);
-  };
-
-  const clickGrid = (newSelection) => {
-    setItemselec(newSelection);
-  };
-
+  const clickGrid = (newSelection) => setItemselec(newSelection);
   const dblClickGrid = (newSelection) => {
-    console.log(newSelection);
+    console.log('[GmoResumo] dblClickGrid', newSelection);
     if (newSelection.operacaotipo === valuesfield[9]) {
       setItemselec(newSelection);
       showLanc();
     }
   };
-
-  const keyGrid = (newSelection) => {
-    setItemselec(newSelection);
-  };
+  const keyGrid = (newSelection) => setItemselec(newSelection);
 
   return (
     <React.Fragment>
@@ -553,12 +527,13 @@ const GmoResumo = (props) => {
                     valuesfield2={valuesfield2}
                     setValuesfield2={(data) => setValuesfield2(data)}
                     disabled={true}
-                  ></CreateObject>
+                  />
                 ))}
               </Row>
             </Card>
           </Col>
         </Row>
+
         <Row>
           <Col style={{ marginLeft: '10px', width: '50%' }}>
             <Card className="Recent-Users">
@@ -577,13 +552,13 @@ const GmoResumo = (props) => {
                     valuesfield2={valuesfield2}
                     setValuesfield2={(data) => setValuesfield2(data)}
                     disabled={false}
-                  ></CreateObject>
+                  />
                 ))}
 
                 <Col style={{ marginTop: '35px' }}>
                   <Row>
                     <Col lg={1}>
-                      <div style={{ height: '25px', width: '25px', backgroundColor: '#66ffff', border: 'solid', borderWidth: '2px' }}></div>
+                      <div style={{ height: '25px', width: '25px', backgroundColor: '#66ffff', border: 'solid', borderWidth: '2px' }} />
                     </Col>
                     <Col>
                       <p style={{ marginTop: '4px', marginLeft: '5px' }} className="text-muted">
@@ -595,7 +570,7 @@ const GmoResumo = (props) => {
                 <Col style={{ marginTop: '35px' }}>
                   <Row>
                     <Col lg={1}>
-                      <div style={{ height: '25px', width: '25px', backgroundColor: '#80ffd4', border: 'solid', borderWidth: '2px' }}></div>
+                      <div style={{ height: '25px', width: '25px', backgroundColor: '#80ffd4', border: 'solid', borderWidth: '2px' }} />
                     </Col>
                     <Col>
                       <p style={{ marginTop: '4px', marginLeft: '5px' }} className="text-muted">
@@ -607,7 +582,7 @@ const GmoResumo = (props) => {
                 <Col style={{ marginTop: '35px' }}>
                   <Row>
                     <Col lg={1}>
-                      <div style={{ height: '25px', width: '25px', backgroundColor: '#ffff99', border: 'solid', borderWidth: '2px' }}></div>
+                      <div style={{ height: '25px', width: '25px', backgroundColor: '#ffff99', border: 'solid', borderWidth: '2px' }} />
                     </Col>
                     <Col>
                       <p style={{ marginTop: '4px', marginLeft: '5px' }} className="text-muted">
@@ -619,7 +594,7 @@ const GmoResumo = (props) => {
                 <Col style={{ marginTop: '35px' }}>
                   <Row>
                     <Col lg={1}>
-                      <div style={{ height: '25px', width: '25px', backgroundColor: '#ff0000', border: 'solid', borderWidth: '2px' }}></div>
+                      <div style={{ height: '25px', width: '25px', backgroundColor: '#ff0000', border: 'solid', borderWidth: '2px' }} />
                     </Col>
                     <Col>
                       <p style={{ marginTop: '4px', marginLeft: '5px' }} className="text-muted">
@@ -629,6 +604,7 @@ const GmoResumo = (props) => {
                   </Row>
                 </Col>
               </Row>
+
               <Row style={{ marginTop: '10px' }}>
                 <AGGrid
                   width="100%"
@@ -642,144 +618,123 @@ const GmoResumo = (props) => {
                   onDoubleClick={dblClickGrid}
                   onCelClick={clickGrid}
                   validations={validations}
-                ></AGGrid>
+                />
               </Row>
             </Card>
           </Col>
         </Row>
+
         <Row>
           <Col>
             <Row style={{ marginTop: '5px' }}>
               <Card className="Recent-Users" style={{ marginBottom: '2px' }}>
                 <Row>
-                  {totais.map((data, index) => {
-                    return (
-                      <Col key={index}>
-                        {data.visible === true ? (
-                          <Card
-                            style={{
-                              backgroundColor: data.color,
-                              height: '120px',
-                              marginBottom: '2px',
-                              boxShadow: '0rem 0rem 1rem 0.1rem'
-                            }}
-                            key={index}
-                          >
-                            <Card.Body key={index}>
-                              <Row key={index}>
-                                <Col key={index} md={2} xl={3}>
-                                  <img style={{ height: '30px', width: '30px' }} src={data.icon} alt={data.icon}></img>
-                                </Col>
-
-                                <h6 style={{ color: data.colortitle, marginTop: '3px' }}>{data.name}</h6>
-                              </Row>
-                              <h3 key={index} className="mb-1 f-w-300" style={{ textAlign: 'right', color: data.colortitle }}>
-                                {data.value}
-                              </h3>
-                            </Card.Body>
-                          </Card>
-                        ) : (
-                          <></>
-                        )}
-                      </Col>
-                    );
-                  })}
+                  {totais.map((data, index) => (
+                    <Col key={index}>
+                      {data.visible ? (
+                        <Card
+                          style={{ backgroundColor: data.color, height: '120px', marginBottom: '2px', boxShadow: '0rem 0rem 1rem 0.1rem' }}
+                        >
+                          <Card.Body>
+                            <Row>
+                              <Col md={2} xl={3}>
+                                <img style={{ height: '30px', width: '30px' }} src={data.icon} alt={data.icon} />
+                              </Col>
+                              <h6 style={{ color: data.colortitle, marginTop: '3px' }}>{data.name}</h6>
+                            </Row>
+                            <h3 className="mb-1 f-w-300" style={{ textAlign: 'right', color: data.colortitle }}>
+                              {data.value}
+                            </h3>
+                          </Card.Body>
+                        </Card>
+                      ) : null}
+                    </Col>
+                  ))}
                 </Row>
               </Card>
             </Row>
           </Col>
         </Row>
 
-        <hr></hr>
+        <hr />
         <Row style={{ textAlign: 'right' }}>
           <Col>
             {itemselec !== undefined && operacaotipo === valuesfield[9] ? (
               <Button id="btnEditar" className="btn btn-success shadow-2 mb-2" onClick={() => showLanc()}>
-                <i className={'feather icon-edit'} />
-                Editar Qtde.
+                <i className={'feather icon-edit'} /> Editar Qtde.
               </Button>
-            ) : (
-              <></>
-            )}
+            ) : null}
+
             {itemselec !== undefined && operacaotipo === valuesfield[9] ? (
               <Button id="btnGerar" className="btn btn-warning shadow-2 mb-2" onClick={() => showReq()}>
                 <i className={'feather icon-layers'} /> Gerar Requisições
               </Button>
-            ) : (
-              <></>
-            )}
+            ) : null}
+
             {itemselec !== undefined ? (
               <Button id="btnTransito" className="btn btn-primary shadow-2 mb-2" onClick={() => setShowtran(true)}>
-                <i className={'feather icon-map'} />
-                Em Trânsito
+                <i className={'feather icon-map'} /> Em Trânsito
               </Button>
-            ) : (
-              <></>
-            )}
+            ) : null}
+
             {itemselec !== undefined ? (
               <Button id="btnEquip" className="btn btn-primary shadow-2 mb-2" onClick={() => setShowparque(true)}>
-                <i className={'feather icon-printer'} />
-                Equipamentos
+                <i className={'feather icon-printer'} /> Equipamentos
               </Button>
-            ) : (
-              <></>
-            )}
+            ) : null}
+
             {itemselec !== undefined ? (
               <Button id="btnModelo" className="btn btn-primary shadow-2 mb-2" onClick={() => setShowprod(true)}>
-                <i className={'feather icon-search'} />
-                Modelo
+                <i className={'feather icon-search'} /> Modelo
               </Button>
-            ) : (
-              <></>
-            )}
+            ) : null}
+
             <Button id="btnFechar" className="btn btn-primary shadow-2 mb-2" onClick={() => Fechar()}>
-              <i className={'feather icon-x-circle'} />
-              Fechar
+              <i className={'feather icon-x-circle'} /> Fechar
             </Button>
           </Col>
         </Row>
       </div>
-      <Modal backdrop="static" fullscreen={true} show={showparque} centered={true} onHide={handleCloseparque}>
+
+      {/* Modais */}
+      <Modal backdrop="static" fullscreen show={showparque} centered onHide={handleCloseparque}>
         <Modal.Header className="h5" closeButton>
           <i className={'feather icon-printer'} />
-          &nbsp; Equipamento selecionado:{' '}
-          {itemselec !== undefined ? itemselec.produto + ' - ' + itemselec.referencia + ' - ' + itemselec.nome : ''}
+          &nbsp; Equipamento selecionado: {itemselec ? `${itemselec.produto} - ${itemselec.referencia} - ${itemselec.nome}` : ''}
         </Modal.Header>
         <ModalBody>
-          {itemselec !== undefined ? (
+          {itemselec ? (
             <GmoEquipamento
               item={itemselec}
               showparque={showparque}
               setShowparque={(data) => setShowparque(data)}
               somentepre={valuesfield[7]}
               operacao={operacao}
-            ></GmoEquipamento>
-          ) : (
-            <></>
-          )}
+            />
+          ) : null}
         </ModalBody>
       </Modal>
-      <Modal backdrop="static" fullscreen={true} show={showprod} centered={true} onHide={handleCloseprod}>
+
+      <Modal backdrop="static" fullscreen show={showprod} centered onHide={handleCloseprod}>
         <Modal.Header className="h5" closeButton>
           <i className={'feather icon-search'} />
-          &nbsp; Equipamento selecionado:{' '}
-          {itemselec !== undefined ? itemselec.produto + ' - ' + itemselec.referencia + ' - ' + itemselec.nome : ''}
+          &nbsp; Equipamento selecionado: {itemselec ? `${itemselec.produto} - ${itemselec.referencia} - ${itemselec.nome}` : ''}
         </Modal.Header>
-        <ModalBody>{itemselec !== undefined ? <ProdutoInfor produto={itemselec.produto}></ProdutoInfor> : <></>}</ModalBody>
+        <ModalBody>{itemselec ? <ProdutoInfor produto={itemselec.produto} /> : null}</ModalBody>
         <ModalFooter>
-          <Button id="btnFecharprod" className="btn btn-success shadow-2 mb-2" onClick={() => handleCloseprod()}>
-            <i className={'feather icon-x-circle'} />
-            Fechar
+          <Button id="btnFecharprod" className="btn btn-success shadow-2 mb-2" onClick={handleCloseprod}>
+            <i className={'feather icon-x-circle'} /> Fechar
           </Button>
         </ModalFooter>
       </Modal>
-      <Modal backdrop="static" size="xl" show={showlanc} centered={true} onHide={handleCloselanc}>
+
+      <Modal backdrop="static" size="xl" show={showlanc} centered onHide={handleCloselanc}>
         <Modal.Header className="h5" closeButton>
           <i className={'feather icon-edit'} />
           &nbsp; Solicitação de Requisição
         </Modal.Header>
         <ModalBody>
-          {itemselec !== undefined ? (
+          {itemselec ? (
             <GmoResumoQtde
               itemselec={itemselec}
               setItemselec={(data) => setItemselec(data)}
@@ -791,19 +746,18 @@ const GmoResumo = (props) => {
                 console.log('[GmoResumo] recebidos do Qtde:', lista);
                 setSeriaisSelecionados(lista || []);
               }}
-            ></GmoResumoQtde>
-          ) : (
-            <></>
-          )}
+            />
+          ) : null}
         </ModalBody>
       </Modal>
-      <Modal backdrop="static" size="xl" show={showreq} centered={true} onHide={handleClosereq}>
+
+      <Modal backdrop="static" size="xl" show={showreq} centered onHide={handleClosereq}>
         <Modal.Header className="h5" closeButton>
           <i className={'feather icon-layers'} />
           &nbsp; Geração de Requisições (Instalação)
         </Modal.Header>
         <ModalBody>
-          {itemselec !== undefined ? (
+          {itemselec ? (
             <GmoResumoRequisicao
               codemp={itemselec.codemp}
               contrato={itemselec}
@@ -813,21 +767,20 @@ const GmoResumo = (props) => {
               setRows={(data) => setRows(data)}
               gerado={gerado}
               setGerado={(data) => setGerado(data)}
-              seriaisSelecionados={seriaisSelecionados}
+              seriaisSelecionados={seriaisSelecionados} // << repassa para o Requisição
               setSeriaisSelecionados={setSeriaisSelecionados}
-            ></GmoResumoRequisicao>
-          ) : (
-            <></>
-          )}
+            />
+          ) : null}
         </ModalBody>
       </Modal>
-      <Modal backdrop="static" size="xl" show={showped} centered={true} onHide={handleCloseped}>
+
+      <Modal backdrop="static" size="xl" show={showped} centered onHide={handleCloseped}>
         <Modal.Header className="h5" closeButton>
           <i className={'feather icon-layers'} />
           &nbsp; Geração de Requisições (Desinstalação)
         </Modal.Header>
         <ModalBody>
-          {itemselec !== undefined ? (
+          {itemselec ? (
             <GmoResumoPedido
               precontrato={itemselec.precontrato}
               codemp={itemselec.codemp}
@@ -838,19 +791,20 @@ const GmoResumo = (props) => {
               setRows={(data) => setRows(data)}
               gerado={gerado}
               setGerado={(data) => setGerado(data)}
-            ></GmoResumoPedido>
-          ) : (
-            <></>
-          )}
+              seriaisSelecionados={seriaisSelecionados}
+              setSeriaisSelecionados={setSeriaisSelecionados}
+            />
+          ) : null}
         </ModalBody>
       </Modal>
-      <Modal backdrop="static" size="xl" show={showtran} centered={true} onHide={handleClosetran}>
+
+      <Modal backdrop="static" size="xl" show={showtran} centered onHide={handleClosetran}>
         <Modal.Header className="h5" closeButton>
           <i className={'feather icon-map'} />
           &nbsp; Requisições em Trânsito
         </Modal.Header>
         <ModalBody>
-          {itemselec !== undefined ? (
+          {itemselec ? (
             <GmoTransito
               precontrato={itemselec.precontrato}
               produto={itemselec.produto}
@@ -858,10 +812,8 @@ const GmoResumo = (props) => {
               operacao={operacaotipo}
               showtran={showtran}
               setShowtran={(data) => setShowtran(data)}
-            ></GmoTransito>
-          ) : (
-            <></>
-          )}
+            />
+          ) : null}
         </ModalBody>
       </Modal>
     </React.Fragment>
@@ -869,18 +821,3 @@ const GmoResumo = (props) => {
 };
 
 export default GmoResumo;
-
-/*
-  <Col style={{ marginRight: '10px', width: '50%' }}>
-            <Row style={{ marginLeft: '5px' }}>
-              <Card className="Recent-Users" style={{ marginBottom: '2px' }}>
-                <Card.Header>
-                  <Card.Title as="h5">Gráfico de Informações (Top 10)</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Chart options={options} series={series} type="bar" width="100%" height="335px" />
-                </Card.Body>
-              </Card>
-            </Row>
-          </Col>
-*/
