@@ -152,6 +152,7 @@ const GmoResumoPedido = (props) => {
   const ListarSites = async () => {
     valuesfield[1] = '';
     setValuesfield([...valuesfield]);
+
     for (const item of sitescod) {
       const responsesite = await apiFind('ContratoSite', 'TB02176_NOME', '', "TB02176_CODIGO = '" + item.site + "' ");
       if (responsesite.status === 200) {
@@ -166,15 +167,18 @@ const GmoResumoPedido = (props) => {
         }
 
         const responsecad = await apiExec("EXEC SP01123 '" + codclifim + "','" + Decode64(sessionStorage.getItem('user')) + "' ", 'S');
+
         if (responsecad.status === 200) {
           const codfor = responsecad.data[0].CODFOR;
           valuesfield[1] =
             valuesfield[1] + 'Gerando Requisição Site: ' + item.site + '-' + nomesite + '  Pré-Conrato: ' + item.precontrato + '\n';
           setValuesfield([...valuesfield]);
+
           const tmdata1 = Date();
           const dt1 = new Date(tmdata1);
           const data1 = dt1.toLocaleDateString('en-US');
           const dataatual = data1 + ' 00:00:00';
+
           let itemreq = {};
           itemreq['codigo'] = item.requisicao;
           itemreq['data'] = dataatual;
@@ -198,12 +202,15 @@ const GmoResumoPedido = (props) => {
           itemreq['baseicms2'] = 0;
           itemreq['vlricms2'] = 0;
           itemreq['obs'] = 'Requisição gerada pelo DATACLIENT';
+
           const responsepedido = await apiInsert('PedidoCompra', itemreq);
+
           if (responsepedido.status === 200) {
             try {
               let numreq = responsepedido.data.id;
               valuesfield[1] = valuesfield[1] + responsepedido.data.mensagem + '\n';
               setValuesfield([...valuesfield]);
+
               let itemhist = {};
               itemhist['codcad'] = codfor;
               itemhist['codemp'] = props.codemp;
@@ -213,12 +220,15 @@ const GmoResumoPedido = (props) => {
               itemhist['user'] = Decode64(sessionStorage.getItem('user'));
               itemhist['nome'] = nomestatus;
               itemhist['obs'] = 'Requisição gerada pelo DATACLIENT';
+
               const responsehistorico = await apiInsert('Historico', itemhist);
               if (responsehistorico.status === 200) {
                 valuesfield[1] = valuesfield[1] + responsehistorico.data.mensagem + '\n';
                 setValuesfield([...valuesfield]);
+
                 let itens = rowsselec.filter((listaprod) => listaprod.codsite === item.site);
                 let index = 1;
+
                 for (const listaprod of itens) {
                   let itemprod = {};
                   itemprod['codemp'] = props.codemp;
@@ -250,6 +260,7 @@ const GmoResumoPedido = (props) => {
                   itemprod['vlrfrete'] = 0;
                   itemprod['vlroutdesp'] = 0;
                   itemprod['dtent'] = dataatual;
+
                   const responseitem = await apiInsert('PedidoCompraItem', itemprod);
                   if (responseitem.status === 200) {
                     valuesfield[1] = valuesfield[1] + responseitem.data.mensagem + '\n';
@@ -258,25 +269,63 @@ const GmoResumoPedido = (props) => {
                   index += 1;
                 }
               }
+
+              // 🔹 ATUALIZA APENAS OS SERIAIS SELECIONADOS (se houver) COM A REQUISIÇÃO GERADA (numreq)
+              if (Array.isArray(props.seriaisSelecionados) && props.seriaisSelecionados.length > 0) {
+                console.log('[DEBUG] Atualizando somente seriais selecionados para a requisição', numreq);
+                for (const sel of props.seriaisSelecionados) {
+                  // opcional: garantir que é do mesmo pré do loop atual
+                  if (sel.precontrato === item.precontrato) {
+                    const dadosselec = {
+                      numserie: sel.numserie,
+                      produto: sel.produto,
+                      contrato: sel.contrato,
+                      precontrato: sel.precontrato,
+                      coditem: sel.coditem,
+                      iditem: sel.iditem,
+                      requisicao: numreq
+                    };
+
+                    try {
+                      const upRes = await apiUpdate('PrecontratoDevolucao', dadosselec);
+                      console.log(upRes)
+                      if (upRes?.status !== 200) {
+                        console.warn('Falha ao atualizar serial selecionado:', sel, upRes);
+                      } else {
+                        console.log('Serial atualizado (selecionado):', sel.numserie, '=> req', numreq);
+                      }
+                    } catch (e) {
+                      console.error('apiUpdate serial selecionado:', sel, e);
+                    }
+                  }
+                }
+              } else {
+                console.log('Nenhum serial selecionado; mantendo fluxo original sem apiUpdate.');
+              }
+
               const responseserial = await apiList(
                 'PrecontratoDevolucaoVW',
                 '*',
                 '',
                 "precontrato = '" + precontrato + "' and codsite = '" + item.site + "' "
               );
+
               if (responseserial.status === 200) {
                 const seriais = responseserial.data;
-                console.log(seriais);
                 for (const serial of seriais) {
-                  let saveserial = {};
-                  saveserial['pedido'] = numreq;
-                  saveserial['contrato'] = props.contrato;
-                  saveserial['produto'] = serial.produto;
-                  saveserial['numserie'] = serial.numserie;
-                  saveserial['pat'] = serial.pat;
+                  let saveserial = {
+                    coditem: serial.coditem,
+                    contrato: serial.contrato,
+                    iditem: serial.iditem,
+                    numserie: serial.numserie,
+                    precontrato: serial.precontrato,
+                    produto: serial.produto,
+                    requisicao: numreq
+                  };
+
                   const responseinsserial = await apiInsert('PedidoCompraEquip', saveserial);
                   if (responseinsserial.status === 200) {
-                    valuesfield[1] = valuesfield[1] + 'Serial: ' + serial.numserie + '\n';
+                    valuesfield[1] += `Serial: ${serial.numserie}\n`;
                     setValuesfield([...valuesfield]);
                   }
                 }
@@ -289,6 +338,7 @@ const GmoResumoPedido = (props) => {
         }
       }
     }
+
     setGerado(true);
   };
 
