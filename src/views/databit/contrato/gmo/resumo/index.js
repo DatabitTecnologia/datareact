@@ -486,7 +486,7 @@ const GmoResumo = (props) => {
     Password('frmgmo', senhareq.senha, 168, senhareq.funcao, senhareq.ativo === 'S').then((result) => {
       if (result.isConfirmed) {
         if (valuesfield[9] === 'A') {
-          console.log('[GmoResumo] Abrindo modal Requisição... Seriais atuais:', seriaisSelecionados);
+          console.log('GmoResumo Abrindo Requisição... Seriais atuais:', seriaisSelecionados);
           setShowreq(true);
         } else {
           setShowped(true);
