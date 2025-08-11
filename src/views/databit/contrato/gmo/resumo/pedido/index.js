@@ -270,11 +270,11 @@ const GmoResumoPedido = (props) => {
                 }
               }
 
-              // 🔹 ATUALIZA APENAS OS SERIAIS SELECIONADOS (se houver) COM A REQUISIÇÃO GERADA (numreq)
+              // ATUALIZA APENAS OS SERIAIS SELECIONADOS (se houver) COM A REQUISIÇÃO GERADA (numreq)
               if (Array.isArray(props.seriaisSelecionados) && props.seriaisSelecionados.length > 0) {
-                console.log('[DEBUG] Atualizando somente seriais selecionados para a requisição', numreq);
+                console.log('Atualizando somente seriais selecionados para a requisição', numreq);
                 for (const sel of props.seriaisSelecionados) {
-                  // opcional: garantir que é do mesmo pré do loop atual
+
                   if (sel.precontrato === item.precontrato) {
                     const dadosselec = {
                       numserie: sel.numserie,
@@ -300,7 +300,7 @@ const GmoResumoPedido = (props) => {
                   }
                 }
               } else {
-                console.log('Nenhum serial selecionado; mantendo fluxo original sem apiUpdate.');
+                console.log('Nenhum serial selecionado mantem fluxo original sem apiUpdate.');
               }
 
               const responseserial = await apiList(
