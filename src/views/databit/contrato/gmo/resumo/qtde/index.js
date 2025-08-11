@@ -165,7 +165,7 @@ const GmoResumoQtde = (props) => {
   const receberSeriaisSelecionados = (lista) => {
     console.log('[GmoResumoQtde] receberSeriaisSelecionados:', lista);
     setSeriaisSelecionados(lista || []);
-    onSaveSeriais?.(lista || []); // se o pai quiser receber
+    onSaveSeriais?.(lista || []); 
     fecharModalSeriais();
   };
 
