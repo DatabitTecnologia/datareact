@@ -308,6 +308,7 @@ const GmoResumoPedido = (props) => {
                   const saveserial = {
                     contrato: serial.contrato,
                     numserie: serial.numserie,
+                    pat: serial.pat,
                     produto: serial.produto,
                     pedido: numreq
                   };
@@ -332,6 +333,7 @@ const GmoResumoPedido = (props) => {
                     const saveserial = {
                       contrato: serial.contrato,
                       numserie: serial.numserie,
+                      pat: serial.pat,
                       produto: serial.produto,
                       pedido: numreq
                     };
