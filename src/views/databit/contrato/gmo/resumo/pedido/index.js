@@ -270,11 +270,10 @@ const GmoResumoPedido = (props) => {
                 }
               }
 
-              // ATUALIZA APENAS OS SERIAIS SELECIONADOS (se houver) COM A REQUISIÇÃO GERADA (numreq)
+              // Atualiza requisicao somente nos seriais SELECIONADOS 
               if (Array.isArray(props.seriaisSelecionados) && props.seriaisSelecionados.length > 0) {
-                console.log('Atualizando somente seriais selecionados para a requisição', numreq);
                 for (const sel of props.seriaisSelecionados) {
-
+                  // garante que pertence ao mesmo pré-contrato do site corrente
                   if (sel.precontrato === item.precontrato) {
                     const dadosselec = {
                       numserie: sel.numserie,
@@ -285,35 +284,28 @@ const GmoResumoPedido = (props) => {
                       iditem: sel.iditem,
                       requisicao: numreq
                     };
-
                     try {
                       const upRes = await apiUpdate('PrecontratoDevolucao', dadosselec);
-                      //console.log(upRes)
                       if (upRes?.status !== 200) {
                         console.warn('Falha ao atualizar serial selecionado:', sel, upRes);
-                      } else {
-                        console.log('Serial atualizado (selecionado):', sel.numserie, '=> req', numreq);
                       }
                     } catch (e) {
                       console.error('apiUpdate serial selecionado:', sel, e);
                     }
                   }
                 }
-              } else {
-                console.log('Nenhum serial selecionado mantem fluxo original sem apiUpdate.');
               }
 
-              const responseserial = await apiList(
-                'PrecontratoDevolucaoVW',
-                '*',
-                '',
-                "precontrato = '" + precontrato + "' and codsite = '" + item.site + "' "
-              );
+              //   Inserir em PedidoCompraEquip APENAS os seriais selecionados
+              //   se não usa o fluxo antigo 
+              const selecionadosDestePre = Array.isArray(props.seriaisSelecionados)
+                ? props.seriaisSelecionados.filter((s) => s.precontrato === item.precontrato)
+                : [];
 
-              if (responseserial.status === 200) {
-                const seriais = responseserial.data;
-                for (const serial of seriais) {
-                  let saveserial = {
+              if (selecionadosDestePre.length > 0) {
+                // Insere só os selecionados
+                for (const serial of selecionadosDestePre) {
+                  const saveserial = {
                     coditem: serial.coditem,
                     contrato: serial.contrato,
                     iditem: serial.iditem,
@@ -322,11 +314,38 @@ const GmoResumoPedido = (props) => {
                     produto: serial.produto,
                     requisicao: numreq
                   };
-
                   const responseinsserial = await apiInsert('PedidoCompraEquip', saveserial);
                   if (responseinsserial.status === 200) {
                     valuesfield[1] += `Serial: ${serial.numserie}\n`;
                     setValuesfield([...valuesfield]);
+                  }
+                }
+              } else {
+                // mantém o comportamento original
+                const responseserial = await apiList(
+                  'PrecontratoDevolucaoVW',
+                  '*',
+                  '',
+                  "precontrato = '" + precontrato + "' and codsite = '" + item.site + "' "
+                );
+                if (responseserial.status === 200) {
+                  const seriais = responseserial.data;
+                  for (const serial of seriais) {
+                    const saveserial = {
+                      coditem: serial.coditem,
+                      contrato: serial.contrato,
+                      iditem: serial.iditem,
+                      numserie: serial.numserie,
+                      precontrato: serial.precontrato,
+                      produto: serial.produto,
+                      requisicao: numreq
+                    };
+                    const responseinsserial = await apiInsert('PedidoCompraEquip', saveserial);
+                    console.log('Resposta do Insert 2208',responseinsserial)
+                    if (responseinsserial.status === 200) {
+                      valuesfield[1] += `Serial: ${serial.numserie}\n`;
+                      setValuesfield([...valuesfield]);
+                    }
                   }
                 }
               }

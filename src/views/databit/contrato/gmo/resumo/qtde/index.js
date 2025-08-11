@@ -22,7 +22,8 @@ const GmoResumoQtde = (props) => {
   const [mensagem, setMensagem] = React.useState('');
 
   useEffect(() => {
-    setValuesdisable([true, true, true, true, true, true, true, true, false]);
+    const disables =[true, true, true, true, true, true, true, true, false];
+    setValuesdisable(disables);
     setFields([
       {
         id: 0,
@@ -34,7 +35,7 @@ const GmoResumoQtde = (props) => {
         tipoobject: 1,
         widthfield: 6,
         measure: '7rem',
-        disabled: valuesdisable[0]
+        disabled: disables[0]
       },
       {
         id: 1,
@@ -46,7 +47,7 @@ const GmoResumoQtde = (props) => {
         tipoobject: 1,
         widthfield: 6,
         measure: '6rem',
-        disabled: valuesdisable[1]
+        disabled: disables[1]
       },
       {
         id: 2,
@@ -59,7 +60,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 15,
         measure: '15rem',
         charnormal: true,
-        disabled: valuesdisable[2]
+        disabled: disables[2]
       },
       {
         id: 3,
@@ -72,7 +73,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 40,
         measure: '40rem',
         charnormal: true,
-        disabled: valuesdisable[3]
+        disabled: disables[3]
       },
       {
         id: 4,
@@ -85,7 +86,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 27,
         measure: '27rem',
         charnormal: true,
-        disabled: valuesdisable[4]
+        disabled: disables[4]
       },
       {
         id: 5,
@@ -98,7 +99,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 15,
         measure: '15rem',
         charnormal: true,
-        disabled: valuesdisable[5]
+        disabled: disables[5]
       },
       {
         id: 6,
@@ -111,7 +112,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 6,
         measure: '6rem',
         charnormal: true,
-        disabled: valuesdisable[6]
+        disabled: disables[6]
       },
       {
         id: 7,
@@ -124,7 +125,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 10,
         measure: '10rem',
         charnormal: true,
-        disabled: valuesdisable[7],
+        disabled: disables[7],
         tipomascara: 3
       },
       {
@@ -138,7 +139,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 10,
         measure: '10rem',
         charnormal: true,
-        disabled: valuesdisable[8]
+        disabled: disables[8]
       }
     ]);
 
@@ -254,6 +255,7 @@ const GmoResumoQtde = (props) => {
           <SeriaisSelector
             precontrato={itemselec.precontrato}
             produto={itemselec.produto}
+            qtde={Number(valuesfield[8] ?? 0)}  
             onConfirm={receberSeriaisSelecionados}
             onClose={fecharModalSeriais}
           />

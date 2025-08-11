@@ -140,7 +140,7 @@ const GmoResumoRequisicao = (props) => {
   }, [codigoreq]);
 
   useEffect(() => {
-    console.log('[GmoResumoRequisicao] seriaisSelecionados (props):', seriaisSelecionados);
+    console.log('GmoResumoRequisicao seriaisSelecionados props:', seriaisSelecionados);
   }, [seriaisSelecionados]);
 
   const listarSites = async () => {
