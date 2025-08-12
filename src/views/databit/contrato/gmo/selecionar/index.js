@@ -17,7 +17,7 @@ const SeriaisSelector = ({ precontrato, produto, qtde = 0, onConfirm, onClose })
   useEffect(() => {
     const carregarSeriais = async () => {
       setCarregando(true);
-      const campos = 'TB02308_NUMSERIE,TB02308_CONTRATO,TB02308_PRECONTRATO,TB02308_CODITEM,TB02308_IDITEM,TB02308_PRODUTO';
+      const campos = 'TB02308_NUMSERIE,TB02308_CONTRATO,TB02308_PRECONTRATO,TB02308_CODITEM,TB02308_IDITEM,TB02308_PRODUTO,TB02308_PAT';
       const filtro = `TB02308_PRODUTO = '${produto}' AND TB02308_REQUISICAO IS NULL AND TB02308_PRECONTRATO = '${precontrato}' ORDER BY TB02308_NUMSERIE`;
 
       try {
