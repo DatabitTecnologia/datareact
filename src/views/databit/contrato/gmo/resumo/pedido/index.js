@@ -361,7 +361,7 @@ const GmoResumoPedido = (props) => {
   const Gerar = async () => {
     console.log(valuesfield[0]);
 
-    console.log('[GmoResumoPedido] Seriais selecionados no Pedido:', seriaisSelecionados);
+    console.log('GmoResumoPedido Seriais selecionados no Pedido:', seriaisSelecionados);
 
     if (valuesfield[0] !== '' && valuesfield[0] !== undefined) {
       Confirmation('frmpedcom', 'Confirma a geração de Requisições ?').then((result) => {
