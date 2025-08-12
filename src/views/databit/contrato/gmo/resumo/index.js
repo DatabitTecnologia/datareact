@@ -445,7 +445,7 @@ const GmoResumo = (props) => {
     }
     if (rows !== undefined && rows.length > 0) {
       rows.forEach((element) => {
-        console.log('[GmoResumo] qtinstalada row:', element.qtinstalada);
+        //console.log('[GmoResumo] qtinstalada row:', element.qtinstalada);
         totais[0].value += element.qtcontratada;
         totais[1].value += element.qtaprovada;
         totais[2].value += element.qtpendente;
@@ -476,7 +476,7 @@ const GmoResumo = (props) => {
   const showLanc = () => {
     Password('frmgmo', senhareq.senha, 168, senhareq.funcao, senhareq.ativo === 'S').then((result) => {
       if (result.isConfirmed) {
-        console.log('[GmoResumo] Abrindo modal Qtde...');
+        //console.log('[GmoResumo] Abrindo modal Qtde...');
         setShowlanc(true);
       }
     });
@@ -486,7 +486,7 @@ const GmoResumo = (props) => {
     Password('frmgmo', senhareq.senha, 168, senhareq.funcao, senhareq.ativo === 'S').then((result) => {
       if (result.isConfirmed) {
         if (valuesfield[9] === 'A') {
-          console.log('GmoResumo Abrindo Requisição... Seriais atuais:', seriaisSelecionados);
+          //console.log('GmoResumo Abrindo Requisição... Seriais atuais:', seriaisSelecionados);
           setShowreq(true);
         } else {
           setShowped(true);
@@ -497,7 +497,7 @@ const GmoResumo = (props) => {
 
   const clickGrid = (newSelection) => setItemselec(newSelection);
   const dblClickGrid = (newSelection) => {
-    console.log('[GmoResumo] dblClickGrid', newSelection);
+    //console.log('[GmoResumo] dblClickGrid', newSelection);
     if (newSelection.operacaotipo === valuesfield[9]) {
       setItemselec(newSelection);
       showLanc();
@@ -743,7 +743,7 @@ const GmoResumo = (props) => {
               rows={rows}
               setRows={(data) => setRows(data)}
               onSaveSeriais={(lista) => {
-                console.log('[GmoResumo] recebidos do Qtde:', lista);
+                //console.log('[GmoResumo] recebidos do Qtde:', lista);
                 setSeriaisSelecionados(lista || []);
               }}
             />

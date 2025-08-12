@@ -140,7 +140,7 @@ const GmoResumoRequisicao = (props) => {
   }, [codigoreq]);
 
   useEffect(() => {
-    console.log('GmoResumoRequisicao seriaisSelecionados props:', seriaisSelecionados);
+    //console.log('GmoResumoRequisicao seriaisSelecionados props:', seriaisSelecionados);
   }, [seriaisSelecionados]);
 
   const listarSites = async () => {
@@ -185,7 +185,7 @@ const GmoResumoRequisicao = (props) => {
                 let numreq = response.data.id;
 
                 // Atualiza os seriais com a Requisição correta
-                console.log('Seriais selecionados:', seriaisSelecionados);
+                //console.log('Seriais selecionados:', seriaisSelecionados);
                 for (const objeto of seriaisSelecionados) {
                   if (objeto.precontrato === item.precontrato) {
                     const data = {
