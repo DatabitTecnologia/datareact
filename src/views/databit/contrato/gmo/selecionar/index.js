@@ -42,13 +42,31 @@ const SeriaisSelector = ({ precontrato, produto, qtde = 0, onConfirm, onClose })
         headerClassName: 'header-list',
         checkboxSelection: true,
         headerCheckboxSelection: true,
-        width: 250
+        width: 150
+      },
+      {
+        field: 'pat',
+        headerName: 'Patrimônio',
+        headerClassName: 'header-list',
+        width: 100
       },
       {
         field: 'produto',
         headerName: 'Produto',
         headerClassName: 'header-list',
-        width: 150
+        width: 100
+      },
+      {
+        field: 'local',
+        headerName: 'Local de Instalação',
+        headerClassName: 'header-list',
+        width: 250
+      },
+      {
+        field: 'local',
+        headerName: 'Instalação',
+        headerClassName: 'header-list',
+        width: 113
       }
     ]);
 
