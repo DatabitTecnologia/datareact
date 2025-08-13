@@ -66,7 +66,7 @@ const SeriaisSelector = ({ precontrato, produto, qtde = 0, onConfirm, onClose })
         field: 'local',
         headerName: 'Instalação',
         headerClassName: 'header-list',
-        width: 113
+        width: 114
       }
     ]);
 
