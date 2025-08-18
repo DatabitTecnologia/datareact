@@ -86,7 +86,7 @@ const SeriaisSelector = ({ precontrato, produto, codsite, qtde = 0, onConfirm, o
 
   return (
     <>
-      <Row>
+      {/* <Row>
         <Col>
           <Button variant="secondary" className="mb-2 me-2" onClick={onClose}>
             Fechar
@@ -101,7 +101,7 @@ const SeriaisSelector = ({ precontrato, produto, codsite, qtde = 0, onConfirm, o
             Confirmar Seleção
           </Button>
         </Col>
-      </Row>
+      </Row> */}
 
       {carregando && <LinearProgress color="primary" />}
 
@@ -132,6 +132,25 @@ const SeriaisSelector = ({ precontrato, produto, codsite, qtde = 0, onConfirm, o
               {selecionados.length} {selecionados.length === 1 ? 'item selecionado' : 'itens selecionados'}
             </div>
           )}
+        </Col>
+      </Row>
+      <hr></hr>
+      <Row style={{ textAlign: 'center' }}>
+        <Col>
+          <Button
+            variant="primary"
+            className="mb-2"
+            onClick={handleConfirmar}
+            disabled={!confirmEnabled}
+            title={qtde > 0 ? `Selecione exatamente ${qtde} item(ns) para confirmar` : 'Selecione ao menos 1 item'}
+          >
+            <i className={'feather icon-save'} />
+            Confirmar Seleção
+          </Button>
+          <Button variant="secondary" className="mb-2 me-2" onClick={onClose}>
+            <i className={'feather icon-x-circle'} />
+            Fechar
+          </Button>
         </Col>
       </Row>
     </>
