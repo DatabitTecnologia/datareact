@@ -18,7 +18,7 @@ const SeriaisSelector = ({ precontrato, produto, codsite, qtde = 0, onConfirm, o
     const carregarSeriais = async () => {
       setCarregando(true);
       const campos = '*';
-      const filtro = `produto = '${produto}' /*AND TB02308_REQUISICAO IS NULL*/ AND precontrato = '${precontrato}' AND codsite ='${codsite}' ORDER BY numserie`;
+      const filtro = `produto = '${produto}' AND requisicao IS NULL AND precontrato = '${precontrato}' AND codsite ='${codsite}' ORDER BY numserie`;
 
       try {
         const response = await apiList('PrecontratoDevolucaoVW', campos, '', filtro);
