@@ -330,17 +330,15 @@ const GmoResumoPedido = (props) => {
                 if (responseserial.status === 200) {
                   const seriais = responseserial.data;
                   for (const serial of seriais) {
-                    const saveserial = {
-                      contrato: serial.contrato,
-                      numserie: serial.numserie,
-                      pat: serial.pat,
-                      produto: serial.produto,
-                      pedido: numreq
-                    };
+                    let saveserial = {};
+                    saveserial['pedido'] = numreq;
+                    saveserial['contrato'] = props.contrato.contrato;
+                    saveserial['produto'] = serial.produto;
+                    saveserial['numserie'] = serial.numserie;
+                    saveserial['pat'] = serial.pat;
                     const responseinsserial = await apiInsert('PedidoCompraEquip', saveserial);
-                    //console.log('Resposta do Insert 2208', responseinsserial);
                     if (responseinsserial.status === 200) {
-                      valuesfield[1] += `Serial: ${serial.numserie}\n`;
+                      valuesfield[1] = valuesfield[1] + 'Serial: ' + serial.numserie + '\n';
                       setValuesfield([...valuesfield]);
                     }
                   }
