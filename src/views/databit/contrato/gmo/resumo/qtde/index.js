@@ -247,7 +247,7 @@ const GmoResumoQtde = (props) => {
       </div>
 
       {/* Modal de seriais */}
-      <Modal show={showModalSeriais} onHide={fecharModalSeriais} size="lg" centered>
+      <Modal show={showModalSeriais} onHide={fecharModalSeriais} size="lg" backdrop="static" centered>
         <Modal.Header closeButton>
           <i className={'feather icon-edit'} /> &nbsp;
           <Modal.Title>Selecionar Seriais</Modal.Title>
