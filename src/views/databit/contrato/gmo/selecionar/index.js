@@ -4,7 +4,7 @@ import { LinearProgress } from '@mui/material';
 import { apiList } from '../../../../../api/crudapi';
 import AGGrid from '../../../../../components/AGGrid';
 
-const SeriaisSelector = ({ precontrato, produto, qtde = 0, onConfirm, onClose }) => {
+const SeriaisSelector = ({ precontrato, produto, codsite, qtde = 0, onConfirm, onClose }) => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const [carregando, setCarregando] = useState(false);
@@ -17,11 +17,11 @@ const SeriaisSelector = ({ precontrato, produto, qtde = 0, onConfirm, onClose })
   useEffect(() => {
     const carregarSeriais = async () => {
       setCarregando(true);
-      const campos = 'TB02308_NUMSERIE,TB02308_CONTRATO,TB02308_PRECONTRATO,TB02308_CODITEM,TB02308_IDITEM,TB02308_PRODUTO,TB02308_PAT';
-      const filtro = `TB02308_PRODUTO = '${produto}' AND TB02308_REQUISICAO IS NULL AND TB02308_PRECONTRATO = '${precontrato}' ORDER BY TB02308_NUMSERIE`;
+      const campos = '*';
+      const filtro = `produto = '${produto}' /*AND TB02308_REQUISICAO IS NULL*/ AND precontrato = '${precontrato}' AND codsite ='${codsite}' ORDER BY numserie`;
 
       try {
-        const response = await apiList('PrecontratoDevolucao', campos, '', filtro);
+        const response = await apiList('PrecontratoDevolucaoVW', campos, '', filtro);
         if (response?.status === 200 && Array.isArray(response.data)) {
           setRows(response.data);
         } else {
@@ -63,7 +63,7 @@ const SeriaisSelector = ({ precontrato, produto, qtde = 0, onConfirm, onClose })
         width: 250
       },
       {
-        field: 'local',
+        field: 'data',
         headerName: 'Instalação',
         headerClassName: 'header-list',
         width: 114

@@ -255,6 +255,7 @@ const GmoResumoQtde = (props) => {
           <SeriaisSelector
             precontrato={itemselec.precontrato}
             produto={itemselec.produto}
+            codsite= {itemselec.codsite}
             qtde={Number(valuesfield[8] ?? 0)}  
             onConfirm={receberSeriaisSelecionados}
             onClose={fecharModalSeriais}
