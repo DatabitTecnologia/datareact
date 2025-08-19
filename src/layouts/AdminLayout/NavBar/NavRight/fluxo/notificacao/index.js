@@ -30,6 +30,17 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
       return filtro;
     };
 
+    /* apiList(
+      'OportunidadeNotificacao',
+      'TB02255_STATUS',
+      '',
+      `TB02255_CODVEN = "${seller}"`
+    ).then((response) => {
+      if (response.status === 200) {
+        //console.log(response.data);
+      }
+    }); */
+
     async function checarPendencias() {
       try {
         const filtro = montarFiltro();
