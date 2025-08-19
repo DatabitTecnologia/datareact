@@ -24,7 +24,7 @@ const NavRight = (props) => {
   const configContext = useContext(ConfigContext);
   const navigate = useNavigate();
   const { rtlLayout } = configContext.state;
-
+ 
   const [listOpen, setListOpen] = useState(false);
 
   const openFluxo = () => {
