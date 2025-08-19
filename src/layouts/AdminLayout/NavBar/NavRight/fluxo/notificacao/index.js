@@ -4,7 +4,7 @@ import { apiList } from '../../../../../../api/crudapi';
 
 const INTERVALO_MS = 6_000; // ajuste o período de checagem
 
-const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
+const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => { 
   const ultimaChaveRef = useRef(null);
   const timerRef = useRef(null);
 
