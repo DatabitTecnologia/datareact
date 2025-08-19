@@ -25,10 +25,10 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         if (!usuario) return;
 
         const resp = await apiList(
-          'FluxoPendenciasVW',           // AJUSTE: mesma entidade do InforFluxo
+          'FluxoPendenciasVW',           
           '*',
           '',
-          `usuario='${usuario}' AND status IN ('PENDENTE','CRITICO')` // AJUSTE: mesma condição
+          `usuario='${usuario}' AND status IN ('PENDENTE','CRITICO')` 
         );
 
         const itens = Array.isArray(resp?.data) ? resp.data : [];
