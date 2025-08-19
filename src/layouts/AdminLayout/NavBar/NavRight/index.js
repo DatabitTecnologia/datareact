@@ -176,6 +176,6 @@ const NavRight = (props) => {
       /> */}
     </React.Fragment>
   );
-};
+}; 
 
 export default NavRight;
