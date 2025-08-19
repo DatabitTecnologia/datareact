@@ -36,7 +36,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         return false;
       }
     }
-
+    
     // Checa as duas views do fluxo, como o InforFluxo
     async function checarPendencias() {
       try {

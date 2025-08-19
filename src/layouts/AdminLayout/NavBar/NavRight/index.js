@@ -27,10 +27,10 @@ const NavRight = (props) => {
  
   const [listOpen, setListOpen] = useState(false);
 
-  const openFluxo = () => {
+ /*  const openFluxo = () => {
     const el = document.querySelector('#dropdown-bell'); // vamos dar um id no Toggle do sino
     if (el) el.click();
-  };
+  }; */
 
   const logOff = () => {
     try {
@@ -170,10 +170,10 @@ const NavRight = (props) => {
         </ListGroup.Item>
       </ListGroup>
       <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
-      <FluxoNotifier
+      {/* <FluxoNotifier
         habilitado={Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2'}
         onOpenFluxo={openFluxo}
-      />
+      /> */}
     </React.Fragment>
   );
 };
