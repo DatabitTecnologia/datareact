@@ -9,6 +9,7 @@ import { Decode64 } from '../../../../../../utils/crypto';
 import { addCodigo } from '../../../../../../utils/codigo/codigo';
 
 const GmoResumoRequisicao = (props) => {
+  const { showreq, codemp, contrato  = [] } = props; 
   const { shoreq, setShowreq } = props;
   const { rows, setRows } = props;
   const { gerado, setGerado } = props;
@@ -35,6 +36,7 @@ const GmoResumoRequisicao = (props) => {
   const [siteatual, setSiteatual] = React.useState('');
   const [nomestatus, setNomestatus] = React.useState('');
   const [tabela, setTabela] = React.useState('');
+  const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
 
   useEffect(() => {
     setColumns([
@@ -137,6 +139,10 @@ const GmoResumoRequisicao = (props) => {
     }
   }, [codigoreq]);
 
+  useEffect(() => {
+    //console.log('GmoResumoRequisicao seriaisSelecionados props:', seriaisSelecionados);
+  }, [seriaisSelecionados]);
+
   const listarSites = async () => {
     valuesfield[1] = '';
     setValuesfield([...valuesfield]);
@@ -177,6 +183,28 @@ const GmoResumoRequisicao = (props) => {
             if (response.status === 200) {
               try {
                 let numreq = response.data.id;
+
+                // Atualiza os seriais com a Requisição correta
+                //console.log('Seriais selecionados:', seriaisSelecionados);
+                for (const objeto of seriaisSelecionados) {
+                  if (objeto.precontrato === item.precontrato) {
+                    const data = {
+                      numserie: objeto.numserie,
+                      contrato: objeto.contrato,
+                      precontrato: objeto.precontrato,
+                      coditem: objeto.coditem,
+                      iditem: objeto.iditem,
+                      requisicao: numreq // cuidado com a capitalização do campo!
+                    };
+
+                    apiUpdate('PrecontratoDevolucao', data).then((res) => {
+                      if (res?.status !== 200) {
+                        console.error('Erro ao atualizar serial:', objeto);
+                      }
+                    });
+                  }
+                }
+
                 valuesfield[1] = valuesfield[1] + response.data.mensagem + '\n';
                 setValuesfield([...valuesfield]);
                 let itemhist = {};

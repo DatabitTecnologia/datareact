@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Button, Alert } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, Modal } from 'react-bootstrap';
 import { CreateObject } from '../../../../../../components/CreateObject';
 import ProdutoEstoque from '../../../../produto/estoque';
+import SeriaisSelector from '../../selecionar';
 
 const GmoResumoQtde = (props) => {
+  const { onSaveSeriais } = props;
   const { itemselec, setItemselec } = props;
   const { showlanc, setShowlanc } = props;
   const { rows, setRows } = props;
+
+  const [seriaisSelecionados, setSeriaisSelecionados] = useState([]);
+  const [showModalSeriais, setShowModalSeriais] = useState(false); // ÚNICO estado do modal
+
   const [fields, setFields] = React.useState([]);
   const [valuesfield, setValuesfield] = React.useState([]);
   const [valuesfield2, setValuesfield2] = React.useState([]);
@@ -16,7 +22,8 @@ const GmoResumoQtde = (props) => {
   const [mensagem, setMensagem] = React.useState('');
 
   useEffect(() => {
-    setValuesdisable([true, true, true, true, true, true, true, true, false]);
+    const disables =[true, true, true, true, true, true, true, true, false];
+    setValuesdisable(disables);
     setFields([
       {
         id: 0,
@@ -28,7 +35,7 @@ const GmoResumoQtde = (props) => {
         tipoobject: 1,
         widthfield: 6,
         measure: '7rem',
-        disabled: valuesdisable[0]
+        disabled: disables[0]
       },
       {
         id: 1,
@@ -40,7 +47,7 @@ const GmoResumoQtde = (props) => {
         tipoobject: 1,
         widthfield: 6,
         measure: '6rem',
-        disabled: valuesdisable[1]
+        disabled: disables[1]
       },
       {
         id: 2,
@@ -53,7 +60,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 15,
         measure: '15rem',
         charnormal: true,
-        disabled: valuesdisable[2]
+        disabled: disables[2]
       },
       {
         id: 3,
@@ -66,7 +73,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 40,
         measure: '40rem',
         charnormal: true,
-        disabled: valuesdisable[3]
+        disabled: disables[3]
       },
       {
         id: 4,
@@ -79,7 +86,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 27,
         measure: '27rem',
         charnormal: true,
-        disabled: valuesdisable[4]
+        disabled: disables[4]
       },
       {
         id: 5,
@@ -92,7 +99,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 15,
         measure: '15rem',
         charnormal: true,
-        disabled: valuesdisable[5]
+        disabled: disables[5]
       },
       {
         id: 6,
@@ -105,7 +112,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 6,
         measure: '6rem',
         charnormal: true,
-        disabled: valuesdisable[6]
+        disabled: disables[6]
       },
       {
         id: 7,
@@ -118,7 +125,7 @@ const GmoResumoQtde = (props) => {
         widthfield: 10,
         measure: '10rem',
         charnormal: true,
-        disabled: valuesdisable[7],
+        disabled: disables[7],
         tipomascara: 3
       },
       {
@@ -132,9 +139,10 @@ const GmoResumoQtde = (props) => {
         widthfield: 10,
         measure: '10rem',
         charnormal: true,
-        disabled: valuesdisable[8]
+        disabled: disables[8]
       }
     ]);
+
     valuesfield[0] = itemselec.precontrato;
     valuesfield[1] = itemselec.produto;
     valuesfield[2] = itemselec.referencia;
@@ -143,29 +151,43 @@ const GmoResumoQtde = (props) => {
     valuesfield[5] = itemselec.cidade;
     valuesfield[6] = itemselec.uf;
     valuesfield[7] = itemselec.cep;
-    if (itemselec.qtlanc > 0) {
-      valuesfield[8] = itemselec.qtlanc;
-    } else {
-      valuesfield[8] = itemselec.qtaliberar - itemselec.qttransito;
-    }
-
+    valuesfield[8] = itemselec.qtlanc > 0 ? itemselec.qtlanc : itemselec.qtaliberar - itemselec.qttransito;
     setValuesfield([...valuesfield]);
   }, []);
+
+  const abrirModalSeriais = () => {
+    setShowModalSeriais(true);
+  };
+
+  const fecharModalSeriais = () => {
+    setShowModalSeriais(false);
+  };
+
+  const receberSeriaisSelecionados = (lista) => {
+    //console.log('GmoResumoQtde receberSeriaisSelecionados:', lista);
+    setSeriaisSelecionados(lista || []);
+    onSaveSeriais?.(lista || []); 
+    fecharModalSeriais();
+  };
 
   const Salvar = () => {
     if (parseInt(valuesfield[8]) <= itemselec.qtaliberar - itemselec.qttransito) {
       itemselec.qtlanc = parseInt(valuesfield[8]);
       setItemselec(itemselec);
-      let rowsbkp = rows.slice(0, rows.length);
-      const itembkp = rowsbkp.find((element) => element.id === itemselec.id);
-      itembkp.qtlanc = parseInt(valuesfield[8]);
+
+      const rowsbkp = rows.slice();
+      const itembkp = rowsbkp.find((el) => el.id === itemselec.id);
+      if (itembkp) itembkp.qtlanc = parseInt(valuesfield[8]);
       setRows(rowsbkp);
+
+      // seriaisSelecionados já está no estado/local (e opcionalmente enviado ao pai)
       setShowlanc(false);
     } else {
       setItemvariant(1);
       setMensagem('Não é permitido lançar quantidade MAIOR que o saldo à Liberar !');
     }
   };
+
   return (
     <React.Fragment>
       <div id="frmqtde" name="frmqtde">
@@ -187,14 +209,17 @@ const GmoResumoQtde = (props) => {
                 valuesfield2={valuesfield2}
                 setValuesfield2={(data) => setValuesfield2(data)}
                 disabled={valuesdisable[field.id]}
-              ></CreateObject>
+              />
             ))}
           </Row>
         </Card>
+
         <Row style={{ height: '430px' }}>
-          <ProdutoEstoque produto={itemselec.produto} empselec={itemselec.codemp} compress={true}></ProdutoEstoque>
+          <ProdutoEstoque produto={itemselec.produto} empselec={itemselec.codemp} compress={true} />
         </Row>
-        <hr></hr>
+
+        <hr />
+
         <Row>
           <Alert
             show={mensagem !== '' && mensagem !== undefined}
@@ -205,18 +230,41 @@ const GmoResumoQtde = (props) => {
             {mensagem}
           </Alert>
         </Row>
+
         <Row style={{ textAlign: 'center' }}>
           <Col>
-            <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={(e) => Salvar()}>
+            <Button className="btn btn-info shadow-2 mb-2" onClick={abrirModalSeriais}>
+              <i className={'feather icon-search'} /> Selecionar Seriais
+            </Button>
+            <Button id="btnSalvar" className="btn btn-success shadow-2 mb-2" onClick={Salvar}>
               <i className={'feather icon-save'} /> Salvar
             </Button>
-            <Button id="btnCancelar" className="btn btn-warning shadow-2 mb-2" onClick={(e) => setShowlanc(false)}>
+            <Button id="btnCancelar" className="btn btn-warning shadow-2 mb-2" onClick={() => setShowlanc(false)}>
               <i className={'feather icon-x'} /> Cancelar
             </Button>
           </Col>
         </Row>
       </div>
+
+      {/* Modal de seriais */}
+      <Modal show={showModalSeriais} onHide={fecharModalSeriais} size="lg" backdrop="static" centered>
+        <Modal.Header closeButton>
+          <i className={'feather icon-edit'} /> &nbsp;
+          <Modal.Title>Selecionar Seriais</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <SeriaisSelector
+            precontrato={itemselec.precontrato}
+            produto={itemselec.produto}
+            codsite= {itemselec.codsite}
+            qtde={Number(valuesfield[8] ?? 0)}  
+            onConfirm={receberSeriaisSelecionados}
+            onClose={fecharModalSeriais}
+          />
+        </Modal.Body>
+      </Modal>
     </React.Fragment>
   );
 };
+
 export default GmoResumoQtde;

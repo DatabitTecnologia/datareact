@@ -211,7 +211,7 @@ const GmoRequisicao = (props) => {
       }
     ]);
     setCarregando(true);
-    console.log(tipoop);
+    //console.log(tipoop);
     apiFind('GmoReqVW', '*', '', "CODIGO = '" + itemselec.numreq + "' and TIPO = " + tipoop).then((response) => {
       if (response.status === 200) {
         setCarregando(false);

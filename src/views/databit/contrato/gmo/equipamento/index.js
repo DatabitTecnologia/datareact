@@ -102,7 +102,7 @@ const GmoEquipamento = (props) => {
     }
     apiList(
       'GmoItemVW',
-      '*',
+      'CONTRATO,NUMSERIE,PAT,EQUIP,REFERENCIA,NOME,ULTPB,ULTCOR,SITE,NUMOS,CONCOS,NUMREQ,DTENTREGA,CIDADE,UF,CEP,DEPTO,PRE,CODSITE',
       'case when CONCOS is null and DTENTREGA is null then 0 ' +
         '     when CONCOS is not null and DTENTREGA is null then 1 ' +
         '     when CONCOS is null and DTENTREGA is not null then 2 ' +
