@@ -1,17 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Decode64 } from '../../../../../../utils/crypto';
 import { apiList } from '../../../../../../api/crudapi';
+import { Modal, Button } from 'react-bootstrap';
 
-const INTERVALO_MS = 6_000; // ajuste o período de checagem
+const INTERVALO_MS = 10_000;      // checa a cada 60s
+const COOLDOWN_MS  = 1 * 60_000; // re-notifica a cada 15min mesmo sem mudança
 
-const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => { 
+const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
   const ultimaChaveRef = useRef(null);
+  const lastNotifyAtRef = useRef(0);
   const timerRef = useRef(null);
+
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (!habilitado) return;
 
-    // Mesmo critério do InforFluxo: filtra por CODVEN conforme 'seller' de sessão (exceto 'ZZZZ')
+    // Mesmo critério do InforFluxo: filtra por CODVEN conforme 'seller' (exceto 'ZZZZ')
     const montarFiltro = () => {
       let filtro = ' 0 = 0 ';
       try {
@@ -25,19 +30,6 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
       return filtro;
     };
 
-    async function pedirPermissao() {
-      if (!('Notification' in window)) return false;
-      if (Notification.permission === 'granted') return true;
-      if (Notification.permission === 'denied') return false;
-      try {
-        const perm = await Notification.requestPermission();
-        return perm === 'granted';
-      } catch (_) {
-        return false;
-      }
-    }
-    
-    // Checa as duas views do fluxo, como o InforFluxo
     async function checarPendencias() {
       try {
         const filtro = montarFiltro();
@@ -53,39 +45,22 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         // Se não há nada em nenhuma, não notifica
         if (rowsOp.length === 0 && rowsPre.length === 0) return;
 
-        // Monte uma "assinatura" para evitar notificar repetidamente o mesmo conjunto
-        // Tente usar identificadores estáveis das linhas (ajuste os campos caso precise)
+        // Assinatura para deduplicar (use campos estáveis quando possível)
         const chaveAtual = JSON.stringify({
           op: rowsOp.map(r => r.codigo ?? r.id ?? r.pk ?? JSON.stringify(r)),
           pre: rowsPre.map(r => r.codigo ?? r.id ?? r.pk ?? JSON.stringify(r))
         });
 
-        if (chaveAtual === ultimaChaveRef.current) return;
+        const agora = Date.now();
+        const mesmaChave = chaveAtual === ultimaChaveRef.current;
+        const emCooldown = (agora - lastNotifyAtRef.current) < COOLDOWN_MS;
+        if (mesmaChave && emCooldown) return;
 
-        // Notificação do sistema
-        if ('Notification' in window && Notification.permission === 'granted') {
-          const notif = new Notification('Fluxo de Processos', {
-            body: 'Há pendências a serem analisadas, deseja ver?',
-            requireInteraction: true,
-            tag: 'fluxo-pendencias' // evita empilhar múltiplas
-          });
-
-          notif.onclick = () => {
-            try {
-              window.focus();
-              if (typeof onOpenFluxo === 'function') onOpenFluxo();
-              notif.close();
-            } catch (_) {
-              // erro ignorado intencionalmente
-            }
-          };
-        } else {
-          // Fallback simples caso o usuário negue/permissão não exista
-          const ver = window.confirm('Há pendências a serem analisadas, deseja ver?');
-          if (ver && typeof onOpenFluxo === 'function') onOpenFluxo();
-        }
+        // Exibe modal (não precisa de permissão do navegador)
+        setShowModal(true);
 
         ultimaChaveRef.current = chaveAtual;
+        lastNotifyAtRef.current = Date.now();
       } catch (_) {
         // erros transitórios ignorados
       }
@@ -95,8 +70,9 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
 
     (async () => {
       try {
-        await pedirPermissao();
-        if (ativo) await checarPendencias(); // dispara uma verificação imediata
+        // checagem imediata
+        if (ativo) await checarPendencias();
+        // checagens periódicas
         if (ativo) timerRef.current = setInterval(checarPendencias, INTERVALO_MS);
       } catch (_) {
         // erro ignorado intencionalmente
@@ -112,7 +88,41 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
     };
   }, [habilitado, onOpenFluxo]);
 
-  return null; // componente invisível (não renderiza nada)
+  const handleVerAgora = () => {
+    try {
+      if (typeof onOpenFluxo === 'function') onOpenFluxo();
+    } catch (_) {
+      // erro ignorado intencionalmente
+    } finally {
+      setShowModal(false);
+    }
+  };
+
+  const handleDepois = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <>
+      {/* Modal de notificação*/}
+      <Modal show={showModal} onHide={handleDepois} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Fluxo de Processos</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Há pendências a serem analisadas, deseja ver?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDepois}>
+            Depois
+          </Button>
+          <Button variant="primary" onClick={handleVerAgora}>
+            Ver agora
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 };
 
 export default FluxoNotifier;

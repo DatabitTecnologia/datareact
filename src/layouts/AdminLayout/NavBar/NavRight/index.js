@@ -27,10 +27,10 @@ const NavRight = (props) => {
  
   const [listOpen, setListOpen] = useState(false);
 
- /*  const openFluxo = () => {
+  const openFluxo = () => {
     const el = document.querySelector('#dropdown-bell'); // vamos dar um id no Toggle do sino
     if (el) el.click();
-  }; */
+  };
 
   const logOff = () => {
     try {
@@ -63,7 +63,6 @@ const NavRight = (props) => {
               <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
                 <img src={zap} width="35px" height="35px" alt="zap"></img>
               </Dropdown.Toggle>
-              <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-bell"></Dropdown.Toggle>
               <Dropdown.Menu align="end" className="profile-notification" style={{ width: '1200px' }}>
                 <div className="pro-head">
                   <img src={zap} alt="zap"></img>
@@ -97,7 +96,7 @@ const NavRight = (props) => {
         {Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2' ? (
           <ListGroup.Item as="li" bsPrefix=" ">
             <Dropdown align={!rtlLayout ? 'end' : 'start'} className="drp-user">
-              <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
+              <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-bell">
                 <img src={bell} width="40px" height="40px" alt="bell"></img>
               </Dropdown.Toggle>
               <Dropdown.Menu align="end" className="profile-notification" style={{ width: '1400px' }}>
@@ -170,10 +169,10 @@ const NavRight = (props) => {
         </ListGroup.Item>
       </ListGroup>
       <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
-      {/* <FluxoNotifier
+      <FluxoNotifier
         habilitado={Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2'}
         onOpenFluxo={openFluxo}
-      /> */}
+      />
     </React.Fragment>
   );
 }; 
