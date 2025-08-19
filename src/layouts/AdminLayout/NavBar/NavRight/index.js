@@ -18,12 +18,19 @@ import InforChat from './chat';
 import InforFluxo from './fluxo';
 import { delUser } from '../../../../api/apiconnect';
 
+import FluxoNotifier from './fluxo/notificacao';
+
 const NavRight = (props) => {
   const configContext = useContext(ConfigContext);
   const navigate = useNavigate();
   const { rtlLayout } = configContext.state;
 
   const [listOpen, setListOpen] = useState(false);
+
+  const openFluxo = () => {
+    const el = document.querySelector('#dropdown-bell'); // vamos dar um id no Toggle do sino
+    if (el) el.click();
+  };
 
   const logOff = () => {
     try {
@@ -56,6 +63,7 @@ const NavRight = (props) => {
               <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
                 <img src={zap} width="35px" height="35px" alt="zap"></img>
               </Dropdown.Toggle>
+              <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-bell"></Dropdown.Toggle>
               <Dropdown.Menu align="end" className="profile-notification" style={{ width: '1200px' }}>
                 <div className="pro-head">
                   <img src={zap} alt="zap"></img>
@@ -162,6 +170,10 @@ const NavRight = (props) => {
         </ListGroup.Item>
       </ListGroup>
       <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
+      <FluxoNotifier
+        habilitado={Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2'}
+        onOpenFluxo={openFluxo}
+      />
     </React.Fragment>
   );
 };
