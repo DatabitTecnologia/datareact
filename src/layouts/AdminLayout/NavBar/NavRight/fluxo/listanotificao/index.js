@@ -19,8 +19,8 @@ const ListaNotificacoes = ({ show, onHide }) => {
       const seller = (Decode64(sessionStorage.getItem('seller')) || '').replace(/'/g, "''");
       const sql = `select * from Ft02027('${user}','${seller}')`;
 
-      const resp = await apiExec(sql, 'S');
-      const data = Array.isArray(resp?.data) ? resp.data : [];
+      const response = await apiExec(sql, 'S');
+      const data = Array.isArray(response?.data) ? response.data : [];
 
       setRows(data);
 
