@@ -27,8 +27,7 @@ const NavRight = (props) => {
   const { rtlLayout } = configContext.state;
 
   const [listOpen, setListOpen] = useState(false);
-
-  // ADIÇÃO: controla o modal da lista de notificações (Ft02027)
+  /* controla o modal de lista */
   const [showLista, setShowLista] = useState(false);
 
   const logOff = () => {
@@ -95,7 +94,6 @@ const NavRight = (props) => {
         {Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2' ? (
           <ListGroup.Item as="li" bsPrefix=" ">
             <Dropdown align={!rtlLayout ? 'end' : 'start'} className="drp-user">
-              {/* mantém exatamente como antes: abre o dropdown com InforFluxo */}
               <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
                 <img src={bell} width="40px" height="40px" alt="bell"></img>
               </Dropdown.Toggle>
