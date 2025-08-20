@@ -8,8 +8,9 @@ const INTERVALO_MS = 10_000;
 const COOLDOWN_MS = 1 * 60_000; 
 
 const table = 'TB00035';
-const fieldpk = Decode64(sessionStorage.getItem('seller')) || '';
+const fieldpk = 'TB00035_NOME';
 const field = 'TB00035_PHOTO';
+const value = Decode64(sessionStorage.getItem('user')) || ''
 
 const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
   const ultimaChaveRef = useRef(null);
