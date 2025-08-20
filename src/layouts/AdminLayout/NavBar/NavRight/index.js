@@ -170,13 +170,11 @@ const NavRight = (props) => {
       </ListGroup>
       <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
 
-      {/* ADIÇÃO: Notificador — no "Ver agora" abre o modal da lista */}
       <FluxoNotifier
         habilitado={Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2'}
         onOpenFluxo={() => setShowLista(true)}
       />
 
-      {/* ADIÇÃO: Modal com AGGrid (Ft02027) */}
       <ListaNotificacoes show={showLista} onHide={() => setShowLista(false)} />
     </React.Fragment>
   );
