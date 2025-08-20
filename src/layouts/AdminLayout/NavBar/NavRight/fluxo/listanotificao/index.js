@@ -17,7 +17,7 @@ const ListaNotificacoes = ({ show, onHide }) => {
 
       const user = (Decode64(sessionStorage.getItem('user')) || '').replace(/'/g, "''");
       const seller = (Decode64(sessionStorage.getItem('seller')) || '').replace(/'/g, "''");
-      const sql = `select * from Ft02027('${user}','${seller}')`;
+      const sql = `select CONVERT(varchar(10), data, 103) AS Date,* from Ft02027('${user}','${seller}')`;
 
       const response = await apiExec(sql, 'S');
       const data = Array.isArray(response?.data) ? response.data : [];
@@ -29,34 +29,38 @@ const ListaNotificacoes = ({ show, onHide }) => {
           field: 'codigo',
           headerName: 'Código',
           headerClassName: 'header-list',
-          checkboxSelection: true,
-          headerCheckboxSelection: true,
           width: 100
         },
         {
-          field: 'data',
+          field: 'Date',
           headerName: 'Data',
           headerClassName: 'header-list',
-          width: 100
+          width: 130
         },
         {
           field: 'nomecli',
           headerName: 'Nome Cliente',
           headerClassName: 'header-list',
-          width: 280
+          width: 350
         },
         {
-          field: 'local',
-          headerName: 'Local de Instalação',
+          field: 'nometipo',
+          headerName: 'Tipo',
           headerClassName: 'header-list',
           width: 250
         },
         {
-          field: 'data',
-          headerName: 'Instalação',
+          field: 'qtde',
+          headerName: 'Qtde',
           headerClassName: 'header-list',
-          width: 114
-        }
+          width: 80
+        },
+        {
+          field: 'nomestatus',
+          headerName: 'Status',
+          headerClassName: 'header-list',
+          width: 250
+        },
       ]);
     };
 
@@ -79,12 +83,6 @@ const ListaNotificacoes = ({ show, onHide }) => {
           multselec={false}
         />
       </Modal.Body>
-
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Fechar
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };
