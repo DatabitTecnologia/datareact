@@ -1,129 +1,150 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Decode64 } from '../../../../../../utils/crypto';
-import { apiList } from '../../../../../../api/crudapi';
+import { apiExec, apiGetPicture } from '../../../../../../api/crudapi';
 import { Modal, Button } from 'react-bootstrap';
+import TipoSup0 from '../../../../../../assets/images/user/avatar-2.jpg'; // placeholder simples
 
-const INTERVALO_MS = 10_000;      // checa a cada 60s
-const COOLDOWN_MS  = 1 * 60_000; // re-notifica a cada 15min mesmo sem mudança
+const INTERVALO_MS = 10_000; // 10s
+const COOLDOWN_MS = 1 * 60_000; // 1min
+
+// Config da foto (troque se necessário)
+const PICTURE_TABLE = 'TB01131';
+const PICTURE_PK = 'TB01131_USER';
+const PICTURE_IMAGE_FIELD = 'TB01131_FOTO';
 
 const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
   const ultimaChaveRef = useRef(null);
   const lastNotifyAtRef = useRef(0);
   const timerRef = useRef(null);
+  const stoppedRef = useRef(false);
 
   const [showModal, setShowModal] = useState(false);
+  const [fotoUser, setFotoUser] = useState('');
 
   useEffect(() => {
     if (!habilitado) return;
 
-    // Mesmo critério do InforFluxo: filtra por CODVEN conforme 'seller' (exceto 'ZZZZ')
-    const montarFiltro = () => {
-      let filtro = ' 0 = 0 ';
+    // Carrega a foto do usuário via apiGetPicture (padrão AvatarProduto)
+    (async () => {
       try {
-        const seller = Decode64(sessionStorage.getItem('seller'));
-        if (seller !== 'ZZZZ') {
-          filtro += ` and CODVEN = '${seller}' `;
-        }
-      } catch (_) {
-        // erro ignorado intencionalmente
-      }
-      return filtro;
-    };
+        const user = Decode64(sessionStorage.getItem('user')) || '';
+        if (!user) return;
 
-    /* apiList(
-      'OportunidadeNotificacao',
-      'TB02255_STATUS',
-      '',
-      `TB02255_CODVEN = "${seller}"`
-    ).then((response) => {
-      if (response.status === 200) {
-        //console.log(response.data);
-      }
-    }); */
+        const resp = await apiGetPicture(PICTURE_TABLE, PICTURE_PK, PICTURE_IMAGE_FIELD, user);
+        if (resp?.status === 200 && Array.isArray(resp.data) && resp.data[0]?.picture) {
+          setFotoUser(resp.data[0].picture); // base64 sem prefixo
+        }
+      } catch (_) { /* ignora erro da foto */ }
+    })();
 
     async function checarPendencias() {
       try {
-        const filtro = montarFiltro();
+        if (stoppedRef.current) return;
 
-        const [respOp, respPre] = await Promise.all([
-          apiList('OportunidadeFluxoVW', '*', '', filtro),
-          apiList('PrecontratoFluxoVW', '*', '', filtro)
-        ]);
+        const user = Decode64(sessionStorage.getItem('user')) || '';
+        const seller = Decode64(sessionStorage.getItem('seller')) || '';
+
+        const sql =
+          "select * from Ft02027('" +
+          user.replace(/'/g, "''") +
+          "','" +
+          seller.replace(/'/g, "''") +
+          "')";
+
+        const [respOp] = await Promise.all([apiExec(sql, 'S')]);
 
         const rowsOp = Array.isArray(respOp?.data) ? respOp.data : [];
-        const rowsPre = Array.isArray(respPre?.data) ? respPre.data : [];
+        if (rowsOp.length === 0) return; // só notifica se Ft02027 trouxer dados
 
-        // Se não há nada em nenhuma, não notifica
-        if (rowsOp.length === 0 && rowsPre.length === 0) return;
-
-        // Assinatura para deduplicar (use campos estáveis quando possível)
         const chaveAtual = JSON.stringify({
-          op: rowsOp.map(r => r.codigo ?? r.id ?? r.pk ?? JSON.stringify(r)),
-          pre: rowsPre.map(r => r.codigo ?? r.id ?? r.pk ?? JSON.stringify(r))
+          op: rowsOp.map((r) => r.codigo ?? r.id ?? r.pk ?? JSON.stringify(r)),
+          pre: []
         });
 
         const agora = Date.now();
         const mesmaChave = chaveAtual === ultimaChaveRef.current;
-        const emCooldown = (agora - lastNotifyAtRef.current) < COOLDOWN_MS;
+        const emCooldown = agora - lastNotifyAtRef.current < COOLDOWN_MS;
         if (mesmaChave && emCooldown) return;
 
-        // Exibe modal (não precisa de permissão do navegador)
         setShowModal(true);
-
         ultimaChaveRef.current = chaveAtual;
-        lastNotifyAtRef.current = Date.now();
-      } catch (_) {
-        // erros transitórios ignorados
-      }
+        lastNotifyAtRef.current = agora;
+      } catch (_) { /* ignora erros transitórios */ }
     }
 
     let ativo = true;
 
     (async () => {
       try {
-        // checagem imediata
-        if (ativo) await checarPendencias();
-        // checagens periódicas
+        if (ativo) await checarPendencias(); // checagem imediata
         if (ativo) timerRef.current = setInterval(checarPendencias, INTERVALO_MS);
-      } catch (_) {
-        // erro ignorado intencionalmente
-      }
+      } catch (_) { /* ignora erros transitórios */ }
     })();
 
     return () => {
-      try {
-        if (timerRef.current) clearInterval(timerRef.current);
-      } catch (_) {
-        // erro ignorado intencionalmente
-      }
+      try { if (timerRef.current) clearInterval(timerRef.current); } catch (_) { /* ignora erros transitórios */ }
     };
   }, [habilitado, onOpenFluxo]);
 
   const handleVerAgora = () => {
-    try {
-      if (typeof onOpenFluxo === 'function') onOpenFluxo();
-    } catch (_) {
-      // erro ignorado intencionalmente
-    } finally {
-      setShowModal(false);
-    }
+    try { if (typeof onOpenFluxo === 'function') onOpenFluxo(); } catch (_) { /* ignora erros transitórios */ }
+    finally { setShowModal(false); }
   };
 
-  const handleDepois = () => {
+  const handleDepois = () => setShowModal(false);
+
+  // interrompe novas notificações
+  const handleParar = () => {
+    stoppedRef.current = true;
+    try { if (timerRef.current) clearInterval(timerRef.current); } catch (_) { /* ignora erros transitórios */ }
     setShowModal(false);
   };
 
+  // dados básicos (se quiser preencher Setor/Email, salve em sessionStorage)
+  const nomeUser = (() => {
+    try { return (Decode64(sessionStorage.getItem('user')) || '').toUpperCase(); } catch { return 'USUÁRIO'; }
+  })();
+  const setorUser = sessionStorage.getItem('setorUser') || '';
+  const emailUser = sessionStorage.getItem('emailUser') || '';
+
   return (
     <>
-      {/* Modal de notificação*/}
       <Modal show={showModal} onHide={handleDepois} centered>
         <Modal.Header closeButton>
           <Modal.Title>Fluxo de Processos</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
+          {/* Card da foto no padrão base64 + fallback */}
+          <div
+            style={{
+              background: '#03A9F4',
+              color: '#fff',
+              borderRadius: 8,
+              padding: 12,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              marginBottom: 12
+            }}
+          >
+            <img
+              src={fotoUser ? `data:image/jpeg;base64,${fotoUser}` : TipoSup0}
+              alt="Foto do usuário"
+              style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', background: '#b3e5fc' }}
+            />
+            <div style={{ lineHeight: 1.3 }}>
+              <div style={{ fontWeight: 700 }}>{nomeUser || 'USUÁRIO'}</div>
+            </div>
+          </div>
+
           Há pendências a serem analisadas, deseja ver?
         </Modal.Body>
+
         <Modal.Footer>
+          <Button variant="outline-danger" onClick={handleParar}>
+            Parar notificações
+          </Button>
           <Button variant="secondary" onClick={handleDepois}>
             Depois
           </Button>
