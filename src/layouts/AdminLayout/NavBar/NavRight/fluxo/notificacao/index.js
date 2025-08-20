@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Decode64 } from '../../../../../../utils/crypto';
 import { apiExec, apiGetPicture } from '../../../../../../api/crudapi';
 import { Modal, Button } from 'react-bootstrap';
-import TipoSup0 from '../../../../../../assets/images/user/avatar-2.jpg'; 
+import avatar from '../../../../../../assets/images/user/avatar-2.jpg'; 
 
 const INTERVALO_MS = 10_000; // 10s
 const COOLDOWN_MS = 1 * 60_000; // 1min
@@ -129,7 +129,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
             }}
           >
             <img
-              src={fotoUser ? `data:image/jpeg;base64,${fotoUser}` : TipoSup0}
+              src={fotoUser ? `data:image/jpeg;base64,${fotoUser}` : avatar}
               alt="Foto do usuário"
               style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', background: '#b3e5fc' }}
             />

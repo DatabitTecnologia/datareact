@@ -8,11 +8,6 @@ const ListaNotificacoes = ({ show, onHide }) => {
   const [carregando, setCarregando] = useState(false);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
-  const selecionadosRef = useRef([]);
-
-  const handleMultSelect = (linhasSelecionadas) => {
-    selecionadosRef.current = Array.isArray(linhasSelecionadas) ? linhasSelecionadas : [];
-  };
 
   useEffect(() => {
     if (!show) return;
@@ -31,24 +26,24 @@ const ListaNotificacoes = ({ show, onHide }) => {
 
       setColumns([
         {
-          field: 'numserie',
-          headerName: 'Número de Série',
+          field: 'codigo',
+          headerName: 'Código',
           headerClassName: 'header-list',
           checkboxSelection: true,
           headerCheckboxSelection: true,
-          width: 150
+          width: 100
         },
         {
-          field: 'pat',
-          headerName: 'Patrimônio',
+          field: 'data',
+          headerName: 'Data',
           headerClassName: 'header-list',
           width: 100
         },
         {
-          field: 'produto',
-          headerName: 'Produto',
+          field: 'nomecli',
+          headerName: 'Nome Cliente',
           headerClassName: 'header-list',
-          width: 100
+          width: 280
         },
         {
           field: 'local',
@@ -81,8 +76,7 @@ const ListaNotificacoes = ({ show, onHide }) => {
           rows={rows}
           columns={columns}
           loading={carregando}
-          multselec={true}
-          onMultselec={handleMultSelect}
+          multselec={false}
         />
       </Modal.Body>
 
