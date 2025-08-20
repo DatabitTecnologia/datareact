@@ -2,15 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Decode64 } from '../../../../../../utils/crypto';
 import { apiExec, apiGetPicture } from '../../../../../../api/crudapi';
 import { Modal, Button } from 'react-bootstrap';
-import TipoSup0 from '../../../../../../assets/images/user/avatar-2.jpg'; // placeholder simples
+import TipoSup0 from '../../../../../../assets/images/user/avatar-2.jpg'; 
 
 const INTERVALO_MS = 10_000; // 10s
 const COOLDOWN_MS = 1 * 60_000; // 1min
 
 // Config da foto (troque se necessário)
-const PICTURE_TABLE = 'TB01131';
-const PICTURE_PK = 'TB01131_USER';
-const PICTURE_IMAGE_FIELD = 'TB01131_FOTO';
+const PICTURE_TABLE = 'TB00035';
+const PICTURE_PK = Decode64(sessionStorage.getItem('seller')) || '';
+const PICTURE_IMAGE_FIELD = 'TB00035_PHOTO';
 
 const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
   const ultimaChaveRef = useRef(null);

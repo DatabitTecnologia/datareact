@@ -19,18 +19,17 @@ import InforFluxo from './fluxo';
 import { delUser } from '../../../../api/apiconnect';
 
 import FluxoNotifier from './fluxo/notificacao';
+import ListaNotificacoes from './fluxo/listanotificao';
 
 const NavRight = (props) => {
   const configContext = useContext(ConfigContext);
   const navigate = useNavigate();
   const { rtlLayout } = configContext.state;
- 
+
   const [listOpen, setListOpen] = useState(false);
 
-  const openFluxo = () => {
-    const el = document.querySelector('#dropdown-bell'); // vamos dar um id no Toggle do sino
-    if (el) el.click();
-  };
+  // ADIÇÃO: controla o modal da lista de notificações (Ft02027)
+  const [showLista, setShowLista] = useState(false);
 
   const logOff = () => {
     try {
@@ -96,7 +95,8 @@ const NavRight = (props) => {
         {Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2' ? (
           <ListGroup.Item as="li" bsPrefix=" ">
             <Dropdown align={!rtlLayout ? 'end' : 'start'} className="drp-user">
-              <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-bell">
+              {/* mantém exatamente como antes: abre o dropdown com InforFluxo */}
+              <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
                 <img src={bell} width="40px" height="40px" alt="bell"></img>
               </Dropdown.Toggle>
               <Dropdown.Menu align="end" className="profile-notification" style={{ width: '1400px' }}>
@@ -169,12 +169,17 @@ const NavRight = (props) => {
         </ListGroup.Item>
       </ListGroup>
       <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
+
+      {/* ADIÇÃO: Notificador — no "Ver agora" abre o modal da lista */}
       <FluxoNotifier
         habilitado={Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2'}
-        onOpenFluxo={openFluxo}
+        onOpenFluxo={() => setShowLista(true)}
       />
+
+      {/* ADIÇÃO: Modal com AGGrid (Ft02027) */}
+      <ListaNotificacoes show={showLista} onHide={() => setShowLista(false)} />
     </React.Fragment>
   );
-}; 
+};
 
 export default NavRight;
