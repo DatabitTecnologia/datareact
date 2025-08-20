@@ -24,7 +24,6 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
   useEffect(() => {
     if (!habilitado) return;
 
-    // Carrega a foto do usuário via apiGetPicture (padrão AvatarProduto)
     (async () => {
       try {
         const user = Decode64(sessionStorage.getItem('user')) || '';
