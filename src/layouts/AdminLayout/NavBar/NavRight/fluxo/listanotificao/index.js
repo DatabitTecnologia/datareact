@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import AGGrid from '../../../../../../components/AGGrid'; // ajuste o caminho se necessário
+import AGGrid from '../../../../../../components/AGGrid'; 
 import { Decode64 } from '../../../../../../utils/crypto';
 import { apiExec } from '../../../../../../api/crudapi';
 

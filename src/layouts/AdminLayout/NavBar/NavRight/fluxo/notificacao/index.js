@@ -4,10 +4,9 @@ import { apiExec, apiGetPicture } from '../../../../../../api/crudapi';
 import { Modal, Button } from 'react-bootstrap';
 import avatar from '../../../../../../assets/images/user/avatar-2.jpg'; 
 
-const INTERVALO_MS = 10_000; // 10s
-const COOLDOWN_MS = 1 * 60_000; // 1min
+const INTERVALO_MS = 10_000; 
+const COOLDOWN_MS = 1 * 60_000; 
 
-// Config da foto (troque se necessário)
 const PICTURE_TABLE = 'TB00035';
 const PICTURE_PK = Decode64(sessionStorage.getItem('seller')) || '';
 const PICTURE_IMAGE_FIELD = 'TB00035_PHOTO';
