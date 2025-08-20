@@ -31,7 +31,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
 
         const resp = await apiGetPicture(table, fieldpk, field, value);
         if (resp?.status === 200 && Array.isArray(resp.data) && resp.data[0]?.picture) {
-          setFotoUser(resp.data[0].picture); // base64 sem prefixo
+          setFotoUser(resp.data[0].picture); 
         }
       } catch (_) { /* ignora erro da foto */ }
     })();
@@ -53,7 +53,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         const [respOp] = await Promise.all([apiExec(sql, 'S')]);
 
         const rowsOp = Array.isArray(respOp?.data) ? respOp.data : [];
-        if (rowsOp.length === 0) return; // só notifica se Ft02027 trouxer dados
+        if (rowsOp.length === 0) return; //so notifica se exstir regisrtros
 
         const chaveAtual = JSON.stringify({
           op: rowsOp.map((r) => r.codigo ?? r.id ?? r.pk ?? JSON.stringify(r)),
