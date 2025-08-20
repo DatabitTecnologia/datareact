@@ -7,9 +7,9 @@ import avatar from '../../../../../../assets/images/user/avatar-2.jpg';
 const INTERVALO_MS = 10_000; 
 const COOLDOWN_MS = 1 * 60_000; 
 
-const PICTURE_TABLE = 'TB00035';
-const PICTURE_PK = Decode64(sessionStorage.getItem('seller')) || '';
-const PICTURE_IMAGE_FIELD = 'TB00035_PHOTO';
+const table = 'TB00035';
+const fieldpk = Decode64(sessionStorage.getItem('seller')) || '';
+const field = 'TB00035_PHOTO';
 
 const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
   const ultimaChaveRef = useRef(null);
@@ -28,7 +28,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         const user = Decode64(sessionStorage.getItem('user')) || '';
         if (!user) return;
 
-        const resp = await apiGetPicture(PICTURE_TABLE, PICTURE_PK, PICTURE_IMAGE_FIELD, user);
+        const resp = await apiGetPicture(table, fieldpk, field, value);
         if (resp?.status === 200 && Array.isArray(resp.data) && resp.data[0]?.picture) {
           setFotoUser(resp.data[0].picture); // base64 sem prefixo
         }
