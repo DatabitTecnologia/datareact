@@ -68,7 +68,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         setShowModal(true);
         ultimaChaveRef.current = chaveAtual;
         lastNotifyAtRef.current = agora;
-      } catch (_) { /* ignora erros transitórios */ }
+      } catch (_) { /* ignora erros  */ }
     }
 
     let ativo = true;
@@ -77,16 +77,16 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
       try {
         if (ativo) await checarPendencias(); // checagem imediata
         if (ativo) timerRef.current = setInterval(checarPendencias, INTERVALO_MS);
-      } catch (_) { /* ignora erros transitórios */ }
+      } catch (_) { /* ignora erros  */ }
     })();
 
     return () => {
-      try { if (timerRef.current) clearInterval(timerRef.current); } catch (_) { /* ignora erros transitórios */ }
+      try { if (timerRef.current) clearInterval(timerRef.current); } catch (_) { /* ignora erros  */ }
     };
   }, [habilitado, onOpenFluxo]);
 
   const handleVerAgora = () => {
-    try { if (typeof onOpenFluxo === 'function') onOpenFluxo(); } catch (_) { /* ignora erros transitórios */ }
+    try { if (typeof onOpenFluxo === 'function') onOpenFluxo(); } catch (_) { /* ignora erros  */ }
     finally { setShowModal(false); }
   };
 
@@ -95,16 +95,14 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
   // interrompe novas notificações
   const handleParar = () => {
     stoppedRef.current = true;
-    try { if (timerRef.current) clearInterval(timerRef.current); } catch (_) { /* ignora erros transitórios */ }
+    try { if (timerRef.current) clearInterval(timerRef.current); } catch (_) { /* ignora erros  */ }
     setShowModal(false);
   };
 
-  // dados básicos (se quiser preencher Setor/Email, salve em sessionStorage)
   const nomeUser = (() => {
     try { return (Decode64(sessionStorage.getItem('user')) || '').toUpperCase(); } catch { return 'USUÁRIO'; }
   })();
-  const setorUser = sessionStorage.getItem('setorUser') || '';
-  const emailUser = sessionStorage.getItem('emailUser') || '';
+  
 
   return (
     <>
@@ -114,7 +112,6 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         </Modal.Header>
 
         <Modal.Body>
-          {/* Card da foto no padrão base64 + fallback */}
           <div
             style={{
               background: '#03A9F4',
