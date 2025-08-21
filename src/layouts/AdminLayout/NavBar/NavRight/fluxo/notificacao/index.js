@@ -29,11 +29,11 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         const user = Decode64(sessionStorage.getItem('user')) || '';
         if (!user) return;
 
-        const resp = await apiGetPicture(table, fieldpk, field, value);
-        if (resp?.status === 200 && Array.isArray(resp.data) && resp.data[0]?.picture) {
-          setFotoUser(resp.data[0].picture); 
+        const response = await apiGetPicture(table, fieldpk, field, value);
+        if (response?.status === 200 && Array.isArray(response.data) && response.data[0]?.picture) {
+          setFotoUser(response.data[0].picture); 
         }
-      } catch (_) { /* ignora erro da foto */ }
+      } catch (_) { /* ignora  */ }
     })();
 
     async function checarPendencias() {
@@ -45,9 +45,9 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
 
         const sql =`select * from Ft02027('${user}','${seller}')`;
 
-        const [respOp] = await Promise.all([apiExec(sql, 'S')]);
+        const [responseOp] = await Promise.all([apiExec(sql, 'S')]);
 
-        const rowsOp = Array.isArray(respOp?.data) ? respOp.data : [];
+        const rowsOp = Array.isArray(responseOp?.data) ? responseOp.data : [];
         if (rowsOp.length === 0) return; //so notifica se exstir regisrtros
 
         const chaveAtual = JSON.stringify({
