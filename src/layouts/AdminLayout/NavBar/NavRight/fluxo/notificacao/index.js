@@ -43,7 +43,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         const user = Decode64(sessionStorage.getItem('user')) || '';
         const seller = Decode64(sessionStorage.getItem('seller')) || '';
 
-        const sql =`select * from Ft02027('${user}','${seller}')`;
+        const sql =`select * from FT02027('${user}','${seller}')`;
 
         const [responseOp] = await Promise.all([apiExec(sql, 'S')]);
 
