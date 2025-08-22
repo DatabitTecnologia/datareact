@@ -6,7 +6,7 @@ import avatar from '../../../../../../assets/images/user/avatar-2.jpg';
 import './index.css';
 
 const INTERVALO_MS = 10_000; 
-const COOLDOWN_MS = 3 * 60_000; 
+const COOLDOWN_MS = 5 * 60_000; 
 
 const table = 'TB00035';
 const fieldpk = 'TB00035_NOME';
