@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import AGGrid from '../../../../../../components/AGGrid'; 
+import AGGrid from '../../../../../../components/AGGrid';
 import { Decode64 } from '../../../../../../utils/crypto';
 import { apiExec } from '../../../../../../api/crudapi';
+import './index.css';
 
 const ListaNotificacoes = ({ show, onHide }) => {
   const [carregando, setCarregando] = useState(false);
@@ -60,7 +61,7 @@ const ListaNotificacoes = ({ show, onHide }) => {
           headerName: 'Status',
           headerClassName: 'header-list',
           width: 250
-        },
+        }
       ]);
     };
 
@@ -70,18 +71,12 @@ const ListaNotificacoes = ({ show, onHide }) => {
   return (
     <Modal show={show} onHide={onHide} centered size="xl" backdrop="static">
       <Modal.Header closeButton>
-        <Modal.Title>Pendências</Modal.Title>
+        <i className="feather icon-alert-triangle" />
+        &nbsp;&nbsp;<Modal.Title className="tituloListaPen">Pendências</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        <AGGrid
-          width="100%"
-          height="60vh"
-          rows={rows}
-          columns={columns}
-          loading={carregando}
-          multselec={false}
-        />
+        <AGGrid width="100%" height="60vh" rows={rows} columns={columns} loading={carregando} multselec={false} />
       </Modal.Body>
     </Modal>
   );

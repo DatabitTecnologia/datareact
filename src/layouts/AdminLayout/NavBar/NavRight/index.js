@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { apiExec } from '../../../../api/crudapi';
 import { ListGroup, Dropdown, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +30,27 @@ const NavRight = (props) => {
   const [listOpen, setListOpen] = useState(false);
   /* controla o modal de lista */
   const [showLista, setShowLista] = useState(false);
+  /* para apresentar o numero de notificações */
+  const [qtdFt, setQtdFt] = useState(0);
+
+  /* conta pendecias */
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const user = (Decode64(sessionStorage.getItem('user')) || '').replace(/'/g, "''");
+        const seller = (Decode64(sessionStorage.getItem('seller')) || '').replace(/'/g, "''");
+        const sql = `SELECT count(1) as qtd FROM FT02027('${user}','${seller}')`;
+        const response = await apiExec(sql, 'S');
+        const numero = Number(response?.data?.[0]?.qtd || 0);
+        setQtdFt(Number.isFinite(numero) ? numero : 0);
+      } catch (_) {
+        setQtdFt(0);
+      }
+    };
+    fetchCount();
+    const id = setInterval(fetchCount, 30000); //Atualiza a quantidade a cada 30s
+    return () => clearInterval(id);
+  }, []);
 
   const logOff = () => {
     try {
@@ -93,10 +115,37 @@ const NavRight = (props) => {
         )}
         {Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2' ? (
           <ListGroup.Item as="li" bsPrefix=" ">
-            <Dropdown align={!rtlLayout ? 'end' : 'start'} className="drp-user">
+            <Dropdown align={!rtlLayout ? 'end' : 'start'} className="drp-user">          
               <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
-                <img src={bell} width="40px" height="40px" alt="bell"></img>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  
+                  {qtdFt > 0 && (
+                    /* span de contagem de pendencias */
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: 13,
+                        left: 20,
+                        minWidth: 18,
+                        height: 18,
+                        padding: '0 4px',
+                        borderRadius: 9,
+                        background: '#e53935',
+                        color: '#fff',
+                        fontSize: 10,
+                        lineHeight: '18px',
+                        textAlign: 'center',
+                        fontWeight: 700
+                      }}
+                      title={`${qtdFt}`}
+                    >
+                      {qtdFt > 99 ? '99+' : qtdFt}
+                    </span>
+                  )}
+                  <img src={bell} width="40px" height="40px" alt="bell" />
+                </div>
               </Dropdown.Toggle>
+
               <Dropdown.Menu align="end" className="profile-notification" style={{ width: '1400px' }}>
                 <div className="pro-head">
                   <img src={bell} alt="bell"></img>
@@ -168,7 +217,7 @@ const NavRight = (props) => {
       </ListGroup>
       <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
 
-      <FluxoNotifier
+      <FluxoNotifier 
         habilitado={Decode64(sessionStorage.getItem('system')) === '1' || Decode64(sessionStorage.getItem('system')) === '2'}
         onOpenFluxo={() => setShowLista(true)}
       />

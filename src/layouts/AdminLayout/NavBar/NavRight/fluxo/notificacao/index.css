@@ -1,0 +1,21 @@
+.msgNotifier{
+    color: blue;
+    margin-left: 2.2rem;
+    margin-right: auto;
+    display: flex;
+}
+
+
+.footerModalNotifier {
+  display: flex;
+  justify-content: center;
+  gap: 5px; /* espaço entre botões */
+}
+
+.btnPararNotifier{
+    border: 0.5px solid red !important;
+}
+
+.modalNotifier{
+ background-color: rgba(65, 61, 61, 0.7) !important;
+}

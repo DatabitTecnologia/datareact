@@ -3,9 +3,10 @@ import { Decode64 } from '../../../../../../utils/crypto';
 import { apiExec, apiGetPicture } from '../../../../../../api/crudapi';
 import { Modal, Button } from 'react-bootstrap';
 import avatar from '../../../../../../assets/images/user/avatar-2.jpg'; 
+import './index.css';
 
 const INTERVALO_MS = 10_000; 
-const COOLDOWN_MS = 1 * 60_000; 
+const COOLDOWN_MS = 3 * 60_000; 
 
 const table = 'TB00035';
 const fieldpk = 'TB00035_NOME';
@@ -50,18 +51,26 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
         const rowsOp = Array.isArray(responseOp?.data) ? responseOp.data : [];
         if (rowsOp.length === 0) return; //so notifica se exstir regisrtros
 
+        /* cria uma chave dos id dos registros encontrados */
         const chaveAtual = JSON.stringify({
           op: rowsOp.map((r) => r.codigo ?? r.id ?? r.pk ?? JSON.stringify(r)),
           pre: []
         });
 
+        /* monta as chaves */
         const agora = Date.now();
         const mesmaChave = chaveAtual === ultimaChaveRef.current;
         const emCooldown = agora - lastNotifyAtRef.current < COOLDOWN_MS;
+
+        /* compara os ultimos id com os atuais  */
         if (mesmaChave && emCooldown) return;
 
+        /* abre modal se houver coisa nova */
         setShowModal(true);
+
+        /* atualiza chave */
         ultimaChaveRef.current = chaveAtual;
+        /* começa a contar tempo */
         lastNotifyAtRef.current = agora;
       } catch (_) { /* ignora erros  */ }
     }
@@ -70,16 +79,20 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
 
     (async () => {
       try {
-        if (ativo) await checarPendencias(); // checagem imediata
+         // checagem imediata para não esperar 10s na primeira vez
+        if (ativo) await checarPendencias();
+
         if (ativo) timerRef.current = setInterval(checarPendencias, INTERVALO_MS);
       } catch (_) { /* ignora erros  */ }
     })();
 
     return () => {
+      /* limpa contagem de tempo */
       try { if (timerRef.current) clearInterval(timerRef.current); } catch (_) { /* ignora erros  */ }
     };
   }, [habilitado, onOpenFluxo]);
 
+  /* btns do modal */
   const handleVerAgora = () => {
     try { if (typeof onOpenFluxo === 'function') onOpenFluxo(); } catch (_) { /* ignora erros  */ }
     finally { setShowModal(false); }
@@ -94,6 +107,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
     setShowModal(false);
   };
 
+  /* preenche nome na telinha */
   const nomeUser = (() => {
     try { return (Decode64(sessionStorage.getItem('user')) || '').toUpperCase(); } catch { return 'USUÁRIO'; }
   })();
@@ -101,9 +115,9 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
 
   return (
     <>
-      <Modal show={showModal} onHide={handleDepois} centered>
+      <Modal className='modalNotifier' show={showModal} onHide={handleDepois} backdrop='static' centered>
         <Modal.Header closeButton>
-          <Modal.Title>Fluxo de Processos</Modal.Title>
+          <i className={'feather icon-bell'}/>&nbsp;&nbsp;<Modal.Title style={{fontSize: '15px'}}>Fluxo de Processos</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -112,7 +126,7 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
               background: '#03A9F4',
               color: '#fff',
               borderRadius: 8,
-              padding: 12,
+              padding: 10,
               display: 'flex',
               alignItems: 'center',
               gap: 12,
@@ -129,11 +143,11 @@ const FluxoNotifier = ({ habilitado = true, onOpenFluxo }) => {
             </div>
           </div>
 
-          Há pendências a serem analisadas, deseja ver?
+          <h5 className='msgNotifier'>Há pendências a serem analisadas, deseja ver?</h5>
         </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="outline-danger" onClick={handleParar}>
+        <Modal.Footer className='footerModalNotifier'>
+          <Button className='btnPararNotifier' variant="outline-danger" onClick={handleParar}>
             Parar notificações
           </Button>
           <Button variant="secondary" onClick={handleDepois}>
